@@ -1,32 +1,63 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import "bootstrap/dist/css/bootstrap.min.css";
+import heroPic from "../assets/hero_pic.png";
 
 const About = () => (
   <section className="about-section py-5 bg-light">
-    {/* Hero Video Section */}
-    <div className="container mb-5">
-      <div className="row align-items-center">
-        <div className="col-12 text-center">
-          <div className="hero-video-wrapper mb-4">
-            {/* Replace src with your actual hero video URL */}
-            <video
-              className="w-100 rounded shadow"
-              controls
-              poster="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=800&q=80"
-              style={{ maxHeight: "400px", objectFit: "cover" }}
-            >
-              <source src="your-hero-video.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <h1 className="display-4 fw-bold text-primary mb-3">
-            Experience the Art of Japanese Hibachi
-          </h1>
-          <h2 className="h4 text-secondary mb-4">
-            Where Culinary Mastery Meets Unforgettable Entertainment
-          </h2>
-        </div>
-      </div>
+    <Helmet>
+      <title>My Hibachi | Hibachi at Home | Private Hibachi Chef & Catering in Bay Area & Sacramento</title>
+      <meta
+        name="description"
+        content="Experience hibachi at home with My Hibachi. Private chef entertainment and catering for San Francisco, San Jose, Sacramento, and the Bay Area."
+      />
+      <meta
+        name="keywords"
+        content="hibachi at home, hibachi catering, private hibachi chef, San Francisco, San Jose, Sacramento, Bay Area, teppanyaki, hibachi party"
+      />
+      <link rel="canonical" href="https://myhibachichef.com/" />
+      <script type="application/ld+json">
+        {`
+        {
+          "@context": "https://schema.org",
+          "@type": "FoodEstablishment",
+          "name": "My Hibachi",
+          "image": "https://myhibachichef.com/assets/hero_pic.png",
+          "telephone": "(408) 123-4567",
+          "email": "info@myhibachi.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "San Francisco",
+            "addressRegion": "CA",
+            "addressCountry": "US"
+          },
+          "servesCuisine": ["Japanese", "Hibachi", "Teppanyaki"],
+          "areaServed": ["San Francisco", "San Jose", "Sacramento", "Bay Area"],
+          "url": "https://myhibachichef.com/"
+        }
+        `}
+      </script>
+    </Helmet>
+    {/* Hero Image Section */}
+    <div>
+      <img
+        src={heroPic}
+        alt="Private hibachi chef cooking teppanyaki in Bay Area"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          display: "block"
+        }}
+      />
+    </div>
+    <div className="container text-center my-4">
+      <h1 className="display-4 fw-bold text-primary mb-3">
+        Experience the Art of Japanese Hibachi
+      </h1>
+      <h2 className="h4 text-secondary mb-4">
+        Where Culinary Mastery Meets Unforgettable Entertainment
+      </h2>
     </div>
 
     {/* About Content */}
