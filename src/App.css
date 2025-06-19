@@ -47,3 +47,8 @@
   right: 20px;
   z-index: 1000;
 }
+
+.react-datepicker__day--today {
+  border: 2px solid #646cff !important;
+  color: #646cff !important;
+}

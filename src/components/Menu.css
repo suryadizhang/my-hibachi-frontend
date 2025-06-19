@@ -1,0 +1,11 @@
+/* Import Silver Garden font from Google Fonts or local if you have it */
+@import url('https://fonts.googleapis.com/css2?family=Silver+Garden:wght@400;700&display=swap');
+
+.menu-silver-garden {
+  font-family: 'Silver Garden', cursive, sans-serif !important;
+  letter-spacing: 0.5px;
+}
+
+.menu-silver-garden-bg {
+  background: #f8fafc !important;
+}

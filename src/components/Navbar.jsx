@@ -27,7 +27,7 @@ const Navbar = () => (
     <div style={{ flex: 1 }}>
       <Nav className="ms-auto justify-content-end" style={{ display: "flex", width: "100%" }}>
         <Nav.Link as={Link} to="/" className="mx-2" style={{ color: "#FFD700", fontWeight: "bold" }}>About</Nav.Link>
-        <Nav.Link as={Link} to="/services" className="mx-2" style={{ color: "#FFD700", fontWeight: "bold" }}>Order & Services</Nav.Link>
+        <Nav.Link as={Link} to="/services" className="mx-2" style={{ color: "#FFD700", fontWeight: "bold" }}>Book now</Nav.Link>
         <Nav.Link as={Link} to="/menu" className="mx-2" style={{ color: "#FFD700", fontWeight: "bold" }}>Menu</Nav.Link>
         <Nav.Link as={Link} to="/reviews" className="mx-2" style={{ color: "#FFD700", fontWeight: "bold" }}>Reviews</Nav.Link>
         <Nav.Link as={Link} to="/faqs" className="mx-2" style={{ color: "#FFD700", fontWeight: "bold" }}>FAQs</Nav.Link>

@@ -12,10 +12,12 @@ function AdminPanel() {
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState("");
 
+  const token = "YOUR_TOKEN_HERE"; // Replace with your actual token
+
   const fetchWeekly = async () => {
     try {
       const res = await axios.get(`${API_BASE}/admin/weekly?start_date=${date}`, {
-        headers: { "X-API-KEY": ADMIN_API_KEY }
+        headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(res.data);
       setError("");
@@ -28,7 +30,7 @@ function AdminPanel() {
   const fetchMonthly = async () => {
     try {
       const res = await axios.get(`${API_BASE}/admin/monthly?year=${year}&month=${month}`, {
-        headers: { "X-API-KEY": ADMIN_API_KEY }
+        headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(res.data);
       setError("");

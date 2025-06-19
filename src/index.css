@@ -83,3 +83,22 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.fully-booked-day {
+  background: #e60505 !important; /* Red for fully booked */
+  color: #fff !important;
+}
+.available-day {
+  background: #01db34 !important; /* Green for available */
+  color: #fff !important;
+}
+.past-day {
+  background: #b0b0b0 !important;
+  color: #fff !important;
+}
+.badge {
+  transition: background 0.3s, color 0.3s;
+}
+.slot-status-dot {
+  transition: background 0.3s;
+}
