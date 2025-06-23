@@ -267,6 +267,30 @@ const OrderServices = () => {
   // Highlight selected time slot in the dropdown and slot status
   const isSelectedTime = (time) => formData.timeSlot === time;
 
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (showModal || showWaitlistModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [showModal, showWaitlistModal]);
+
+  // Keyboard ESC support for modals
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        if (showModal) setShowModal(false);
+        if (showWaitlistModal) setShowWaitlistModal(false);
+      }
+    };
+    if (showModal || showWaitlistModal) {
+      window.addEventListener('keydown', handleEsc);
+    }
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [showModal, showWaitlistModal]);
+
   return (
     <Card className="p-4 shadow" style={{ maxWidth: 900, margin: "40px auto", borderRadius: 18 }}>
       <h2 className="mb-4 text-center" style={{ color: "#FFD700", fontWeight: "bold" }}>Order & Book a Service</h2>
