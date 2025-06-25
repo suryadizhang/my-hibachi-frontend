@@ -150,18 +150,24 @@ const OrderServices = () => {
     } catch (err) {
       setVariant('danger');
       if (err.response?.data?.detail) {
-        setMessage(
-          typeof err.response.data.detail === "string"
-            ? err.response.data.detail
-            : Array.isArray(err.response.data.detail)
-            ? err.response.data.detail.map(d => d.msg).join(", ")
-            : "Booking failed."
-        );
+        if (typeof err.response.data.detail === "string") {
+          setMessage(err.response.data.detail);
+        } else if (Array.isArray(err.response.data.detail)) {
+          setMessage(err.response.data.detail.map(d => d.msg).join(", "));
+        } else {
+          setMessage("Booking failed. Please check your details and try again.");
+        }
+      } else if (err.response?.status === 401) {
+        setMessage("Unauthorized. Please log in as admin.");
+      } else if (err.response?.status === 403) {
+        setMessage("Forbidden. You do not have permission.");
+      } else if (err.response?.status === 429) {
+        setMessage("Too many requests. Please wait and try again.");
       } else {
-        setMessage('Booking failed. Please check your details and try again.');
+        setMessage("Could not connect to the server. Please try again later. or contact our customer service");
       }
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // Calculate min selectable date (today + 2 days)

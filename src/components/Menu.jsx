@@ -3,13 +3,7 @@ import { Card, Row, Col, Badge, ListGroup, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Menu.css';
 
-const proteinOptions = [
-  { name: 'Chicken' },
-  { name: 'NY Strip Steak' },
-  { name: 'Shrimp' },
-  { name: 'Salmon' },
-  { name: 'Tofu' },
-];
+const proteinOptions = ['Chicken', 'NY Strip Steak', 'Shrimp', 'Salmon', 'Tofu'];
 
 const upgradeOptions = [
   { name: 'Stir-fried Noodles', extra: 5 },
@@ -19,13 +13,16 @@ const upgradeOptions = [
   { name: '3rd Protein', extra: 10 },
 ];
 
-// Sort upgrades by price (cheapest first)
+// Sort upgrades cheapest to most expensive
 const sortedUpgrades = [...upgradeOptions].sort((a, b) => a.extra - b.extra);
 
 const Menu = () => (
   <Card className="p-4 shadow-lg rounded-4 menu-silver-garden-bg">
-    <h2 className="mb-4 text-center fw-bold menu-silver-garden">🍱 My Hibachi Menu</h2>
-    <Alert variant="info" className="menu-silver-garden text-center fs-5 mb-4">
+    <h1 className="mb-4 text-center fw-bold menu-silver-garden" aria-label="My Hibachi Menu">
+      🍱 My Hibachi Menu
+    </h1>
+
+    <Alert variant="info" className="text-center fs-5 mb-4 menu-silver-garden">
       <strong>PRICING</strong><br />
       <span className="fs-4 text-danger">$55.00</span> <span>per adult</span> &nbsp;|&nbsp;
       <span className="fs-4 text-primary">$30.00</span> <span>per child</span>
@@ -35,40 +32,44 @@ const Menu = () => (
       </span>
       <br />
       <span className="text-muted">
-        <strong>*Party Minimum of $550.00</strong> (example: 10 adults). This includes everything but chef tip, optional upgrades, and possible travel fee.
+        <strong>Party Minimum: $550.00</strong> (example: 10 adults). Includes all items except chef tip, upgrades, and travel if applicable.
       </span>
       <br />
       <span className="text-muted">
-        <strong>*13 and older:</strong> adult price. &nbsp; <strong>Children 6-12:</strong> $30 each. &nbsp; <strong>Age 5 and under:</strong>  <span style={{ color: 'red', fontWeight: 'bold' }}>On us!</span>
+        <strong>13 and older:</strong> Adult price. &nbsp; 
+        <strong>Ages 6–12:</strong> $30. &nbsp; 
+        <strong>5 and under:</strong> 
+        <span style={{ color: 'red', fontWeight: 'bold' }}> Free!</span>
       </span>
     </Alert>
 
     <Card className="mb-4 border-0 shadow-sm menu-silver-garden-bg">
       <Card.Body>
-        <h3 className="menu-silver-garden text-success mb-3">MENU</h3>
+        <h2 className="menu-silver-garden text-success mb-3">Included with Every Meal</h2>
         <p className="menu-silver-garden fs-5">
-          All orders include <strong>fried rice</strong>, <strong>cooked veggies</strong>, <strong>side salad</strong> & <strong>signature sauces</strong>.<br />
-          <span>Each guest picks <strong>2 Proteins</strong>:</span>
+          Every order includes <strong>fried rice</strong>, <strong>mixed vegetables</strong>, a <strong>side salad</strong>, and our signature sauces.
+          <br />
+          Guests choose <strong>2 proteins</strong> from the list below:
         </p>
+
         <Row>
           <Col md={6}>
-            <ListGroup variant="flush" className="mb-3">
-              {proteinOptions.map(opt => (
-                <ListGroup.Item key={opt.name} className="menu-silver-garden fs-5 border-0">
-                  {opt.name}
+            <h3 className="fs-5 fw-bold mb-2">Protein Choices</h3>
+            <ListGroup variant="flush">
+              {proteinOptions.map(name => (
+                <ListGroup.Item key={name} className="menu-silver-garden fs-5 border-0">
+                  {name}
                 </ListGroup.Item>
               ))}
             </ListGroup>
           </Col>
           <Col md={6}>
-            <div className="mb-2 menu-silver-garden fs-5"><strong>Menu Upgrades:</strong></div>
+            <h3 className="fs-5 fw-bold mb-2">Upgrade Options</h3>
             <ListGroup variant="flush">
-              {sortedUpgrades.map(opt => (
-                <ListGroup.Item key={opt.name} className="menu-silver-garden fs-5 border-0">
-                  {opt.name}
-                  <Badge bg="warning" text="dark" className="ms-2">
-                    +${opt.extra.toFixed(2)}
-                  </Badge>
+              {sortedUpgrades.map(({ name, extra }) => (
+                <ListGroup.Item key={name} className="menu-silver-garden fs-5 border-0 d-flex justify-content-between">
+                  <span>{name}</span>
+                  <Badge bg="warning" text="dark">+${extra.toFixed(2)}</Badge>
                 </ListGroup.Item>
               ))}
             </ListGroup>
@@ -78,8 +79,8 @@ const Menu = () => (
     </Card>
 
     <div className="d-flex justify-content-center mt-4">
-      <Link to="/services">
-        <button className="btn btn-dark btn-lg menu-silver-garden px-5 shadow">
+      <Link to="/services" aria-label="Order your hibachi experience now">
+        <button className="btn btn-dark btn-lg px-5 shadow menu-silver-garden">
           Order Now
         </button>
       </Link>

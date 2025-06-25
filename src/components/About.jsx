@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import heroPic from "../assets/hero_pic.png";
 
 const About = () => (
-  <section className="about-section py-5 bg-light">
+  <section className="about-section py-5 bg-light text-dark">
     <Helmet>
       <title>My Hibachi | Hibachi at Home | Private Hibachi Chef & Catering in Bay Area & Sacramento</title>
       <meta
@@ -17,40 +17,50 @@ const About = () => (
       />
       <link rel="canonical" href="https://myhibachichef.com/" />
       <script type="application/ld+json">
-        {`
-        {
+        {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FoodEstablishment",
-          "name": "My Hibachi",
-          "image": "https://myhibachichef.com/assets/hero_pic.png",
-          "telephone": "(408) 123-4567",
-          "email": "info@myhibachi.com",
-          "address": {
+          name: "My Hibachi",
+          image: "https://myhibachichef.com/assets/hero_pic.png",
+          telephone: "(408) 123-4567",
+          email: "info@myhibachi.com",
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": "San Francisco",
-            "addressRegion": "CA",
-            "addressCountry": "US"
+            addressLocality: "San Francisco",
+            addressRegion: "CA",
+            addressCountry: "US",
           },
-          "servesCuisine": ["Japanese", "Hibachi", "Teppanyaki"],
-          "areaServed": ["San Francisco", "San Jose", "Sacramento", "Bay Area"],
-          "url": "https://myhibachichef.com/"
-        }
-        `}
+          servesCuisine: ["Japanese", "Hibachi", "Teppanyaki"],
+          areaServed: [
+            "San Francisco",
+            "San Jose",
+            "Sacramento",
+            "Bay Area",
+          ],
+          url: "https://myhibachichef.com/",
+        })}
       </script>
     </Helmet>
-    {/* Hero Image Section */}
+
+    {/* Hero Image (LCP Target) */}
     <div>
       <img
         src={heroPic}
         alt="Private hibachi chef cooking teppanyaki in Bay Area"
+        width="1920"
+        height="800"
+        loading="eager"
+        fetchPriority="high"
         style={{
           width: "100%",
-          height: "100%",
+          height: "auto",
           objectFit: "cover",
-          display: "block"
+          display: "block",
         }}
       />
     </div>
+
+    {/* Headline Section */}
     <div className="container text-center my-4">
       <h1 className="display-4 fw-bold text-primary mb-3">
         Experience the Art of Japanese Hibachi
@@ -66,8 +76,7 @@ const About = () => (
         <div className="col-lg-10">
           <h3 className="fw-semibold mb-3 text-dark">Meet Our Chefs</h3>
           <p className="lead">
-            At{" "}
-            <span className="fw-bold text-primary">My Hibachi</span>, our talented
+            At <span className="fw-bold text-primary">My Hibachi</span>, our talented
             chefs are true maestros of the teppanyaki grill, blending years of
             experience with an unwavering passion for flavor and flair. Having
             honed their skills in renowned Japanese kitchens, our chefs fuse

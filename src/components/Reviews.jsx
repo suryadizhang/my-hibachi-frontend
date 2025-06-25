@@ -26,28 +26,37 @@ const reviewsData = [
 ];
 
 const StarRating = ({ rating }) => {
-  const stars = Array.from({ length: 5 }, (_, index) => (
-    <i
-      key={index}
-      className={`bi ${index < rating ? 'bi-star-fill' : 'bi-star'} text-warning`}
-    />
-  ));
-  return <div className="mb-2">{stars}</div>;
+  return (
+    <div className="mb-2" aria-label={`Rating: ${rating} out of 5 stars`}>
+      {[...Array(5)].map((_, index) => (
+        <i
+          key={index}
+          className={`bi ${index < rating ? 'bi-star-fill' : 'bi-star'} text-warning`}
+          role="img"
+          aria-hidden="true"
+        />
+      ))}
+    </div>
+  );
 };
 
 const Reviews = () => (
-  <Container className="py-5">
-    <h2 className="text-center mb-4">✨ What Our Customers Say ✨</h2>
-    <Row>
+  <Container className="py-5" aria-label="Customer Reviews Section">
+    <h1 className="text-center fw-bold mb-3">✨ What Our Customers Say ✨</h1>
+    <Row className="justify-content-center">
       {reviewsData.map((review, idx) => (
-        <Col key={idx} md={6} lg={4} className="mb-4">
-          <Card className="h-100 shadow-sm border-0 hover-shadow">
-            <Card.Body className="p-4">
-              <StarRating rating={review.rating} />
-              <blockquote className="blockquote">
-                <p className="mb-3 text-dark">“{review.quote}”</p>
-              </blockquote>
-              <footer className="blockquote-footer text-muted">{review.author}</footer>
+        <Col key={idx} md={6} lg={4} className="mb-4 d-flex">
+          <Card className="h-100 shadow-sm border-0 hover-shadow flex-fill">
+            <Card.Body className="p-4 d-flex flex-column justify-content-between">
+              <div>
+                <StarRating rating={review.rating} />
+                <blockquote className="blockquote">
+                  <p className="mb-3 text-dark">“{review.quote}”</p>
+                </blockquote>
+              </div>
+              <footer className="blockquote-footer text-muted">
+                <cite>{review.author}</cite>
+              </footer>
             </Card.Body>
           </Card>
         </Col>

@@ -201,3 +201,31 @@ button:focus-visible {
     transform: translateX(-110%);
   }
 }
+
+/* Dashboard widget hover effect */
+.bg-primary:hover, .bg-success:hover, .bg-warning:hover, .bg-danger:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+.faq-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-category-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #fff;
+  background-color: #343a40;
+}
+
+.accordion-body {
+  background-color: #fff;
+  color: #212529;
+}
