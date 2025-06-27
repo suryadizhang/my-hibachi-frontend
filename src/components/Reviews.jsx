@@ -10,12 +10,12 @@ const reviewsData = [
   },
   {
     quote: "Amazing flavors and fun! My guests are still talking about it. Highly recommended.",
-    author: "Mike, San Jose",
+    author: "Mike, Fremont",
     rating: 5,
   },
   {
     quote: "Perfect for our backyard party. Professional, punctual, and delicious food.",
-    author: "Lily, Sacramento",
+    author: "Lily, Newark",
     rating: 5,
   },
   {

@@ -10,14 +10,11 @@ import Menu from "./components/Menu";
 import Reviews from "./components/Reviews";
 import FAQs from "./components/faqs/FAQs";
 import Contact from "./components/Contact";
-import ChatBot from "./components/ChatBot";
+import EnhancedChatBot from "./components/EnhancedChatBot";
 import CreditCardPayment from "./components/CreditCardPayment";
 import PartyGuestProteinForm from "./components/PartyGuestProteinForm";
 import AdminLogin from './components/AdminLogin';
 import AdminPanel from "./components/AdminPanel";
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import store from './store';
 
 function App() {
   return (
@@ -37,16 +34,9 @@ function App() {
           <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </div>
-      <ChatBot />
+      <EnhancedChatBot />
     </Router>
   );
 }
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
 
 export default App;

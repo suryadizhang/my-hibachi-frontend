@@ -6,15 +6,28 @@ const faqData = {
       header: "What is on the menu?",
       body: (
         <>
-          Each guest gets: Choice of 2 Proteins (<strong>Chicken, NY Strip Steak, Shrimp, Salmon, Tofu</strong>).<br />
-          Includes: Fried Rice, Fresh Cooked Vegetables, Side Salad, Signature Sauce, and Sake (21+).<br /><br />
-          <strong>Menu Upgrades (extra charge):</strong>
+          <strong>🥩 Protein Options (Choose 2):</strong><br />
+          • <strong>Chicken</strong>: Tender grilled chicken breast with signature hibachi seasonings and teriyaki glaze<br />
+          • <strong>Premium Angus Sirloin Steak</strong>: Premium USDA choice beef cooked to your preferred temperature<br />
+          • <strong>Shrimp</strong>: Fresh jumbo shrimp with garlic butter and hibachi spices<br />
+          • <strong>Salmon</strong>: Wild-caught Atlantic salmon with teriyaki glaze and sesame seeds<br />
+          • <strong>Tofu</strong>: Organic marinated tofu grilled with vegetables - perfect vegetarian option<br /><br />
+          
+          <strong>🍚 Included with every meal:</strong><br />
+          • Hibachi fried rice with egg and vegetables<br />
+          • Mixed seasonal vegetables (zucchini, onions, mushrooms)<br />
+          • Fresh garden salad with ginger dressing<br />
+          • Signature yum yum sauce<br />
+          • Traditional ginger dressing<br />
+          • Homemade teriyaki sauce<br /><br />
+          
+          <strong>⭐ Premium Upgrades:</strong>
           <ul>
-            <li>Stir-fried Noodles: <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li>Scallops: <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li>Filet Mignon: <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li>Lobster Tail: <Badge bg="warning" text="dark">+$10</Badge></li>
-            <li>3rd Protein (any): <Badge bg="warning" text="dark">+$10</Badge></li>
+            <li><strong>Yakisoba Noodles</strong> (Japanese style lo mein): <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Scallops</strong>: Fresh sea scallops grilled to perfection: <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Filet Mignon</strong>: Premium tender beef filet: <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Lobster Tail</strong>: Fresh lobster tail with garlic butter: <Badge bg="warning" text="dark">+$10</Badge></li>
+            <li><strong>3rd Protein</strong>: Add a third protein to your meal: <Badge bg="warning" text="dark">+$10</Badge></li>
           </ul>
         </>
       )
@@ -36,7 +49,7 @@ const faqData = {
               <strong>Base Cost:</strong> $55 per adult, $30 per child, with a $550 minimum. (The base price includes each guest’s choice of two complimentary proteins, plenty of fried rice, vegetables, salad, sauces, and unlimited sake.)
             </li>
             <li>
-              <strong>Menu Upgrades:</strong> Filet Mignon (+$5), Lobster Tail (+$10), Scallops (+$5), Stir-fried Noodles (+$5), 3rd Protein (+$10)
+              <strong>Menu Upgrades:</strong> Filet Mignon (+$5), Lobster Tail (+$10), Scallops (+$5), Yakisoba Noodles - Japanese style lo mein (+$5), 3rd Protein (+$10)
             </li>
             <li>
               <strong>Travel Fee:</strong> The first 30 miles are free; after that, it’s $2 per mile.
@@ -71,6 +84,25 @@ const faqData = {
       body: (
         <>
           Yes, we can accommodate most dietary restrictions upon request, including vegan, vegetarian, gluten-free, dairy-free, halal, and kosher. Please let your reservation manager know your needs before the party.
+        </>
+      )
+    },
+    {
+      header: "What about food allergies and allergens?",
+      body: (
+        <>
+          <strong>🚫 We DON'T use:</strong><br />
+          • Peanuts<br />
+          • Sesame products<br />
+          • Dairy products (we use dairy-free liquid butter)<br /><br />
+          
+          <strong>⚠️ Possible allergens in our food:</strong><br />
+          • Eggs (in fried rice)<br />
+          • Mushrooms (in mixed vegetables)<br />
+          • Gluten (soy sauce, teriyaki sauce)<br />
+          • Seafood (shrimp, salmon, scallops, lobster)<br /><br />
+          
+          <strong>Important:</strong> Please inform us of any food allergies when booking. We can accommodate most dietary restrictions and use separate cooking utensils when needed.
         </>
       )
     },

@@ -73,7 +73,7 @@ class ActionProvider {
 
   handleLocation = () => {
     const message = this.createChatBotMessage(
-      "We serve San Jose, San Francisco, Sacramento, Bay Area, and surrounding regions. For remote areas, a travel fee may apply."
+      "We're based in Fremont, California 94539. We serve Northern California, Bay Area, Greater Sacramento and surrounding regions. Travel is FREE for the first 30 miles from our Fremont location, then $2 per mile after that."
     );
     this.setState((prev) => ({ ...prev, messages: [...prev.messages, message], lastIntent: "location" }));
   };
