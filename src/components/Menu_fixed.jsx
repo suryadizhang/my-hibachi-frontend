@@ -5,7 +5,7 @@ import './Menu.css';
 
 const proteinOptions = [
   { name: 'Chicken', description: 'Tender grilled chicken breast with signature hibachi seasonings and teriyaki glaze' },
-  { name: 'Premium Angus Sirloin Steak', description: 'Premium Angus Sirloin steak cooked to your preferred temperature' },
+  { name: 'Premium Angus Sirloin Steak', description: 'Premium USDA choice beef cooked to your preferred temperature' },
   { name: 'Shrimp', description: 'Fresh jumbo shrimp with garlic butter and hibachi spices' },
   { name: 'Tofu', description: 'Fried tofu with our house special seasoning - perfect vegetarian option' }
 ];
