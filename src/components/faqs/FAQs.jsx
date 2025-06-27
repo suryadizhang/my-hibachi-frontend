@@ -96,6 +96,11 @@ const FAQs = () => {
         <p className="faq-subtitle">
           Find answers to all your hibachi party questions
         </p>
+        <div className="mt-3">
+          <Badge bg="success" className="px-4 py-2 fs-6">
+            🌟 Premium Quality Ingredients • Reasonable Prices • Excellence is Our Priority 🌟
+          </Badge>
+        </div>
       </div>
 
       {/* Search Section */}
@@ -268,8 +273,11 @@ const FAQs = () => {
           <Card className="contact-cta-card">
             <Card.Body className="p-4">
               <h4>Still have questions?</h4>
-              <p className="text-light mb-4 opacity-90">
+              <p className="text-light mb-2 opacity-90">
                 Our customer service team is here to help you plan the perfect hibachi experience!
+              </p>
+              <p className="text-light mb-4 opacity-75 fst-italic">
+                <strong>🏆 Quality ingredients • Reasonable prices • Exceptional service</strong>
               </p>
               <div className="contact-info">
                 <Badge className="contact-badge">

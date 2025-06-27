@@ -8,9 +8,14 @@ const Contact = () => (
     style={{ maxWidth: 550, margin: "40px auto", borderRadius: 18 }}
     aria-label="Contact card for My Hibachi"
   >
-    <h1 className="mb-4 text-center" style={{ color: "#FFD700", fontWeight: "bold" }}>
+    <h1 className="mb-3 text-center" style={{ color: "#FFD700", fontWeight: "bold" }}>
       Contact Us
     </h1>
+    <div className="text-center mb-4">
+      <span className="badge bg-success px-3 py-2">
+        🌟 Premium Quality • Reasonable Prices • Excellence is Our Priority 🌟
+      </span>
+    </div>
 
     <Row className="mb-3 align-items-center">
       <Col xs="auto" aria-hidden="true"><FaEnvelope style={{ color: "#FFD700" }} /></Col>

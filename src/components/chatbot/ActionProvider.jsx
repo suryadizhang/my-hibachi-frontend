@@ -12,9 +12,13 @@ class ActionProvider {
     const message = this.createChatBotMessage(
       <>
         <img src="/src/assets/hero_pic.png" alt="Hibachi Menu" style={{ width: "100%", borderRadius: 8, marginBottom: 8 }} />
-        Our menu includes Chicken, NY Strip Steak, Shrimp, Salmon, and Tofu. Every meal comes with fried rice, mixed vegetables, side salad, and signature sauces. Upgrades: Stir-fried Noodles, Scallops, Filet Mignon (+$5), Lobster Tail, 3rd Protein (+$10).
+        <div style={{ backgroundColor: '#d4edda', padding: '8px', borderRadius: '4px', marginBottom: '8px', fontSize: '0.9em' }}>
+          🌟 <strong>Quality Ingredients • Reasonable Prices • Excellence is Our Priority</strong> 🌟
+        </div>
+        Our premium menu includes farm-fresh Chicken, USDA Choice NY Strip Steak, fresh Gulf Shrimp, wild-caught Salmon, and organic Tofu. Every meal comes with quality hibachi fried rice, fresh mixed vegetables, garden salad, and our signature house-made sauces. 
+        <br />Premium upgrades: Authentic Yakisoba Noodles, fresh Sea Scallops, premium Filet Mignon (+$5), Maine Lobster Tail, 3rd Protein (+$10).
         <br />
-        <a href="/menu" target="_blank" rel="noopener noreferrer">See full menu</a>
+        <a href="/menu" target="_blank" rel="noopener noreferrer">See full menu with quality details</a>
       </>
     );
     this.setState((prev) => ({
@@ -29,10 +33,10 @@ class ActionProvider {
   handlePricing = () => {
     let contextMsg = "";
     if (this.memory?.lastTopic === "menu") {
-      contextMsg = "For the menu you just asked about: ";
+      contextMsg = "For the premium quality menu you just asked about: ";
     }
     const message = this.createChatBotMessage(
-      `${contextMsg}Pricing: $55 per adult, $30 per child (ages 6–12), free for 5 and under. $550 minimum per party. Upgrades and travel fees may apply. See the Menu page for details.`
+      `${contextMsg}🏆 Exceptional Value Pricing: $55 per adult, $30 per child (ages 6–12), FREE for 5 and under. $550 minimum per party. Premium quality ingredients at reasonable prices - because excellence shouldn't break the bank! Upgrades and travel fees may apply. See the Menu page for complete value details.`
     );
     this.setState((prev) => ({
       ...prev,

@@ -6,32 +6,42 @@ const faqData = {
       header: "What is on the menu?",
       body: (
         <>
-          <strong>🥩 Protein Options (Choose 2):</strong><br />
-          • <strong>Chicken</strong>: Tender grilled chicken breast with signature hibachi seasonings and teriyaki glaze<br />
-          • <strong>Premium Angus Sirloin Steak</strong>: Premium Angus steak cooked to your preferred temperature<br />
-          • <strong>Shrimp</strong>: Fresh jumbo shrimp with garlic butter and hibachi spices<br />
-          • <strong>Salmon</strong>: Wild-caught Atlantic salmon with teriyaki glaze and sesame seeds<br />
-          • <strong>Tofu</strong>: Organic marinated tofu grilled with vegetables - perfect vegetarian option<br /><br />
+          <div className="text-center mb-3">
+            <Badge bg="success" className="px-3 py-2">🌟 Quality Ingredients • Reasonable Prices • Excellence is Our Priority 🌟</Badge>
+          </div>
           
-          <strong>🍚 Included with every meal:</strong><br />
-          • Hibachi fried rice with egg and vegetables<br />
-          • Mixed seasonal vegetables (zucchini, onions, mushrooms)<br />
-          • Fresh garden salad with ginger dressing<br />
-          • Signature yum yum sauce<br />
-          • Traditional ginger dressing<br />
-          • House Special Hot Sauce<br /><br />
+          <strong>🥩 Premium Protein Options (Choose 2):</strong><br />
+          • <strong>Chicken</strong>: Premium farm-fresh chicken breast with signature hibachi seasonings and teriyaki glaze<br />
+          • <strong>Premium Angus Sirloin Steak</strong>: USDA Choice Angus beef, hand-selected for quality and flavor<br />
+          • <strong>Shrimp</strong>: Fresh jumbo Gulf shrimp with garlic butter and authentic hibachi spices<br />
+          • <strong>Salmon</strong>: Premium wild-caught Atlantic salmon with house-made teriyaki glaze and sesame seeds<br />
+          • <strong>Tofu</strong>: Organic, locally-sourced marinated tofu grilled with fresh vegetables<br /><br />
           
-          <strong>⭐ Premium Upgrades:</strong>
+          <strong>🍚 Quality Sides Included with Every Meal:</strong><br />
+          • Hibachi fried rice made with fresh eggs and crisp vegetables<br />
+          • Fresh seasonal vegetables (premium zucchini, onions, mushrooms)<br />
+          • Garden-fresh salad with house-made ginger dressing<br />
+          • Signature yum yum sauce (made fresh daily)<br />
+          • Traditional ginger dressing (authentic recipe)<br />
+          • House Special Hot Sauce (chef's special blend)<br /><br />
+          
+          <strong>⭐ Premium Quality Upgrades (Exceptional Value):</strong>
           <ul>
-            <li><strong>Yakisoba Noodles</strong> (Japanese style lo mein): <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li><strong>Scallops</strong>: Fresh sea scallops grilled to perfection: <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li><strong>Filet Mignon</strong>: Premium tender beef filet: <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li><strong>Salmon</strong>: Wild-caught Atlantic salmon upgrade: <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li><strong>Lobster Tail</strong>: Fresh lobster tail with garlic butter: <Badge bg="warning" text="dark">+$10</Badge></li>
-            <li><strong>3rd Protein</strong>: Add a third protein to your meal: <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li><strong>Extra Fried Rice</strong>: Additional portion of hibachi fried rice: <Badge bg="warning" text="dark">+$5</Badge></li>
-            <li><strong>Extra Vegetables</strong>: Additional mixed seasonal vegetables: <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Yakisoba Noodles</strong> (Authentic Japanese style): <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Fresh Sea Scallops</strong>: Hand-selected, grilled to perfection: <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Filet Mignon</strong>: Prime tender beef filet, restaurant-quality: <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Premium Salmon</strong>: Wild-caught Atlantic salmon upgrade: <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Fresh Lobster Tail</strong>: Maine lobster with real garlic butter: <Badge bg="warning" text="dark">+$10</Badge></li>
+            <li><strong>3rd Protein</strong>: Add any premium protein to your meal: <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Extra Fried Rice</strong>: Additional portion made with quality ingredients: <Badge bg="warning" text="dark">+$5</Badge></li>
+            <li><strong>Extra Vegetables</strong>: Fresh seasonal vegetables, perfectly grilled: <Badge bg="warning" text="dark">+$5</Badge></li>
           </ul>
+          
+          <div className="text-center mt-3">
+            <small className="text-muted fst-italic">
+              🏆 We source only the finest ingredients to deliver exceptional quality at reasonable prices. Your satisfaction is our commitment!
+            </small>
+          </div>
         </>
       )
     },
@@ -39,13 +49,21 @@ const faqData = {
       header: "Do you offer vegetarian and vegan options?",
       body: (
         <>
-          Yes! We offer excellent vegetarian and vegan options including:
+          <strong>Absolutely! Quality vegetarian and vegan options at the same great value:</strong>
           <ul>
-            <li><strong>Tofu</strong>: Organic marinated tofu grilled with vegetables</li>
-            <li><strong>Yakisoba Noodles</strong>: Japanese style lo mein (upgrade +$5)</li>
-            <li><strong>Extra vegetables</strong>: We supplement with additional mixed seasonal vegetables</li>
+            <li><strong>Organic Tofu</strong>: Premium, locally-sourced organic tofu marinated in our signature blend and grilled with fresh vegetables</li>
+            <li><strong>Authentic Yakisoba Noodles</strong>: Traditional Japanese-style lo mein made with quality ingredients (upgrade +$5)</li>
+            <li><strong>Fresh Seasonal Vegetables</strong>: Premium mixed vegetables including zucchini, onions, and mushrooms, perfectly grilled</li>
+            <li><strong>Quality Rice & Sides</strong>: Our hibachi fried rice and fresh salads are made with the finest ingredients</li>
           </ul>
-          The price per person remains the same for vegetarian guests. All sauces and sides are vegetarian-friendly.
+          
+          <div className="text-success fw-bold">
+            🌱 Same reasonable pricing for vegetarian guests - Quality is our priority for all dietary preferences!
+          </div>
+          
+          <small className="text-muted d-block mt-2">
+            All our sauces and sides are prepared with high-quality, vegetarian-friendly ingredients.
+          </small>
         </>
       )
     },
@@ -96,7 +114,19 @@ const faqData = {
       header: "Can I provide my own proteins or food?",
       body: (
         <>
-          Due to insurance and safety regulations, we do not cook any outside proteins or food at this time. All ingredients are provided by My Hibachi to ensure quality and safety.
+          <strong>We exclusively use our premium-sourced ingredients for your safety and quality assurance.</strong>
+          <br /><br />
+          Due to insurance and safety regulations, we do not cook any outside proteins or food. This policy ensures:
+          <ul>
+            <li><strong>Consistent Quality:</strong> All ingredients meet our high standards</li>
+            <li><strong>Food Safety:</strong> Proper handling and storage of all items</li>
+            <li><strong>Freshness Guarantee:</strong> Everything is sourced fresh for your event</li>
+            <li><strong>Reasonable Pricing:</strong> We buy in volume to pass savings to you</li>
+          </ul>
+          
+          <div className="text-info">
+            🏆 Our commitment to quality ingredients at reasonable prices means every dish exceeds expectations!
+          </div>
         </>
       )
     },
@@ -118,14 +148,33 @@ const faqData = {
       header: "How much does your service cost?",
       body: (
         <>
-          <strong>Base Pricing:</strong>
+          <div className="text-center mb-3">
+            <Badge bg="primary" className="px-3 py-2">💎 Premium Quality • Exceptional Value • Unbeatable Experience 💎</Badge>
+          </div>
+          
+          <strong>📊 Transparent, Reasonable Pricing:</strong>
           <ul>
-            <li>Adults: $55 per person</li>
-            <li>Children (6-12 years): $30 per person</li>
-            <li>Children 5 and under: <span style={{ color: 'green', fontWeight: 'bold' }}>FREE!</span></li>
+            <li><strong>Adults:</strong> $55 per person - <em>Includes premium proteins, fresh ingredients, and professional chef service</em></li>
+            <li><strong>Children (6-12 years):</strong> $30 per person - <em>Same quality, age-appropriate portions</em></li>
+            <li><strong>Children 5 and under:</strong> <span style={{ color: 'green', fontWeight: 'bold' }}>FREE!</span> - <em>Because families matter to us</em></li>
           </ul>
-          <strong>Minimum:</strong> $550 total (equivalent to 10 adults)<br />
-          <strong>Includes:</strong> 2 proteins per guest, hibachi fried rice, vegetables, salad, sauces, and unlimited sake!
+          
+          <strong>🎯 Event Minimum:</strong> $550 total (equivalent to 10 adults)<br />
+          
+          <strong>🍽️ What's Included (Premium Value):</strong>
+          <ul>
+            <li>✅ Choice of 2 premium proteins per guest</li>
+            <li>✅ Fresh hibachi fried rice made with quality ingredients</li>
+            <li>✅ Seasonal vegetables sourced for freshness</li>
+            <li>✅ Garden salad with house-made dressings</li>
+            <li>✅ Signature sauces made fresh daily</li>
+            <li>✅ Unlimited premium sake</li>
+            <li>✅ Professional chef entertainment experience</li>
+          </ul>
+          
+          <div className="text-success text-center mt-3">
+            <strong>🌟 Our Philosophy: Premium quality ingredients at reasonable prices - because exceptional experiences shouldn't break the bank!</strong>
+          </div>
         </>
       )
     },
