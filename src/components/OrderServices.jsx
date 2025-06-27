@@ -197,7 +197,6 @@ const OrderServices = () => {
     } else {
       setNextAvailableDate(null);
     }
-    // eslint-disable-next-line
   }, [selectedDate, slotStatus]);
 
   const allSlotsFullyBooked =
@@ -226,7 +225,8 @@ const OrderServices = () => {
       setWaitlistMessage('You have been added to the waitlist! We will contact you if a slot opens.');
       setShowWaitlistModal(false);
       setWaitlistData({ name: '', phone: '', email: '', preferredDate: '', preferredTime: '' });
-    } catch (err) {
+    } catch (error) {
+      console.error("Waitlist error:", error);
       setWaitlistVariant('danger');
       setWaitlistMessage('Failed to join waitlist. Please try again.');
     }

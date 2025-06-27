@@ -1,14 +1,26 @@
 {
-  "name": "mh",
+  "name": "my-hibachi-frontend",
+  "description": "Premium Hibachi Catering Service - Frontend React Application",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "author": "My Hibachi Chef",
+  "license": "MIT",
+  "homepage": "https://myhibachichef.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/myhibachi/frontend.git"
+  },
+  "keywords": ["hibachi", "catering", "react", "booking", "restaurant"],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
@@ -49,11 +61,6 @@
     "jest-environment-jsdom": "^30.0.1",
     "vite": "^6.3.5"
   },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
-  "main": "eslint.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "jest": {
     "transform": {
       "^.+\\.(js|jsx)$": "babel-jest"

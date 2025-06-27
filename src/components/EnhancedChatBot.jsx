@@ -10,7 +10,7 @@ const EnhancedChatBot = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [conversationHistory, setConversationHistory] = useState([]);
-  const [userPreferences, setUserPreferences] = useState({});
+  const [_userPreferences, _setUserPreferences] = useState({});
   const messagesEndRef = useRef(null);
 
   // Initialize conversation
@@ -96,7 +96,7 @@ const EnhancedChatBot = () => {
     };
   };
 
-  const generateCategoryResponse = (category, message, keywords, context) => {
+  const generateCategoryResponse = (category, message, keywords) => {
     switch (category) {
       case 'menu':
         if (message.includes('popular') || message.includes('recommend')) {
@@ -129,7 +129,7 @@ const EnhancedChatBot = () => {
           options: ['Book Now', 'Menu Details', 'Contact Support', 'Special Requests']
         };
         
-      case 'location':
+      case 'location': {
         const isSpecificLocation = keywords.some(k => ['fremont', 'northern california', 'bay area', 'sacramento', 'greater sacramento'].includes(k.toLowerCase()));
         if (isSpecificLocation) {
           return {
@@ -141,6 +141,7 @@ const EnhancedChatBot = () => {
           text: `📍 **Our Service Coverage:**\n\n**� We Serve:**\n${WEBSITE_DATA.service_area.regions_served.map(area => `• ${area}`).join('\n')}\n\n**🚗 Travel Policy:**\n• Based in ${WEBSITE_DATA.service_area.base_location}\n• ${WEBSITE_DATA.service_area.travel_policy}\n• ${WEBSITE_DATA.service_area.travel_fee}\n• ${WEBSITE_DATA.service_area.coverage_radius}\n\n**❓ Not sure if we serve your area?** Just ask! We're always expanding our reach.`,
           options: ['Check My Location', 'Book Now', 'Pricing Info', 'Contact Support']
         };
+      }
         
       case 'event_details':
         if (message.includes('setup') || message.includes('prepare') || message.includes('bring')) {
@@ -178,7 +179,7 @@ const EnhancedChatBot = () => {
           options: ['Book Now', 'Pricing Calculator', 'Event Planning', 'Multiple Chefs']
         };
 
-      case 'occasions':
+      case 'occasions': {
         const occasion = keywords.find(k => ['birthday', 'wedding', 'anniversary', 'graduation', 'corporate'].includes(k.toLowerCase()));
         if (occasion) {
           return {
@@ -190,6 +191,7 @@ const EnhancedChatBot = () => {
           text: `🎊 **Special Occasions We Love:**\n\n${WEBSITE_DATA.services.types.map(type => `🎉 ${type}`).join('\n')}\n\n**✨ What Makes Each Special:**\n• Customized menu and presentation\n• Professional entertainment\n• Memorable experience for all ages\n• Stress-free hosting for you\n• Perfect for creating lasting memories\n\n**🎈 Tell us about your celebration and we'll make it extra special!**`,
           options: ['Book Now', 'Birthday Parties', 'Corporate Events', 'Wedding Celebrations']
         };
+      }
 
       default:
         return {

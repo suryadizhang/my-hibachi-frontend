@@ -22,7 +22,8 @@ function AdminLogin() {
       });
       localStorage.setItem("adminToken", res.data.access_token);
       navigate("/admin");
-    } catch (err) {
+    } catch (error) {
+      console.error("Login error:", error);
       setErrorMsg("Invalid credentials or server error.");
     }
   };

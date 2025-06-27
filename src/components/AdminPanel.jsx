@@ -89,8 +89,8 @@ function AdminPanel() {
         // fallback: compute from bookings if endpoint not available
         setKpis({
           total: bookings.length,
-          week: bookings.filter(b => /* logic for this week */ true).length,
-          month: bookings.filter(b => /* logic for this month */ true).length,
+          week: bookings.filter(() => /* logic for this week */ true).length,
+          month: bookings.filter(() => /* logic for this month */ true).length,
           waitlist: 0 // add waitlist logic if available
         });
       }
