@@ -3,89 +3,318 @@ import { Card, Row, Col, Badge, ListGroup, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Menu.css';
 
-const proteinOptions = ['Chicken', 'NY Strip Steak', 'Shrimp', 'Salmon', 'Tofu'];
-
-const upgradeOptions = [
-  { name: 'Stir-fried Noodles', extra: 5 },
-  { name: 'Scallops', extra: 5 },
-  { name: 'Filet Mignon', extra: 5 },
-  { name: 'Lobster Tail', extra: 10 },
-  { name: '3rd Protein', extra: 10 },
+const proteinOptions = [
+  { name: 'Chicken', description: 'Tender grilled chicken breast with signature hibachi seasonings and teriyaki glaze' },
+  { name: 'Premium Angus Sirloin Steak', description: 'Premium USDA choice beef cooked to your preferred temperature' },
+  { name: 'Shrimp', description: 'Fresh jumbo shrimp with garlic butter and hibachi spices' },
+  { name: 'Tofu', description: 'Fried tofu with our house special seasoning - perfect vegetarian option' }
 ];
 
-// Sort upgrades cheapest to most expensive
-const sortedUpgrades = [...upgradeOptions].sort((a, b) => a.extra - b.extra);
+// Sort by price (cheapest to most expensive)
+const upgradeOptions = [
+  { name: 'Salmon', extra: 5, description: 'Wild-caught Atlantic salmon with teriyaki glaze' },
+  { name: 'Scallops', extra: 5, description: 'Fresh sea scallops grilled to perfection' },
+  { name: 'Filet Mignon', extra: 8, description: 'Premium tender beef filet' },
+  { name: 'Lobster Tail', extra: 15, description: 'Fresh lobster tail with garlic butter' }
+].sort((a, b) => a.extra - b.extra);
+
+// Sort by price (cheapest to most expensive)
+const additionalOptions = [
+  { name: 'Yakisoba Noodles', extra: 5, description: 'Japanese style lo mein noodles' },
+  { name: 'Extra Fried Rice', extra: 5, description: 'Additional portion of hibachi fried rice' },
+  { name: 'Extra Vegetables', extra: 5, description: 'Additional portion of mixed seasonal vegetables' },
+  { name: '3rd Protein', extra: 10, description: 'Add a third protein to your meal' }
+].sort((a, b) => a.extra - b.extra);
 
 const Menu = () => (
-  <Card className="p-4 shadow-lg rounded-4 menu-silver-garden-bg">
-    <h1 className="mb-4 text-center fw-bold menu-silver-garden" aria-label="My Hibachi Menu">
-      🍱 My Hibachi Menu
-    </h1>
+  <div className="menu-container">
+    <div className="container">
+      {/* Hero Section */}
+      <div className="hero-section text-center mb-5">
+        <div className="hero-content">
+          <h1 className="display-2 fw-bold mb-3 d-flex align-items-center justify-content-center">
+            <span className="emoji-visible" style={{ fontSize: '1.2em', marginRight: '0.75rem' }}>🍱</span>
+            <span className="gradient-text">My Hibachi Menu</span>
+          </h1>
+          <p className="lead mb-4" style={{ fontSize: '1.4rem', color: '#2c3e50', fontWeight: 500 }}>
+            ✨ Premium In-Home Hibachi Dining Experience ✨
+          </p>
+          <div className="hero-badges d-flex flex-wrap justify-content-center gap-3 mb-4">
+            <span className="hero-badge">
+              <span className="emoji-visible">👨‍🍳</span> Expert Chefs
+            </span>
+            <span className="hero-badge">
+              <span className="emoji-visible">🎭</span> Live Entertainment
+            </span>
+            <span className="hero-badge">
+              <span className="emoji-visible">🏠</span> Your Location
+            </span>
+            <span className="hero-badge">
+              <span className="emoji-visible">⭐</span> Premium Quality
+            </span>
+          </div>
+        </div>
+      </div>
 
-    <Alert variant="info" className="text-center fs-5 mb-4 menu-silver-garden">
-      <strong>PRICING</strong><br />
-      <span className="fs-4 text-danger">$55.00</span> <span>per adult</span> &nbsp;|&nbsp;
-      <span className="fs-4 text-primary">$30.00</span> <span>per child</span>
-      <br />
-      <span className="text-muted fs-6">
-        <em>*Not including tip</em>
-      </span>
-      <br />
-      <span className="text-muted">
-        <strong>Party Minimum: $550.00</strong> (example: 10 adults). Includes all items except chef tip, upgrades, and travel if applicable.
-      </span>
-      <br />
-      <span className="text-muted">
-        <strong>13 and older:</strong> Adult price. &nbsp; 
-        <strong>Ages 6–12:</strong> $30. &nbsp; 
-        <strong>5 and under:</strong> 
-        <span style={{ color: 'red', fontWeight: 'bold' }}> Free!</span>
-      </span>
-    </Alert>
+      <Card className="menu-card p-0 border-0 overflow-hidden">{/* ... rest of component ... */}
 
-    <Card className="mb-4 border-0 shadow-sm menu-silver-garden-bg">
-      <Card.Body>
-        <h2 className="menu-silver-garden text-success mb-3">Included with Every Meal</h2>
-        <p className="menu-silver-garden fs-5">
-          Every order includes <strong>fried rice</strong>, <strong>mixed vegetables</strong>, a <strong>side salad</strong>, and our signature sauces.
-          <br />
-          Guests choose <strong>2 proteins</strong> from the list below:
-        </p>
+        {/* Pricing Section */}
+        <div className="pricing-section p-5 mb-0">
+          <div className="text-center mb-5">
+            <h2 className="mb-4 d-flex align-items-center justify-content-center gap-3" style={{ fontSize: '2.5rem', fontWeight: 700 }}>
+              <span className="emoji-visible" style={{ fontSize: '1.3em' }}>💰</span>
+              <span style={{
+                background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>Transparent Pricing</span>
+            </h2>
+            <p className="text-muted fs-5 mb-3">No hidden fees • What you see is what you pay</p>
+            <div className="pricing-notes mb-4">
+              <p className="text-info fs-6 fw-medium mb-2">
+                <span className="emoji-visible">🚗</span> Travel fee applied: Free first 30 miles, $2/mile after (up to 150 miles)
+              </p>
+              <p className="text-info fs-6 fw-medium mb-0">
+                <span className="emoji-visible">💡</span> Gratuity is not included, but always appreciated for your hardworking personal chef
+              </p>
+            </div>
+          </div>
+          
+          <Row className="justify-content-center mb-4">
+            <Col lg={10}>
+              <div className="pricing-grid">
+                <div className="pricing-card adult-price">
+                  <div className="pricing-icon emoji-visible">👥</div>
+                  <div className="pricing-amount">$55</div>
+                  <div className="pricing-label">per adult</div>
+                  <div className="pricing-note">Ages 13+</div>
+                </div>
+                <div className="pricing-card child-price">
+                  <div className="pricing-icon emoji-visible">🧒</div>
+                  <div className="pricing-amount">$30</div>
+                  <div className="pricing-label">per child</div>
+                  <div className="pricing-note">Ages 6-12</div>
+                </div>
+                <div className="pricing-card free-price">
+                  <div className="pricing-icon emoji-visible">👶</div>
+                  <div className="pricing-amount">FREE</div>
+                  <div className="pricing-label">little ones</div>
+                  <div className="pricing-note">Under 5</div>
+                </div>
+              </div>
+            </Col>
+          </Row>
+          
+          <div className="minimum-order-card text-center">
+            <div className="d-flex align-items-center justify-content-center flex-wrap gap-3">
+              <div className="minimum-info">
+                <span style={{ filter: 'none' }}>🎯</span>
+                <strong className="ms-2">Party Minimum: $550</strong>
+              </div>
+              <div className="tip-info">
+                <span style={{ filter: 'none' }}>💡</span>
+                <em className="ms-2">Gratuity not included</em>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <Row>
-          <Col md={6}>
-            <h3 className="fs-5 fw-bold mb-2">Protein Choices</h3>
-            <ListGroup variant="flush">
-              {proteinOptions.map(name => (
-                <ListGroup.Item key={name} className="menu-silver-garden fs-5 border-0">
-                  {name}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Col>
-          <Col md={6}>
-            <h3 className="fs-5 fw-bold mb-2">Upgrade Options</h3>
-            <ListGroup variant="flush">
-              {sortedUpgrades.map(({ name, extra }) => (
-                <ListGroup.Item key={name} className="menu-silver-garden fs-5 border-0 d-flex justify-content-between">
-                  <span>{name}</span>
-                  <Badge bg="warning" text="dark">+${extra.toFixed(2)}</Badge>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Col>
-        </Row>
-      </Card.Body>
-    </Card>
+        {/* Included Items Section */}
+        <div className="included-section p-5">
+          <div className="text-center mb-5">
+            <h2 className="section-title mb-4">
+              <span style={{ filter: 'none', fontSize: '1.2em' }}>🍽️</span>
+              <span className="ms-3">What's Included</span>
+            </h2>
+            <p className="text-muted fs-5">Every meal comes with these delicious accompaniments</p>
+          </div>
+          
+          <Row className="mb-5">
+            <Col lg={6} className="mb-4">
+              <div className="included-item">
+                <span className="included-icon" style={{ filter: 'none' }}>🍚</span>
+                <div className="included-content">
+                  <h5 className="included-title">Hibachi Fried Rice</h5>
+                  <p className="included-desc">Perfectly seasoned with egg and fresh vegetables</p>
+                </div>
+              </div>
+              <div className="included-item">
+                <span className="included-icon" style={{ filter: 'none' }}>🥬</span>
+                <div className="included-content">
+                  <h5 className="included-title">Seasonal Vegetables</h5>
+                  <p className="included-desc">Fresh zucchini, onions, and mushrooms</p>
+                </div>
+              </div>
+              <div className="included-item">
+                <span className="included-icon" style={{ filter: 'none' }}>🥗</span>
+                <div className="included-content">
+                  <h5 className="included-title">Garden Fresh Salad</h5>
+                  <p className="included-desc">Crisp greens with signature ginger dressing</p>
+                </div>
+              </div>
+            </Col>
+            <Col lg={6} className="mb-4">
+              <div className="included-item">
+                <span className="included-icon" style={{ filter: 'none' }}>🥄</span>
+                <div className="included-content">
+                  <h5 className="included-title">Yum Yum Sauce</h5>
+                  <p className="included-desc">Our famous signature creamy sauce</p>
+                </div>
+              </div>
+              <div className="included-item">
+                <span className="included-icon" style={{ filter: 'none' }}>🍯</span>
+                <div className="included-content">
+                  <h5 className="included-title">Teriyaki Sauce</h5>
+                  <p className="included-desc">House-made sweet and savory perfection</p>
+                </div>
+              </div>
+              <div className="included-item">
+                <span className="included-icon" style={{ filter: 'none' }}>🎪</span>
+                <div className="included-content">
+                  <h5 className="included-title">Chef Entertainment</h5>
+                  <p className="included-desc">Amazing tricks and interactive cooking show</p>
+                </div>
+              </div>
+            </Col>
+          </Row>
+          
+          <div className="protein-selection-banner">
+            <div className="banner-content">
+              <h3 className="banner-title">
+                <span style={{ filter: 'none' }}>🥩</span>
+                Choose Any 2 Proteins Below
+                <span style={{ filter: 'none' }}>🥩</span>
+              </h3>
+              <p className="banner-subtitle">Mix and match for the perfect combination</p>
+            </div>
+          </div>
+        </div>
 
-    <div className="d-flex justify-content-center mt-4">
-      <Link to="/services" aria-label="Order your hibachi experience now">
-        <button className="btn btn-dark btn-lg px-5 shadow menu-silver-garden">
-          Order Now
-        </button>
-      </Link>
+        {/* Protein Options and Premium Upgrades */}
+        <div className="proteins-section p-5">
+          <Row className="mb-5">
+            <Col lg={6} className="mb-4">
+              <div className="protein-card">
+                <div className="card-header">
+                  <h3 className="card-title">
+                    <span style={{ filter: 'none' }}>🥩</span>
+                    Protein Options
+                  </h3>
+                  <div className="included-badge">
+                    <span style={{ filter: 'none' }}>✅</span>
+                    Choose Any 2 - Included
+                  </div>
+                </div>
+                <div className="card-body">
+                  {proteinOptions.map((protein, index) => (
+                    <div key={protein.name} className="protein-item" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <div className="protein-content">
+                        <h5 className="protein-name">{protein.name}</h5>
+                        <p className="protein-desc">{protein.description}</p>
+                      </div>
+                      <div className="protein-check">
+                        <span style={{ filter: 'none' }}>✨</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Col>
+            <Col lg={6} className="mb-4">
+              <div className="upgrade-card">
+                <div className="card-header">
+                  <h3 className="card-title">
+                    <span style={{ filter: 'none' }}>⭐</span>
+                    Premium Upgrades
+                  </h3>
+                  <div className="upgrade-badge">
+                    <span style={{ filter: 'none' }}>💎</span>
+                    Replace Any Protein
+                  </div>
+                </div>
+                <div className="card-body">
+                  {upgradeOptions.map((upgrade, index) => (
+                    <div key={upgrade.name} className="upgrade-item" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <div className="upgrade-content">
+                        <h5 className="upgrade-name">{upgrade.name}</h5>
+                        <p className="upgrade-desc">{upgrade.description}</p>
+                      </div>
+                      <div className="upgrade-price">
+                        <span className="price-tag">+${upgrade.extra}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </div>
+
+        {/* Additional Options */}
+        <div className="additional-section p-5">
+          <div className="text-center mb-5">
+            <h2 className="section-title mb-4">
+              <span style={{ filter: 'none', fontSize: '1.2em' }}>🍜</span>
+              <span className="ms-3">Additional Options</span>
+            </h2>
+            <p className="text-muted fs-5">Enhance your experience with these extras</p>
+          </div>
+          
+          <Row>
+            {additionalOptions.map(({ name, extra, description }, index) => (
+              <Col lg={6} key={name} className="mb-4">
+                <div className="additional-item" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div className="additional-content">
+                    <h5 className="additional-name">{name}</h5>
+                    <p className="additional-desc">{description}</p>
+                  </div>
+                  <div className="additional-price">
+                    <span className="add-price-tag">+${extra}</span>
+                  </div>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </div>
+
+        {/* Call to Action */}
+        <div className="cta-section text-center p-5">
+          <div className="cta-content">
+            <h2 className="cta-title mb-4">
+              Ready for an Unforgettable Experience?
+            </h2>
+            <p className="cta-subtitle mb-5">
+              Book your premium hibachi experience today and create memories that will last a lifetime
+            </p>
+            
+            <Link to="/services" aria-label="Order your hibachi experience now">
+              <button className="cta-button">
+                <span style={{ filter: 'none' }}>🍽️</span>
+                <span className="cta-text">Order Your Hibachi Experience</span>
+                <span style={{ filter: 'none' }}>🍽️</span>
+              </button>
+            </Link>
+            
+            <div className="cta-features mt-4">
+              <div className="feature-item">
+                <span style={{ filter: 'none' }}>👨‍🍳</span>
+                <span>Professional Chef</span>
+              </div>
+              <div className="feature-item">
+                <span style={{ filter: 'none' }}>�</span>
+                <span>Live Entertainment</span>
+              </div>
+              <div className="feature-item">
+                <span style={{ filter: 'none' }}>💯</span>
+                <span>Satisfaction Guaranteed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
     </div>
-  </Card>
+  </div>
 );
 
 export default Menu;

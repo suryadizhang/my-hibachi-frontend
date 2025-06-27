@@ -107,7 +107,7 @@ const EnhancedChatBot = () => {
           };
         }
         return {
-          text: `🍽️ **Our Premium Hibachi Menu:**\n\n**🥩 Protein Options:**\n${WEBSITE_DATA.menu.proteins.map(p => `• **${p.name}**: ${p.description}`).join('\n')}\n\n**🍚 Included with every meal:**\n${WEBSITE_DATA.menu.sides.map(s => `• ${s}`).join('\n')}\n\n**⭐ Premium Upgrades:**\n${WEBSITE_DATA.menu.upgrades.map(u => `• **${u.name}** (${u.price}): ${u.description || 'Premium enhancement'}`).join('\n')}\n\n🔗 [View Full Menu](/menu)`,
+          text: `🍽️ **Our Premium Hibachi Menu:**\n\n**🥩 Protein Options:**\n${WEBSITE_DATA.menu.proteins.map(p => `• **${p.name}**: ${p.description}`).join('\n')}\n\n**🍚 Included with every meal:**\n${WEBSITE_DATA.menu.sides.map(s => `• ${s}`).join('\n')}\n\n**⭐ Premium Upgrades:**\n${WEBSITE_DATA.menu.upgrades.map(u => `• **${u.name}** (${u.price}): ${u.description || 'Premium enhancement'}`).join('\n')}\n\n**🍜 Additional Options:**\n${WEBSITE_DATA.menu.additional_options.map(a => `• **${a.name}** (${a.price}): ${a.description}`).join('\n')}\n\n🔗 [View Full Menu](/menu)`,
           options: ['Popular Combos', 'Pricing Info', 'Dietary Options', 'Book Now']
         };
         

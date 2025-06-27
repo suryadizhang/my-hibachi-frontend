@@ -27,7 +27,6 @@ export const WEBSITE_DATA = {
       { name: "Chicken", description: "Tender grilled chicken breast with signature hibachi seasonings and teriyaki glaze", popular: true },
       { name: "Premium Angus Sirloin Steak", description: "Premium USDA choice beef cooked to your preferred temperature", popular: true },
       { name: "Shrimp", description: "Fresh jumbo shrimp with garlic butter and hibachi spices", popular: true },
-      { name: "Salmon", description: "Wild-caught Atlantic salmon with teriyaki glaze", popular: false },
       { name: "Tofu", description: "Fried tofu with our house special seasoning - perfect vegetarian option", popular: false }
     ],
     sides: [
@@ -39,11 +38,16 @@ export const WEBSITE_DATA = {
       "Homemade teriyaki sauce"
     ],
     upgrades: [
-      { name: "Yakisoba Noodles", price: "Available", description: "Japanese style lo mein noodles with vegetables" },
-      { name: "Scallops", price: "Premium upgrade", description: "Fresh sea scallops grilled to perfection" },
-      { name: "Filet Mignon", price: "+$5", description: "Premium tender beef filet" },
-      { name: "Lobster Tail", price: "Premium upgrade", description: "Fresh lobster tail with garlic butter" },
-      { name: "3rd Protein", price: "+$10", description: "Add a third protein to your meal" }
+      { name: "Filet Mignon", price: "+$8", description: "Premium tender beef filet" },
+      { name: "Salmon", price: "+$5", description: "Wild-caught Atlantic salmon with teriyaki glaze" },
+      { name: "Scallops", price: "+$5", description: "Fresh sea scallops grilled to perfection" },
+      { name: "Lobster Tail", price: "+$15", description: "Fresh lobster tail with garlic butter" }
+    ],
+    additional_options: [
+      { name: "Yakisoba Noodles", price: "+$5", description: "Japanese style lo mein noodles" },
+      { name: "3rd Protein", price: "+$10", description: "Add a third protein to your meal" },
+      { name: "Extra Fried Rice", price: "+$5", description: "Additional portion of hibachi fried rice" },
+      { name: "Extra Vegetables", price: "+$5", description: "Additional portion of mixed seasonal vegetables" }
     ],
     combo_suggestions: [
       { name: "Surf & Turf", proteins: ["Premium Angus Sirloin Steak", "Shrimp"], popular: true },
