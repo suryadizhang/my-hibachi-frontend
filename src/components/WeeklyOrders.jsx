@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Card, Table, Button, Form } from "react-bootstrap";
 
-const API_BASE = "http://localhost:8000/api/booking";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 function WeeklyOrders() {
   const [monday, setMonday] = useState("");
@@ -10,7 +10,7 @@ function WeeklyOrders() {
 
   const fetchOrders = async () => {
     if (!monday) return;
-    const res = await axios.get(`${API_BASE}/weekly?start_date=${monday}`);
+    const res = await axios.get(`${API_BASE}/api/booking/weekly?start_date=${monday}`);
     setOrders(res.data);
   };
 

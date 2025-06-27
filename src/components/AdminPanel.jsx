@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Spinner, Alert, Button, Table, Form } from "react-bootstrap";
 
-const API_BASE = "http://localhost:8000/api/booking";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 function AdminPanel() {
   const [mode, setMode] = useState("weekly");
@@ -30,7 +30,7 @@ function AdminPanel() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get(`${API_BASE}/admin/weekly?start_date=${date}`, {
+      const res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${date}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(res.data);
@@ -53,7 +53,7 @@ function AdminPanel() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get(`${API_BASE}/admin/monthly?year=${year}&month=${month}`, {
+      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${year}&month=${month}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(res.data);
@@ -81,7 +81,7 @@ function AdminPanel() {
     // Fetch KPIs from backend (create an endpoint or compute from bookings)
     const fetchKpis = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/admin/kpis`, {
+        const res = await axios.get(`${API_BASE}/api/booking/admin/kpis`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setKpis(res.data);

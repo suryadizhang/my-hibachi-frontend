@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const timeSlots = ['12:00 PM', '3:00 PM', '6:00 PM', '9:00 PM'];
-const API_BASE = 'http://localhost:8000/api/booking';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 const slotStatusColor = (status) => {
   if (status === "waiting") return "#ffc107"; // yellow for waiting list
@@ -94,7 +94,7 @@ const OrderServices = () => {
         }
         setCalendarLoading(true);
         try {
-          const res = await axios.get(`${API_BASE}/availability?date=${dateStr}`);
+          const res = await axios.get(`${API_BASE}/api/booking/availability?date=${dateStr}`);
           if (JSON.stringify(slotStatus) !== JSON.stringify(res.data)) {
             setSlotStatus(res.data);
             setAvailabilityCache(prev => ({ ...prev, [dateStr]: res.data }));
@@ -104,7 +104,7 @@ const OrderServices = () => {
               prefetchDate.setDate(prefetchDate.getDate() + offset);
               const prefetchStr = prefetchDate.toISOString().split('T')[0];
               if (!availabilityCache[prefetchStr]) {
-                axios.get(`${API_BASE}/availability?date=${prefetchStr}`).then(res => {
+                axios.get(`${API_BASE}/api/booking/availability?date=${prefetchStr}`).then(res => {
                   setAvailabilityCache(prev => ({ ...prev, [prefetchStr]: res.data }));
                 });
               }
@@ -139,13 +139,13 @@ const OrderServices = () => {
       zipcode: formData.zipcode,
     };
     try {
-      await axios.post(`${API_BASE}/book`, payload);
+      await axios.post(`${API_BASE}/api/booking/book`, payload);
       setVariant('success');
       setMessage('Booking submitted!');
       setFormData({ name: '', phone: '', email: '', address: '', city: '', zipcode: '', timeSlot: '', contactPreference: '' });
       // Re-fetch slot availability after booking
       const dateStr = selectedDate.toISOString().split('T')[0];
-      const res = await axios.get(`${API_BASE}/availability?date=${dateStr}`);
+      const res = await axios.get(`${API_BASE}/api/booking/availability?date=${dateStr}`);
       setSlotStatus(res.data);
     } catch (err) {
       setVariant('danger');
@@ -177,7 +177,7 @@ const OrderServices = () => {
       date.setDate(date.getDate() + 1);
       const dateStr = date.toISOString().split('T')[0];
       try {
-        const res = await axios.get(`${API_BASE}/availability?date=${dateStr}`);
+        const res = await axios.get(`${API_BASE}/api/booking/availability?date=${dateStr}`);
         if (Object.values(res.data).some(slot => slot.status === "available")) {
           return new Date(date);
         }
@@ -220,7 +220,7 @@ const OrderServices = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${API_BASE}/waitlist`, waitlistData);
+      await axios.post(`${API_BASE}/api/booking/waitlist`, waitlistData);
       setWaitlistVariant('success');
       setWaitlistMessage('You have been added to the waitlist! We will contact you if a slot opens.');
       setShowWaitlistModal(false);

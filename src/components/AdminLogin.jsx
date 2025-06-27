@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:8000/api/booking";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -17,7 +17,7 @@ function AdminLogin() {
       const form = new FormData();
       form.append("username", username);
       form.append("password", password);
-      const res = await axios.post(`${API_BASE}/token`, form, {
+      const res = await axios.post(`${API_BASE}/api/booking/token`, form, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       localStorage.setItem("adminToken", res.data.access_token);
