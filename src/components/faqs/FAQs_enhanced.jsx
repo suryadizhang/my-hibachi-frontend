@@ -169,7 +169,7 @@ const FAQs = () => {
                 activeKey={activeCategory}
                 className="faq-accordion"
               >
-                {Object.entries(filteredFAQData).map(([category, items], idx) => (
+                {Object.entries(filteredFAQData).map(([category, items]) => (
                   <FAQCategory
                     key={category}
                     eventKey={category}

@@ -5,34 +5,34 @@ import FAQCategory from './FAQCategory';
 import faqData from './faqData';
 import './FAQs.css';
 
+// Helper function to extract text from React elements
+const extractTextFromReactElement = (element) => {
+  if (typeof element === 'string') {
+    return element;
+  }
+  if (typeof element === 'number') {
+    return element.toString();
+  }
+  if (React.isValidElement(element)) {
+    if (element.props && element.props.children) {
+      if (Array.isArray(element.props.children)) {
+        return element.props.children
+          .map(child => extractTextFromReactElement(child))
+          .join(' ');
+      }
+      return extractTextFromReactElement(element.props.children);
+    }
+  }
+  if (Array.isArray(element)) {
+    return element.map(item => extractTextFromReactElement(item)).join(' ');
+  }
+  return '';
+};
+
 const FAQs = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
   const [openCategories, setOpenCategories] = useState([]);
-
-  // Helper function to extract text from React elements
-  const extractTextFromReactElement = (element) => {
-    if (typeof element === 'string') {
-      return element;
-    }
-    if (typeof element === 'number') {
-      return element.toString();
-    }
-    if (React.isValidElement(element)) {
-      if (element.props && element.props.children) {
-        if (Array.isArray(element.props.children)) {
-          return element.props.children
-            .map(child => extractTextFromReactElement(child))
-            .join(' ');
-        }
-        return extractTextFromReactElement(element.props.children);
-      }
-    }
-    if (Array.isArray(element)) {
-      return element.map(item => extractTextFromReactElement(item)).join(' ');
-    }
-    return '';
-  };
 
   // Filter FAQs based on search term
   const filteredFAQData = useMemo(() => {
@@ -252,7 +252,7 @@ const FAQs = () => {
                 }}
                 className="faq-accordion"
               >
-                {Object.entries(filteredFAQData).map(([category, items], idx) => (
+                {Object.entries(filteredFAQData).map(([category, items]) => (
                   <FAQCategory
                     key={category}
                     eventKey={category}

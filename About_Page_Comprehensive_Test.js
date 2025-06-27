@@ -113,7 +113,6 @@ function testAboutPageFunctionality() {
     // Test 9: Responsive Design Elements
     console.log("9️⃣ Testing responsive design...");
     const currentWidth = window.innerWidth;
-    const isMobile = currentWidth <= 768;
     const heroResponsiveContainer = document.querySelector('.hero-media-container');
     if (heroResponsiveContainer) {
       const computedStyle = window.getComputedStyle(heroResponsiveContainer);
