@@ -4,6 +4,7 @@ import { Container, Row, Col, Badge } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./About.css";
 import heroPic from "../assets/hero_pic.png";
+import heroVideo from "../assets/hero_video.mp4";
 
 const About = () => {
   useEffect(() => {
@@ -24,6 +25,34 @@ const About = () => {
     // Observe all elements with animate-on-scroll class
     const animateElements = document.querySelectorAll('.animate-on-scroll');
     animateElements.forEach(el => observer.observe(el));
+
+    // Handle video loading
+    const heroContainer = document.querySelector('.hero-media-container');
+    const heroVideo = document.querySelector('.hero-video');
+    
+    if (heroVideo && heroContainer) {
+      heroContainer.classList.add('loading');
+      
+      const handleVideoLoaded = () => {
+        heroContainer.classList.remove('loading');
+      };
+      
+      const handleVideoError = () => {
+        console.warn('Hero video failed to load, showing fallback image');
+        heroContainer.classList.remove('loading');
+      };
+
+      heroVideo.addEventListener('loadeddata', handleVideoLoaded);
+      heroVideo.addEventListener('error', handleVideoError);
+
+      return () => {
+        observer.disconnect();
+        if (heroVideo) {
+          heroVideo.removeEventListener('loadeddata', handleVideoLoaded);
+          heroVideo.removeEventListener('error', handleVideoError);
+        }
+      };
+    }
 
     return () => observer.disconnect();
   }, []);
@@ -67,20 +96,9 @@ const About = () => {
         </script>
       </Helmet>
 
-      {/* Hero Media Section - Ready for Video Integration */}
+      {/* Hero Video Section */}
       <div className="hero-media-container">
         <div className="hero-media-overlay"></div>
-        {/* Current Image - Ready to be replaced with video */}
-        <img
-          src={heroPic}
-          alt="Private hibachi chef cooking teppanyaki in Bay Area"
-          className="hero-media hero-image"
-          width="1920"
-          height="800"
-          loading="eager"
-          fetchPriority="high"
-        />
-        {/* Video element ready for integration - currently commented out
         <video
           className="hero-media hero-video"
           width="1920"
@@ -90,12 +108,31 @@ const About = () => {
           loop
           playsInline
           poster={heroPic}
+          onError={(e) => {
+            console.warn('Video failed to load, falling back to image');
+            e.target.style.display = 'none';
+            e.target.nextElementSibling.style.display = 'block';
+          }}
         >
-          <source src="/path-to-your-video.mp4" type="video/mp4" />
-          <source src="/path-to-your-video.webm" type="video/webm" />
-          Your browser does not support the video tag.
+          <source src={heroVideo} type="video/mp4" />
+          {/* Fallback image for browsers that don't support video */}
+          <img
+            src={heroPic}
+            alt="Private hibachi chef cooking teppanyaki in Bay Area"
+            className="hero-media hero-image"
+            width="1920"
+            height="800"
+          />
         </video>
-        */}
+        {/* Fallback image (hidden by default, shown if video fails) */}
+        <img
+          src={heroPic}
+          alt="Private hibachi chef cooking teppanyaki in Bay Area"
+          className="hero-media hero-image"
+          width="1920"
+          height="800"
+          style={{ display: 'none' }}
+        />
       </div>
 
       {/* Animated Headline Section */}
