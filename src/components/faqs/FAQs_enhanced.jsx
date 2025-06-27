@@ -1,38 +1,13 @@
-import React, { useState, useMemo, Suspense } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Accordion, Spinner, Form, InputGroup, Badge, Container, Row, Col, Card } from 'react-bootstrap';
 import { Search, X } from 'react-bootstrap-icons';
 import FAQCategory from './FAQCategory';
-import faqData from './faqData';
+import faqData from './faqData_organized';
 import './FAQs.css';
 
 const FAQs = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
-  const [openCategories, setOpenCategories] = useState([]);
-
-  // Helper function to extract text from React elements
-  const extractTextFromReactElement = (element) => {
-    if (typeof element === 'string') {
-      return element;
-    }
-    if (typeof element === 'number') {
-      return element.toString();
-    }
-    if (React.isValidElement(element)) {
-      if (element.props && element.props.children) {
-        if (Array.isArray(element.props.children)) {
-          return element.props.children
-            .map(child => extractTextFromReactElement(child))
-            .join(' ');
-        }
-        return extractTextFromReactElement(element.props.children);
-      }
-    }
-    if (Array.isArray(element)) {
-      return element.map(item => extractTextFromReactElement(item)).join(' ');
-    }
-    return '';
-  };
 
   // Filter FAQs based on search term
   const filteredFAQData = useMemo(() => {
@@ -45,8 +20,10 @@ const FAQs = () => {
         const headerMatch = item.header.toLowerCase().includes(searchLower);
         
         // Extract text content from JSX body for searching
-        const bodyText = extractTextFromReactElement(item.body).toLowerCase();
-        const bodyMatch = bodyText.includes(searchLower);
+        const bodyText = typeof item.body === 'string' 
+          ? item.body 
+          : item.body.props?.children?.toString() || '';
+        const bodyMatch = bodyText.toLowerCase().includes(searchLower);
         
         return headerMatch || bodyMatch;
       });
@@ -62,25 +39,6 @@ const FAQs = () => {
   const clearSearch = () => {
     setSearchTerm('');
     setActiveCategory('');
-    setOpenCategories([]);
-  };
-
-  const handleCategoryClick = (category) => {
-    setActiveCategory(category);
-    setSearchTerm(''); // Clear search when navigating to category
-    setOpenCategories([category]); // Open only the selected category
-    
-    // Scroll to the FAQ content section after a short delay
-    setTimeout(() => {
-      const faqContentElement = document.querySelector('.faq-accordion');
-      if (faqContentElement) {
-        faqContentElement.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start',
-          inline: 'nearest'
-        });
-      }
-    }, 100);
   };
 
   const totalFAQs = Object.values(filteredFAQData).reduce((total, items) => total + items.length, 0);
@@ -144,50 +102,36 @@ const FAQs = () => {
       {!searchTerm && (
         <Row className="mb-4">
           <Col>
-              <Card className="categories-overview">
-                <Card.Header>
-                  <h4 className="mb-0">📋 FAQ Categories</h4>
-                  <p className="mb-0 mt-2 opacity-75">Click on any category to view related questions</p>
-                </Card.Header>
-                <Card.Body>
-                  <Row className="g-4">
-                    {Object.entries(faqData).map(([category, items]) => {
-                      const [emoji, ...nameParts] = category.split(' ');
-                      const categoryName = nameParts.join(' ');
-                      
-                      return (
-                        <Col xs={12} sm={6} lg={4} xl={4} key={category} className="d-flex">
-                          <div 
-                            className="category-card w-100"
-                            onClick={() => handleCategoryClick(category)}
-                            style={{ cursor: 'pointer' }}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                handleCategoryClick(category);
-                              }
-                            }}
-                          >
-                            <div className="category-icon">
-                              {emoji}
-                            </div>
-                            <div className="category-info">
-                              <h6 className="category-name">
-                                {categoryName}
-                              </h6>
-                              <Badge bg="secondary" className="question-count">
-                                {items.length} question{items.length !== 1 ? 's' : ''}
-                              </Badge>
-                            </div>
-                          </div>
-                        </Col>
-                      );
-                    })}
-                  </Row>
-                </Card.Body>
-              </Card>
+            <Card className="categories-overview">
+              <Card.Header>
+                <h4 className="mb-0">📋 FAQ Categories</h4>
+              </Card.Header>
+              <Card.Body>
+                <Row>
+                  {Object.entries(faqData).map(([category, items]) => (
+                    <Col md={6} lg={4} key={category} className="mb-3">
+                      <div 
+                        className="category-card"
+                        onClick={() => setActiveCategory(category)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <div className="category-icon">
+                          {category.split(' ')[0]}
+                        </div>
+                        <div className="category-info">
+                          <h6 className="category-name">
+                            {category.replace(/^[^\s]+\s/, '')}
+                          </h6>
+                          <Badge bg="secondary" className="question-count">
+                            {items.length} question{items.length !== 1 ? 's' : ''}
+                          </Badge>
+                        </div>
+                      </div>
+                    </Col>
+                  ))}
+                </Row>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
       )}
@@ -195,21 +139,6 @@ const FAQs = () => {
       {/* FAQ Content */}
       <Row className="justify-content-center">
         <Col lg={10}>
-          {/* Back to Categories Button */}
-          {activeCategory && !searchTerm && (
-            <div className="back-to-categories text-center">
-              <button 
-                className="btn btn-primary"
-                onClick={() => {
-                  setActiveCategory('');
-                  setOpenCategories([]);
-                }}
-              >
-                ← Back to All Categories
-              </button>
-            </div>
-          )}
-          
           {Object.keys(filteredFAQData).length === 0 ? (
             <Card className="no-results-card text-center">
               <Card.Body>
@@ -224,7 +153,7 @@ const FAQs = () => {
                   className="btn btn-primary"
                   onClick={clearSearch}
                 >
-                  Clear Search & View All Categories
+                  Clear Search
                 </button>
               </Card.Body>
             </Card>
@@ -235,16 +164,9 @@ const FAQs = () => {
               </div>
             }>
               <Accordion 
-                activeKey={searchTerm ? Object.keys(filteredFAQData) : openCategories}
-                onSelect={(eventKey) => {
-                  if (!searchTerm && eventKey) {
-                    if (openCategories.includes(eventKey)) {
-                      setOpenCategories(openCategories.filter(key => key !== eventKey));
-                    } else {
-                      setOpenCategories([...openCategories, eventKey]);
-                    }
-                  }
-                }}
+                alwaysOpen 
+                flush 
+                activeKey={activeCategory}
                 className="faq-accordion"
               >
                 {Object.entries(filteredFAQData).map(([category, items], idx) => (
@@ -264,18 +186,18 @@ const FAQs = () => {
 
       {/* Contact CTA */}
       <Row className="justify-content-center mt-5">
-        <Col lg={8} xl={6} className="text-center">
+        <Col lg={8} className="text-center">
           <Card className="contact-cta-card">
-            <Card.Body className="p-4">
+            <Card.Body>
               <h4>Still have questions?</h4>
-              <p className="text-light mb-4 opacity-90">
+              <p className="text-muted mb-3">
                 Our customer service team is here to help you plan the perfect hibachi experience!
               </p>
               <div className="contact-info">
-                <Badge className="contact-badge">
+                <Badge bg="success" className="me-3 p-2">
                   📞 Available 11 AM - 10 PM Daily
                 </Badge>
-                <Badge className="contact-badge">
+                <Badge bg="info" className="p-2">
                   📧 cs@myhibachichef.com
                 </Badge>
               </div>

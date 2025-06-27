@@ -23,7 +23,7 @@ const About = () => (
           name: "My Hibachi",
           image: "https://myhibachichef.com/assets/hero_pic.png",
           telephone: "(408) 123-4567",
-          email: "info@myhibachi.com",
+          email: "cs@myhibachichef.com",
           address: {
             "@type": "PostalAddress",
             addressLocality: "San Francisco",

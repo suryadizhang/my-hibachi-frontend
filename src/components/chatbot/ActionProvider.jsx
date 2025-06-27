@@ -104,7 +104,7 @@ class ActionProvider {
       <>
         {"I'm not sure about that. For more help, please contact our customer service:"}
         <br /><br />
-        <strong>📧 Email:</strong> <a href="mailto:info@myhibachi.com" target="_blank" rel="noopener noreferrer">info@myhibachi.com</a><br />
+        <strong>📧 Email:</strong> <a href="mailto:cs@myhibachichef.com" target="_blank" rel="noopener noreferrer">cs@myhibachichef.com</a><br />
         <strong>📱 Text:</strong> <a href="sms:+19167408768" target="_blank" rel="noopener noreferrer">+1 (916) 740-8768</a> (Text only)<br />
         <strong>📸 Instagram:</strong> <a href="https://www.instagram.com/my_hibachi/" target="_blank" rel="noopener noreferrer">@my_hibachi</a><br />
         <strong>📘 Facebook:</strong> <a href="https://www.facebook.com/profile.php?id=61577483702847" target="_blank" rel="noopener noreferrer">My Hibachi Facebook Page</a><br /><br />

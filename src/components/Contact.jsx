@@ -16,11 +16,11 @@ const Contact = () => (
       <Col xs="auto" aria-hidden="true"><FaEnvelope style={{ color: "#FFD700" }} /></Col>
       <Col>
         <a
-          href="mailto:info@myhibachi.com"
+          href="mailto:cs@myhibachichef.com"
           style={{ color: "#222", textDecoration: "none" }}
           aria-label="Email My Hibachi"
         >
-          info@myhibachi.com
+          cs@myhibachichef.com
         </a>
       </Col>
     </Row>
