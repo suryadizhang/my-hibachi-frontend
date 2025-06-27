@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Spinner, Alert, Button, Table, Form } from "react-bootstrap";
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+import { API_BASE } from '../config/api';
 
 function AdminPanel() {
   const [mode, setMode] = useState("weekly");

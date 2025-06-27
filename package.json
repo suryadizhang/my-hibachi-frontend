@@ -11,7 +11,13 @@
     "type": "git",
     "url": "https://github.com/myhibachi/frontend.git"
   },
-  "keywords": ["hibachi", "catering", "react", "booking", "restaurant"],
+  "keywords": [
+    "hibachi",
+    "catering",
+    "react",
+    "booking",
+    "restaurant"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -52,6 +58,7 @@
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
     "babel-jest": "^30.0.1",
+    "babel-plugin-transform-import-meta": "^2.3.3",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
