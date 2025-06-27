@@ -10,7 +10,7 @@ export const WEBSITE_DATA = {
       minimum: "$550 per party",
       upgrades: "Available for premium proteins",
       deposits: "$100 deposit required within 6 hours",
-      travel_fee: "Free for first 30 miles from Fremont, CA 94539, then $2 per mile"
+      travel_fee: "Free for first 30 miles from Fremont, CA 94539, then $2 per mile up to 150 miles"
     },
     features: [
       "Professional hibachi chef entertainment",
@@ -92,7 +92,7 @@ export const WEBSITE_DATA = {
     travel_fee: "$2 per mile after the first 30 miles",
     regions_served: ["Northern California", "Bay Area", "Greater Sacramento", "Surrounding areas"],
     extended: "We serve Northern California, Bay Area, Greater Sacramento and surrounding regions with our travel fee policy",
-    coverage_radius: "Up to 100 miles from Fremont, CA 94539 with advance booking"
+    coverage_radius: "Up to 150 miles from Fremont, CA 94539 with advance booking"
   },
 
   event_details: {
@@ -149,7 +149,7 @@ export const WEBSITE_DATA = {
     },
     {
       q: "Do you charge travel fees?",
-      a: "Travel is free for the first 30 miles from our Fremont, CA 94539 location. After 30 miles, we charge $2 per mile. We serve Northern California, Bay Area, Greater Sacramento and surrounding regions!"
+      a: "Travel is free for the first 30 miles from our Fremont, CA 94539 location. After 30 miles, we charge $2 per mile. We travel up to 150 miles from Fremont with advance booking. We serve Northern California, Bay Area, Greater Sacramento and surrounding regions!"
     }
   ],
 
@@ -256,5 +256,5 @@ export const QUICK_RESPONSES = {
   
   setup_quick: "🏠 **Quick Setup Guide:**\n• Tables & chairs for all guests\n• Plates, utensils, napkins\n• Beverages\n• 8x8 ft cooking space\n• We handle the rest!",
   
-  pricing_quick: "💰 **Quick Pricing:**\n• Adults: $55 each\n• Kids 6-12: $30 each\n• Under 5: FREE\n• $550 minimum per party\n• $100 deposit required\n• Travel: Free first 30 miles from Fremont, CA 94539"
+  pricing_quick: "💰 **Quick Pricing:**\n• Adults: $55 each\n• Kids 6-12: $30 each\n• Under 5: FREE\n• $550 minimum per party\n• $100 deposit required\n• Travel: Free first 30 miles from Fremont, CA 94539, then $2/mile up to 150 miles"
 };
