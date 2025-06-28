@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Row, Col, Badge, ListGroup, Alert, Container } from 'react-bootstrap';
+import { Card, Row, Col, Badge, ListGroup, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Menu.css';
 
@@ -7,7 +7,6 @@ const proteinOptions = [
   { name: 'Chicken', description: 'Tender grilled chicken breast with signature hibachi seasonings and teriyaki glaze' },
   { name: 'Premium Angus Sirloin Steak', description: 'Premium Angus Sirloin steak cooked to your preferred temperature' },
   { name: 'Shrimp', description: 'Fresh jumbo shrimp with garlic butter and hibachi spices' },
-  { name: 'Calamari', description: 'Fresh tender calamari grilled with garlic and hibachi spices' },
   { name: 'Tofu', description: 'Fried tofu with our house special seasoning - perfect vegetarian option' }
 ];
 
@@ -29,134 +28,92 @@ const additionalOptions = [
 
 const Menu = () => (
   <div className="menu-container">
-    <Container fluid className="px-lg-5">
-      {/* Enhanced Hero Section */}
+    <div className="container">
+      {/* Hero Section */}
       <div className="hero-section text-center mb-5">
         <div className="hero-content">
-          <div className="hero-icon-wrapper mb-4">
-            <span className="hero-main-icon emoji-visible">🍱</span>
-          </div>
-          <h1 className="display-1 fw-bold mb-4">
+          <h1 className="display-2 fw-bold mb-3 d-flex align-items-center justify-content-center">
+            <span className="emoji-visible" style={{ fontSize: '1.2em', marginRight: '0.75rem' }}>🍱</span>
             <span className="gradient-text">My Hibachi Menu</span>
           </h1>
-          <p className="hero-subtitle mb-5">
-            <span className="emoji-visible">✨</span>
-            Premium In-Home Hibachi Dining Experience
-            <span className="emoji-visible">✨</span>
+          <p className="lead mb-4" style={{ fontSize: '1.4rem', color: '#2c3e50', fontWeight: 500 }}>
+            ✨ Premium In-Home Hibachi Dining Experience ✨
           </p>
-          
-          {/* Enhanced feature badges with better spacing */}
-          <div className="hero-features-grid mb-5">
-            <div className="feature-badge">
-              <span className="feature-icon emoji-visible">👨‍🍳</span>
-              <span className="feature-text">Expert Chefs</span>
-            </div>
-            <div className="feature-badge">
-              <span className="feature-icon emoji-visible">🎭</span>
-              <span className="feature-text">Live Entertainment</span>
-            </div>
-            <div className="feature-badge">
-              <span className="feature-icon emoji-visible">🏠</span>
-              <span className="feature-text">Your Location</span>
-            </div>
-            <div className="feature-badge">
-              <span className="feature-icon emoji-visible">⭐</span>
-              <span className="feature-text">Premium Quality</span>
-            </div>
+          <div className="hero-badges d-flex flex-wrap justify-content-center gap-3 mb-4">
+            <span className="hero-badge">
+              <span className="emoji-visible">👨‍🍳</span> Expert Chefs
+            </span>
+            <span className="hero-badge">
+              <span className="emoji-visible">🎭</span> Live Entertainment
+            </span>
+            <span className="hero-badge">
+              <span className="emoji-visible">🏠</span> Your Location
+            </span>
+            <span className="hero-badge">
+              <span className="emoji-visible">⭐</span> Premium Quality
+            </span>
           </div>
         </div>
       </div>
 
       <Card className="menu-card p-0 border-0 overflow-hidden">
-        {/* Enhanced Pricing Section */}
+        {/* Pricing Section */}
         <div className="pricing-section p-5 mb-0">
           <div className="text-center mb-5">
-            <div className="section-header">
-              <h2 className="section-title mb-4">
-                <span className="emoji-visible">💰</span>
-                <span>Transparent Pricing</span>
-              </h2>
-              <p className="section-subtitle">No hidden fees, just great value</p>
-            </div>
-            
-            <div className="pricing-info-card mb-5">
-              <div className="info-highlight">
-                <span className="emoji-visible">✨</span>
-                <span>Transparent rates — no hidden fees</span>
-              </div>
-              <div className="gratuity-note">
-                <span className="emoji-visible">💝</span>
-                <span><strong>Gratuity is not included</strong>, but always appreciated for your hardworking personal chef</span>
-              </div>
-              <div className="travel-info">
-                <span className="emoji-visible">🚗</span>
-                <span>Travel fee: Free first 30 miles, $2/mile after (up to 150 miles)</span>
-              </div>
+            <h2 className="mb-4 d-flex align-items-center justify-content-center gap-3" style={{ fontSize: '2.5rem', fontWeight: 700 }}>
+              <span className="emoji-visible" style={{ fontSize: '1.3em' }}>💰</span>
+              <span style={{
+                background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>Transparent Pricing</span>
+            </h2>
+            <Alert variant="light" className="border-0 text-muted fs-5 mb-4 mx-auto" style={{ maxWidth: '600px' }}>
+              Transparent rates — no hidden fees. <br />
+              <strong className="text-warning">Gratuity is not included, but always appreciated for your hardworking personal chef.</strong>
+            </Alert>
+            <div className="pricing-notes mb-4">
+              <p className="text-info fs-6 fw-medium mb-0">
+                <span className="emoji-visible">🚗</span> Travel fee applied: Free first 30 miles, $2/mile after (up to 150 miles)
+              </p>
             </div>
           </div>
           
-          <Row className="justify-content-center mb-5">
-            <Col lg={12}>
-              <div className="pricing-cards-wrapper">
+          <Row className="justify-content-center mb-4">
+            <Col lg={10}>
+              <div className="pricing-grid">
                 <div className="pricing-card adult-price">
-                  <div className="card-header-accent"></div>
                   <div className="pricing-icon emoji-visible">👥</div>
                   <div className="pricing-amount">$55</div>
                   <div className="pricing-label">per adult</div>
                   <div className="pricing-note">Ages 13+</div>
-                  <div className="card-features">
-                    <div className="feature">Full hibachi experience</div>
-                    <div className="feature">2 protein choices</div>
-                    <div className="feature">All sides included</div>
-                  </div>
                 </div>
-                
                 <div className="pricing-card child-price">
-                  <div className="card-header-accent"></div>
                   <div className="pricing-icon emoji-visible">🧒</div>
                   <div className="pricing-amount">$30</div>
                   <div className="pricing-label">per child</div>
                   <div className="pricing-note">Ages 6-12</div>
-                  <div className="card-features">
-                    <div className="feature">Kid-friendly portions</div>
-                    <div className="feature">1 protein choice</div>
-                    <div className="feature">Interactive experience</div>
-                  </div>
                 </div>
-                
                 <div className="pricing-card free-price">
-                  <div className="card-header-accent"></div>
                   <div className="pricing-icon emoji-visible">👶</div>
                   <div className="pricing-amount">FREE</div>
                   <div className="pricing-label">little ones</div>
                   <div className="pricing-note">Under 5</div>
-                  <div className="card-features">
-                    <div className="feature">Complimentary meal</div>
-                    <div className="feature">Small portions</div>
-                    <div className="feature">Entertainment included</div>
-                  </div>
                 </div>
               </div>
             </Col>
           </Row>
           
-          <div className="pricing-footer">
-            <div className="minimum-order-banner">
-              <div className="banner-content-flex">
-                <div className="minimum-info">
-                  <span className="info-icon emoji-visible">🎯</span>
-                  <div className="info-text">
-                    <strong>Party Minimum: $550</strong>
-                    <small>Approximately 10 adults</small>
-                  </div>
-                </div>
-                <div className="tip-info">
-                  <span className="info-icon emoji-visible">💡</span>
-                  <div className="info-text">
-                    <strong>Gratuity Guidelines</strong>
-                    <small>20-35% based on your satisfaction</small>
-                  </div>
-                </div>
+          <div className="minimum-order-card text-center">
+            <div className="d-flex align-items-center justify-content-center flex-wrap gap-3">
+              <div className="minimum-info">
+                <span className="emoji-visible">🎯</span>
+                <strong className="ms-2">Party Minimum: $550</strong>
+              </div>
+              <div className="tip-info">
+                <span className="emoji-visible">💡</span>
+                <em className="ms-2">Gratuity not included</em>
               </div>
             </div>
           </div>
@@ -185,7 +142,7 @@ const Menu = () => (
                 <span className="included-icon emoji-visible">🥬</span>
                 <div className="included-content">
                   <h5 className="included-title">Seasonal Vegetables</h5>
-                  <p className="included-desc">Fresh zucchini, carrots, onions, mushrooms, and broccoli</p>
+                  <p className="included-desc">Fresh zucchini, onions, and mushrooms</p>
                 </div>
               </div>
               <div className="included-item">
@@ -338,90 +295,42 @@ const Menu = () => (
           </Row>
         </div>
 
-        {/* Enhanced Call to Action */}
+        {/* Call to Action */}
         <div className="cta-section text-center p-5">
-          <div className="cta-content-wrapper">
-            <div className="cta-background-pattern"></div>
+          <div className="cta-content">
+            <h2 className="cta-title mb-4">
+              Ready for an Unforgettable Experience?
+            </h2>
+            <p className="cta-subtitle mb-5">
+              Book your premium hibachi experience today and create memories that will last a lifetime
+            </p>
             
-            {/* CTA Header */}
-            <div className="cta-header mb-5">
-              <div className="cta-icon-group mb-4">
-                <span className="cta-icon emoji-visible">🍽️</span>
-                <span className="cta-icon emoji-visible">🎉</span>
-                <span className="cta-icon emoji-visible">👨‍🍳</span>
+            <Link to="/BookUs" aria-label="Order your hibachi experience now">
+              <button className="cta-button">
+                <span className="emoji-visible">🍽️</span>
+                <span className="cta-text">Order Your Hibachi Experience</span>
+                <span className="emoji-visible">🍽️</span>
+              </button>
+            </Link>
+            
+            <div className="cta-features mt-4">
+              <div className="feature-item">
+                <span className="emoji-visible">👨‍🍳</span>
+                <span>Professional Chef</span>
               </div>
-              <h2 className="cta-main-title">
-                Ready for an Unforgettable Experience?
-              </h2>
-              <p className="cta-main-subtitle">
-                Book your premium hibachi experience today and create memories that will last a lifetime
-              </p>
-            </div>
-            
-            {/* Main CTA Button */}
-            <div className="cta-button-wrapper mb-5">
-              <Link to="/BookUs" aria-label="Order your hibachi experience now" className="cta-link">
-                <button className="cta-main-button">
-                  <span className="button-icon emoji-visible">🍽️</span>
-                  <span className="button-text">Order Your Hibachi Experience</span>
-                  <span className="button-icon emoji-visible">🍽️</span>
-                  <div className="button-shimmer"></div>
-                </button>
-              </Link>
-              
-              {/* Secondary actions */}
-              <div className="secondary-actions mt-4">
-                <div className="action-item">
-                  <span className="emoji-visible">📞</span>
-                  <span>Call for custom packages</span>
-                </div>
-                <div className="action-divider">•</div>
-                <div className="action-item">
-                  <span className="emoji-visible">💬</span>
-                  <span>Ask about group discounts</span>
-                </div>
+              <div className="feature-item">
+                <span className="emoji-visible">🎭</span>
+                <span>Live Entertainment</span>
               </div>
-            </div>
-            
-            {/* Enhanced Feature Highlights */}
-            <div className="cta-features-section">
-              <h3 className="features-title mb-4">Why Choose My Hibachi?</h3>
-              <div className="cta-features-grid">
-                <div className="cta-feature-card">
-                  <div className="feature-icon-wrapper">
-                    <span className="feature-icon emoji-visible">👨‍🍳</span>
-                  </div>
-                  <div className="feature-content">
-                    <h4 className="feature-title">Professional Chef</h4>
-                    <p className="feature-description">Expertly trained hibachi chefs with 8+ years of professional experience</p>
-                  </div>
-                </div>
-                
-                <div className="cta-feature-card">
-                  <div className="feature-icon-wrapper">
-                    <span className="feature-icon emoji-visible">🎭</span>
-                  </div>
-                  <div className="feature-content">
-                    <h4 className="feature-title">Live Entertainment</h4>
-                    <p className="feature-description">Amazing tricks, flips, and interactive cooking show</p>
-                  </div>
-                </div>
-                
-                <div className="cta-feature-card">
-                  <div className="feature-icon-wrapper">
-                    <span className="feature-icon emoji-visible">🎯</span>
-                  </div>
-                  <div className="feature-content">
-                    <h4 className="feature-title">Personalized Service</h4>
-                    <p className="feature-description">Customized experience tailored to your preferences</p>
-                  </div>
-                </div>
+              <div className="feature-item">
+                <span className="emoji-visible">💯</span>
+                <span>Satisfaction Guaranteed</span>
               </div>
             </div>
           </div>
         </div>
       </Card>
-    </Container>
+    </div>
   </div>
 );
 

@@ -336,7 +336,7 @@ const faqData = {
       header: "What steps does My Hibachi take to ensure fire safety during cooking?",
       body: (
         <>
-          All of our chefs have 8+ years of experience and undergo comprehensive fire safety training. Every chef brings a portable fire extinguisher to ensure maximum safety.
+          All of our chefs have 5-10 years of experience and undergo comprehensive fire safety training. Every chef brings a portable fire extinguisher to ensure maximum safety.
         </>
       )
     },

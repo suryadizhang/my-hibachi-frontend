@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
+import { Form, Button, Card, Alert, Spinner, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import './OrderServices.css';
 
 const timeSlots = ['12:00 PM', '3:00 PM', '6:00 PM', '9:00 PM'];
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
@@ -23,10 +24,11 @@ const OrderServices = () => {
   const minSelectableDate = new Date(now);
   minSelectableDate.setDate(now.getDate() + 2);
 
-  const [selectedDate, setSelectedDate] = useState(minSelectableDate);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [slotStatus, setSlotStatus] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+  const [showMissingFieldsModal, setShowMissingFieldsModal] = useState(false);
   const [nextAvailableDate, setNextAvailableDate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(false);
@@ -74,14 +76,17 @@ const OrderServices = () => {
   };
 
   useEffect(() => {
-    if (selectedDate && !isDateAllowed(selectedDate)) {
-      setSelectedDate(minSelectableDate);
+    // No need to set a default date since we want it to be null initially
+    
+    // Debug log initial state
+    if (import.meta.env.DEV) {
+      console.log('Initial state - selectedDate:', selectedDate, 'minSelectableDate:', minSelectableDate);
     }
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    if (!isDateAllowed(selectedDate)) return;
+    if (!selectedDate || !isDateAllowed(selectedDate)) return;
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       const fetchAvailability = async () => {
@@ -110,8 +115,14 @@ const OrderServices = () => {
               }
             }
           }
-        } catch {
-          setSlotStatus({});
+        } catch (error) {
+          console.warn('API not available, using default slot status:', error.message);
+          // Set default available status for all time slots when API is not available
+          const defaultSlotStatus = {};
+          timeSlots.forEach(slot => {
+            defaultSlotStatus[slot] = { status: 'available' };
+          });
+          setSlotStatus(defaultSlotStatus);
         }
         setCalendarLoading(false);
       };
@@ -122,10 +133,12 @@ const OrderServices = () => {
   }, [selectedDate]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!isDateAllowed(selectedDate)) {
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
+    if (!selectedDate || !isDateAllowed(selectedDate)) {
       setVariant('danger');
-      setMessage('You must book at least 2 days in advance.');
+      setMessage('You must select a date and book at least 2 days in advance.');
       return;
     }
     setLoading(true);
@@ -147,6 +160,7 @@ const OrderServices = () => {
       const dateStr = selectedDate.toISOString().split('T')[0];
       const res = await axios.get(`${API_BASE}/api/booking/availability?date=${dateStr}`);
       setSlotStatus(res.data);
+      setLoading(false);
     } catch (err) {
       setVariant('danger');
       if (err.response?.data?.detail) {
@@ -166,8 +180,8 @@ const OrderServices = () => {
       } else {
         setMessage("Could not connect to the server. Please try again later. or contact our customer service");
       }
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   // Calculate min selectable date (today + 2 days)
@@ -254,34 +268,85 @@ const OrderServices = () => {
   const isPhoneValid = (phone) => /^[0-9]{10,15}$/.test(phone);
   const isZipValid = (zip) => /^[0-9]{4,10}$/.test(zip);
 
+  // Handle submit button click - check for missing fields first
+  const handleSubmitClick = () => {
+    const missingFields = getMissingFields();
+    if (missingFields.length > 0) {
+      setShowMissingFieldsModal(true);
+    } else {
+      setShowModal(true);
+    }
+  };
+
   // Disable booking button if any required field is empty or invalid
-  const isBookingDisabled = () =>
-    !formData.name ||
-    !formData.phone ||
-    !isPhoneValid(formData.phone) ||
-    !formData.email ||
-    !formData.address ||
-    !formData.city ||
-    !formData.zipcode ||
-    !isZipValid(formData.zipcode) ||
-    !formData.timeSlot ||
-    !formData.contactPreference ||
-    slotStatus[formData.timeSlot]?.status === "booked" ||
-    !isDateAllowed(selectedDate) ||
-    loading;
+  const isBookingDisabled = () => {
+    return !formData.name || 
+           !formData.phone || 
+           !isPhoneValid(formData.phone) ||
+           !formData.email || 
+           !formData.address ||
+           !formData.city ||
+           !formData.zipcode ||
+           !isZipValid(formData.zipcode) ||
+           !formData.timeSlot || 
+           !formData.contactPreference ||
+           !selectedDate ||
+           !isDateAllowed(selectedDate) ||
+           slotStatus[formData.timeSlot]?.status === "booked" ||
+           loading;
+  };
+
+  // Get missing fields for user feedback
+  const getMissingFields = () => {
+    const missing = [];
+    if (!formData.name) missing.push('Full Name');
+    if (!formData.phone) missing.push('Phone Number');
+    else if (!isPhoneValid(formData.phone)) missing.push('Valid Phone Number (10-15 digits)');
+    if (!formData.email) missing.push('Email Address');
+    if (!formData.address) missing.push('Street Address');
+    if (!formData.city) missing.push('City');
+    if (!formData.zipcode) missing.push('Zip Code');
+    else if (!isZipValid(formData.zipcode)) missing.push('Valid Zip Code (4-10 digits)');
+    if (!selectedDate) missing.push('Date Selection');
+    else if (!isDateAllowed(selectedDate)) missing.push('Valid Date (at least 2 days in advance)');
+    if (!formData.timeSlot) missing.push('Time Slot');
+    if (!formData.contactPreference) missing.push('Contact Preference');
+    if (slotStatus[formData.timeSlot]?.status === "booked") missing.push('Available Time Slot');
+    
+    // Debug logging
+    if (import.meta.env.DEV) {
+      console.log('FormData check:', {
+        name: formData.name,
+        phone: formData.phone,
+        phoneValid: isPhoneValid(formData.phone),
+        email: formData.email,
+        address: formData.address,
+        city: formData.city,
+        zipcode: formData.zipcode,
+        zipcodeValid: isZipValid(formData.zipcode),
+        timeSlot: formData.timeSlot,
+        contactPreference: formData.contactPreference,
+        dateAllowed: isDateAllowed(selectedDate),
+        slotAvailable: slotStatus[formData.timeSlot]?.status !== "booked",
+        missing: missing
+      });
+    }
+    
+    return missing;
+  };
 
   // Highlight selected time slot in the dropdown and slot status
   const isSelectedTime = (time) => formData.timeSlot === time;
 
   // Prevent background scroll when modal is open
   useEffect(() => {
-    if (showModal || showWaitlistModal) {
+    if (showModal || showWaitlistModal || showMissingFieldsModal) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
     return () => { document.body.style.overflow = ''; };
-  }, [showModal, showWaitlistModal]);
+  }, [showModal, showWaitlistModal, showMissingFieldsModal]);
 
   // Keyboard ESC support for modals
   useEffect(() => {
@@ -289,181 +354,332 @@ const OrderServices = () => {
       if (e.key === "Escape") {
         if (showModal) setShowModal(false);
         if (showWaitlistModal) setShowWaitlistModal(false);
+        if (showMissingFieldsModal) setShowMissingFieldsModal(false);
       }
     };
-    if (showModal || showWaitlistModal) {
+    if (showModal || showWaitlistModal || showMissingFieldsModal) {
       window.addEventListener('keydown', handleEsc);
     }
     return () => window.removeEventListener('keydown', handleEsc);
-  }, [showModal, showWaitlistModal]);
+  }, [showModal, showWaitlistModal, showMissingFieldsModal]);
 
   return (
-    <Card className="p-4 shadow" style={{ maxWidth: 900, margin: "40px auto", borderRadius: 18 }}>
-      <h2 className="mb-4 text-center" style={{ color: "#FFD700", fontWeight: "bold" }}>Order & Book a Service</h2>
-      <div className="container">
-        <div className="row">
-          {/* Calendar Section */}
-          <div className="col-12 col-md-6 mb-4">
-            <div className="mb-2 fw-bold">Select Date:</div>
-            <div style={{ minHeight: 340, position: "relative" }}>
-              {calendarLoading && (
-                <div style={{
-                  position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-                  background: "rgba(255,255,255,0.7)", zIndex: 2, display: "flex", alignItems: "center", justifyContent: "center"
-                }}>
-                  <Spinner animation="border" />
-                </div>
-              )}
-              <DatePicker
-                selected={selectedDate}
-                onChange={date => setSelectedDate(date)}
-                dayClassName={dayClassName}
-                minDate={minSelectableDate}
-                excludeDates={fullyBookedDates}
-                inline
-                aria-label="Select booking date"
-              />
-            </div>
-            <div className="mt-3">
-              <span className="badge" style={{ background: "#28a745", color: "#fff", marginRight: 8 }}>Available</span>
-              <span className="badge" style={{ background: "#ffc107", color: "#222", marginRight: 8 }}>Waiting List</span>
-              <span className="badge" style={{ background: "#dc3545", color: "#fff", marginRight: 8 }}>Booked</span>
-              <span className="badge" style={{ background: "#0056b3", color: "#fff" }}>Selected</span>
-            </div>
+    <div className="bookus-container">
+      <Container fluid className="px-lg-5">
+        {/* Enhanced Hero Section */}
+        <div className="bookus-hero">
+          <div className="hero-icon-wrapper">
+            <span className="hero-main-icon emoji-visible">📅</span>
           </div>
-          {/* Booking Form Section */}
-          <div className="col-12 col-md-6">
-            {message && <Alert variant={variant} aria-live="polite">{message}</Alert>}
-            <Form onSubmit={handleSubmit} aria-label="Booking form">
-              <Form.Group className="mb-2">
-                <Form.Label htmlFor="name">Name</Form.Label>
-                <Form.Control id="name" type="text" required
-                  value={formData.name}
-                  onChange={e => setFormData({ ...formData, name: e.target.value })} />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label htmlFor="phone">Phone</Form.Label>
-                <Form.Control id="phone" type="tel" required pattern="[0-9]{10,15}"
-                  value={formData.phone}
-                  onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                  isInvalid={formData.phone && !isPhoneValid(formData.phone)}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Please enter a valid phone number (10-15 digits).
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label htmlFor="email">Email</Form.Label>
-                <Form.Control id="email" type="email" required value={formData.email}
-                  onChange={e => setFormData({ ...formData, email: e.target.value })} />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label htmlFor="address">Address</Form.Label>
-                <Form.Control
-                  id="address"
-                  type="text"
-                  required
-                  placeholder="Street Address"
-                  value={formData.address}
-                  onChange={e => setFormData({ ...formData, address: e.target.value })}
-                />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label htmlFor="city">City</Form.Label>
-                <Form.Control
-                  id="city"
-                  type="text"
-                  required
-                  placeholder="City"
-                  value={formData.city}
-                  onChange={e => setFormData({ ...formData, city: e.target.value })}
-                />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label htmlFor="zipcode">Zip Code</Form.Label>
-                <Form.Control
-                  id="zipcode"
-                  type="text"
-                  required
-                  placeholder="Zip Code"
-                  value={formData.zipcode}
-                  onChange={e => setFormData({ ...formData, zipcode: e.target.value })}
-                  isInvalid={formData.zipcode && !isZipValid(formData.zipcode)}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Please enter a valid zip code (4-10 digits).
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label htmlFor="contactPreference">Contact Preference</Form.Label>
-                <Form.Select id="contactPreference" required
-                  value={formData.contactPreference}
-                  onChange={e => setFormData({ ...formData, contactPreference: e.target.value })}
-                >
-                  <option value="" disabled>Choose your preference</option>
-                  <option value="text">Text</option>
-                  <option value="call">Call</option>
-                  <option value="email">Email</option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label htmlFor="timeSlot">Time Slot</Form.Label>
-                <Form.Select id="timeSlot" required value={formData.timeSlot}
-                  onChange={e => setFormData({ ...formData, timeSlot: e.target.value })}>
-                  <option value="">Select a time</option>
-                  {timeSlots.map(time => (
-                    <option key={time} value={time}
-                      disabled={slotStatus[time]?.status === "booked"}
-                      style={isSelectedTime(time) ? { background: "#0056b3", color: "#fff" } : {}}
-                    >
-                      {time}
-                      {slotStatus[time]?.status === "available" && " (Available)"}
-                      {slotStatus[time]?.status === "waiting" && " (Waiting List)"}
-                      {slotStatus[time]?.status === "booked" && " (Booked)"}
-                    </option>
-                  ))}
-                </Form.Select>
-                <TimeSlotStatus timeSlots={timeSlots} slotStatus={slotStatus} selectedTime={formData.timeSlot} />
-              </Form.Group>
-              <Button
-                type="button"
-                aria-label="Submit Booking"
-                disabled={isBookingDisabled()}
-                onClick={() => setShowModal(true)}
-                style={{ minWidth: 140 }}
-              >
-                {loading ? <Spinner animation="border" size="sm" /> : "Submit Booking"}
-              </Button>
-            </Form>
-            <div className="mt-3 text-warning" style={{ fontWeight: "bold" }}>
-              Booking requires a deposit to lock the slot within 6 hours. If not, the slot will be released.
-            </div>
-            <div className="mt-2 text-muted" style={{ fontSize: "0.95em" }}>
-              * Bookings must be made at least 2 days in advance.
-            </div>
-            {timeSlots.every(time => slotStatus[time]?.status === "booked") && (
-              <div className="mt-3">
-                <Button
-                  variant="warning"
-                  aria-label="Join Waitlist"
-                  onClick={handleWaitlistOpen}
-                  style={{ minWidth: 140 }}
-                >
-                  Join Waitlist
-                </Button>
-                <div style={{ color: 'red', marginTop: '8px' }}>
-                  All time slots are fully booked for this date. Please choose another date or join the waitlist.
-                </div>
-              </div>
-            )}
-            {allSlotsFullyBooked && nextAvailableDate && (
-              <div style={{ color: 'blue', marginTop: '8px' }}>
-                Next available date: {nextAvailableDate.toLocaleDateString()}
-              </div>
-            )}
-          </div>
+          <h1 className="hero-title">Book Your Hibachi Experience</h1>
+          <p className="hero-subtitle">
+            <span className="emoji-visible">✨</span>
+            Reserve your premium in-home hibachi dining experience
+            <span className="emoji-visible">✨</span>
+          </p>
         </div>
-      </div>
+
+        <Card className="booking-main-card p-0 border-0">
+          <div className="p-4 p-lg-5">
+            <Row className="g-4">
+              {/* Enhanced Calendar Section */}
+              <Col lg={6}>
+                <div className="calendar-section">
+                  <div className="calendar-header">
+                    <span className="calendar-icon emoji-visible">📅</span>
+                    <h3 className="calendar-title">Select Your Date</h3>
+                  </div>
+                  
+                  <div style={{ position: "relative", minHeight: "340px" }}>
+                    {calendarLoading && (
+                      <div className="loading-overlay">
+                        <div className="loading-spinner"></div>
+                      </div>
+                    )}
+                    <DatePicker
+                      selected={selectedDate}
+                      onChange={date => setSelectedDate(date)}
+                      dayClassName={dayClassName}
+                      minDate={minSelectableDate}
+                      excludeDates={fullyBookedDates}
+                      inline
+                      aria-label="Select booking date"
+                    />
+                  </div>
+                  
+                  <div className="status-legend">
+                    <div className="legend-item">
+                      <div className="legend-dot" style={{ background: "#28a745" }}></div>
+                      <span>Available</span>
+                    </div>
+                    <div className="legend-item">
+                      <div className="legend-dot" style={{ background: "#ffc107" }}></div>
+                      <span>Waiting List</span>
+                    </div>
+                    <div className="legend-item">
+                      <div className="legend-dot" style={{ background: "#dc3545" }}></div>
+                      <span>Booked</span>
+                    </div>
+                    <div className="legend-item">
+                      <div className="legend-dot" style={{ background: "#0056b3" }}></div>
+                      <span>Selected</span>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+
+              {/* Enhanced Form Section */}
+              <Col lg={6}>
+                <div className="form-section">
+                  <div className="form-header">
+                    <span className="form-icon emoji-visible">📝</span>
+                    <h3 className="form-title">Booking Details</h3>
+                  </div>
+
+                  {message && (
+                    <Alert variant={variant} className={`enhanced-alert alert-${variant} mb-4`} aria-live="polite">
+                      <span className="alert-icon emoji-visible">
+                        {variant === 'success' ? '✅' : variant === 'danger' ? '❌' : '⚠️'}
+                      </span>
+                      {message}
+                    </Alert>
+                  )}
+
+                  <Form onSubmit={handleSubmit} aria-label="Booking form">
+                    <div className="enhanced-form-group">
+                      <Form.Label htmlFor="name" className="enhanced-form-label">
+                        <span className="label-icon emoji-visible">👤</span>
+                        Full Name
+                      </Form.Label>
+                      <Form.Control 
+                        id="name" 
+                        type="text" 
+                        required
+                        className="enhanced-form-control"
+                        placeholder="Enter your full name"
+                        value={formData.name}
+                        onChange={e => setFormData({ ...formData, name: e.target.value })} 
+                      />
+                    </div>
+
+                    <div className="enhanced-form-group">
+                      <Form.Label htmlFor="phone" className="enhanced-form-label">
+                        <span className="label-icon emoji-visible">📞</span>
+                        Phone Number
+                      </Form.Label>
+                      <Form.Control 
+                        id="phone" 
+                        type="tel" 
+                        required 
+                        pattern="[0-9]{10,15}"
+                        className="enhanced-form-control"
+                        placeholder="Enter your phone number"
+                        value={formData.phone}
+                        onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                        isInvalid={formData.phone && !isPhoneValid(formData.phone)}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please enter a valid phone number (10-15 digits).
+                      </Form.Control.Feedback>
+                    </div>
+
+                    <div className="enhanced-form-group">
+                      <Form.Label htmlFor="email" className="enhanced-form-label">
+                        <span className="label-icon emoji-visible">✉️</span>
+                        Email Address
+                      </Form.Label>
+                      <Form.Control 
+                        id="email" 
+                        type="email" 
+                        required 
+                        className="enhanced-form-control"
+                        placeholder="Enter your email address"
+                        value={formData.email}
+                        onChange={e => setFormData({ ...formData, email: e.target.value })} 
+                      />
+                    </div>
+
+                    <div className="enhanced-form-group">
+                      <Form.Label htmlFor="address" className="enhanced-form-label">
+                        <span className="label-icon emoji-visible">🏠</span>
+                        Street Address
+                      </Form.Label>
+                      <Form.Control
+                        id="address"
+                        type="text"
+                        required
+                        className="enhanced-form-control"
+                        placeholder="Enter your street address"
+                        value={formData.address}
+                        onChange={e => setFormData({ ...formData, address: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="address-grid">
+                      <div className="enhanced-form-group">
+                        <Form.Label htmlFor="city" className="enhanced-form-label">
+                          <span className="label-icon emoji-visible">🏙️</span>
+                          City
+                        </Form.Label>
+                        <Form.Control
+                          id="city"
+                          type="text"
+                          required
+                          className="enhanced-form-control"
+                          placeholder="Enter your city"
+                          value={formData.city}
+                          onChange={e => setFormData({ ...formData, city: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="enhanced-form-group">
+                        <Form.Label htmlFor="zipcode" className="enhanced-form-label">
+                          <span className="label-icon emoji-visible">📮</span>
+                          Zip Code
+                        </Form.Label>
+                        <Form.Control
+                          id="zipcode"
+                          type="text"
+                          required
+                          className="enhanced-form-control"
+                          placeholder="Enter zip code"
+                          value={formData.zipcode}
+                          onChange={e => setFormData({ ...formData, zipcode: e.target.value })}
+                          isInvalid={formData.zipcode && !isZipValid(formData.zipcode)}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          Please enter a valid zip code (4-10 digits).
+                        </Form.Control.Feedback>
+                      </div>
+                    </div>
+
+                    <div className="enhanced-form-group">
+                      <Form.Label htmlFor="contactPreference" className="enhanced-form-label">
+                        <span className="label-icon emoji-visible">📱</span>
+                        Contact Preference
+                      </Form.Label>
+                      <Form.Select 
+                        id="contactPreference" 
+                        required
+                        className="enhanced-form-control"
+                        value={formData.contactPreference}
+                        onChange={e => setFormData({ ...formData, contactPreference: e.target.value })}
+                      >
+                        <option value="" disabled>Choose your preference</option>
+                        <option value="text">📱 Text Message</option>
+                        <option value="call">📞 Phone Call</option>
+                        <option value="email">✉️ Email</option>
+                      </Form.Select>
+                    </div>
+
+                    <div className="timeslot-section">
+                      <div className="timeslot-header">
+                        <span className="calendar-icon emoji-visible">⏰</span>
+                        <h4 className="timeslot-title">Select Time Slot</h4>
+                      </div>
+                      
+                      <Form.Select 
+                        id="timeSlot" 
+                        required 
+                        className="enhanced-form-control"
+                        value={formData.timeSlot}
+                        onChange={e => setFormData({ ...formData, timeSlot: e.target.value })}
+                      >
+                        <option value="">Select a time</option>
+                        {timeSlots.map(time => (
+                          <option key={time} value={time}
+                            disabled={slotStatus[time]?.status === "booked"}
+                          >
+                            {time}
+                            {slotStatus[time]?.status === "available" && " (Available)"}
+                            {slotStatus[time]?.status === "waiting" && " (Waiting List)"}
+                            {slotStatus[time]?.status === "booked" && " (Booked)"}
+                          </option>
+                        ))}
+                      </Form.Select>
+                      
+                      <TimeSlotStatus timeSlots={timeSlots} slotStatus={slotStatus} selectedTime={formData.timeSlot} />
+                    </div>
+
+                    <Button
+                      type="button"
+                      className="enhanced-btn"
+                      disabled={loading}
+                      onClick={handleSubmitClick}
+                      aria-label="Submit Booking"
+                    >
+                      {loading ? (
+                        <Spinner animation="border" size="sm" />
+                      ) : (
+                        <>
+                          <span className="btn-icon emoji-visible">📅</span>
+                          Submit Booking
+                        </>
+                      )}
+                    </Button>
+                  </Form>
+
+                  {/* Info Cards */}
+                  <div className="info-card warning">
+                    <div className="info-content">
+                      <span className="info-icon emoji-visible">⚠️</span>
+                      <div>
+                        <div className="info-text">Deposit Required</div>
+                        <small>Booking requires a deposit to lock the slot within 6 hours. If not, the slot will be released.</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="info-card info">
+                    <div className="info-content">
+                      <span className="info-icon emoji-visible">ℹ️</span>
+                      <div>
+                        <div className="info-text">Advance Booking</div>
+                        <small>Bookings must be made at least 2 days in advance.</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Waitlist Section */}
+                  {timeSlots.every(time => slotStatus[time]?.status === "booked") && (
+                    <div className="info-card warning">
+                      <div className="info-content">
+                        <span className="info-icon emoji-visible">⏰</span>
+                        <div>
+                          <div className="info-text">All Slots Booked</div>
+                          <small>All time slots are fully booked for this date. Please choose another date or join the waitlist.</small>
+                        </div>
+                      </div>
+                      <Button
+                        variant="warning"
+                        className="enhanced-btn enhanced-btn-warning mt-3"
+                        onClick={handleWaitlistOpen}
+                        aria-label="Join Waitlist"
+                      >
+                        <span className="btn-icon emoji-visible">📝</span>
+                        Join Waitlist
+                      </Button>
+                    </div>
+                  )}
+
+                  {allSlotsFullyBooked && nextAvailableDate && (
+                    <div className="info-card info">
+                      <div className="info-content">
+                        <span className="info-icon emoji-visible">📅</span>
+                        <div>
+                          <div className="info-text">Next Available Date</div>
+                          <small>{nextAvailableDate.toLocaleDateString()}</small>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Card>
+      </Container>
+
       {/* Booking Confirmation Modal */}
       {showModal && (
         <Suspense fallback={<Spinner animation="border" />}>
@@ -479,6 +695,92 @@ const OrderServices = () => {
           />
         </Suspense>
       )}
+      
+      {/* Missing Fields Modal */}
+      {showMissingFieldsModal && (
+        <div
+          className="modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.5)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              padding: "2rem",
+              borderRadius: "15px",
+              minWidth: "320px",
+              maxWidth: "500px",
+              maxHeight: "80vh",
+              overflowY: "auto",
+              margin: "1rem",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+            }}
+          >
+            <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>⚠️</div>
+              <h3 style={{ color: "#dc3545", marginBottom: "0.5rem" }}>Missing Required Fields</h3>
+              <p style={{ color: "#6c757d", margin: "0" }}>
+                Please complete all required fields to proceed with your booking.
+              </p>
+            </div>
+            
+            <div style={{ marginBottom: "1.5rem" }}>
+              <h5 style={{ color: "#495057", marginBottom: "1rem" }}>Please complete:</h5>
+              <ul style={{ 
+                listStyle: "none", 
+                padding: "1rem", 
+                margin: "0",
+                background: "#f8f9fa",
+                borderRadius: "8px"
+              }}>
+                {getMissingFields().map((field, index) => (
+                  <li key={index} style={{ 
+                    padding: "0.5rem 0", 
+                    borderBottom: index < getMissingFields().length - 1 ? "1px solid #dee2e6" : "none",
+                    display: "flex",
+                    alignItems: "center"
+                  }}>
+                    <span style={{ color: "#dc3545", marginRight: "0.5rem" }}>•</span>
+                    <span style={{ color: "#495057" }}>{field}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+              <Button
+                variant="primary"
+                onClick={() => setShowMissingFieldsModal(false)}
+                style={{
+                  background: "linear-gradient(135deg, #007bff 0%, #0056b3 100%)",
+                  border: "none",
+                  borderRadius: "25px",
+                  padding: "0.75rem 2rem",
+                  fontWeight: "600",
+                  boxShadow: "0 4px 15px rgba(0,123,255,0.3)",
+                }}
+              >
+                <span className="emoji-visible" style={{ marginRight: "0.5rem" }}>✏️</span>
+                Continue Filling Form
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Waitlist Modal */}
       {showWaitlistModal && (
         <Suspense fallback={<Spinner animation="border" />}>
@@ -497,42 +799,43 @@ const OrderServices = () => {
       )}
       {/* Waitlist feedback */}
       {waitlistMessage && !showWaitlistModal && (
-        <Alert variant={waitlistVariant} className="mt-3" aria-live="polite">
+        <Alert variant={waitlistVariant} className="enhanced-alert mt-3" aria-live="polite">
+          <span className="alert-icon emoji-visible">
+            {waitlistVariant === 'success' ? '✅' : '⚠️'}
+          </span>
           {waitlistMessage}
         </Alert>
       )}
-    </Card>
+    </div>
   );
 };
 
 const TimeSlotStatus = React.memo(({ timeSlots, slotStatus, selectedTime }) => (
-  <div className="mt-2">
+  <div className="slot-status-container">
     {timeSlots.map(time => (
-      <span key={time} style={{ marginRight: 12 }}>
-        <span
+      <div 
+        key={time} 
+        className={`slot-status-item ${selectedTime === time ? 'selected' : ''}`}
+      >
+        <div
           className="slot-status-dot"
           style={{
-            display: "inline-block",
-            width: 10,
-            height: 10,
-            borderRadius: "50%",
             background: slotStatusColor(slotStatus[time]?.status),
-            marginRight: 4,
-            border: selectedTime === time ? "2px solid #0056b3" : "none"
           }}
         />
-        {time}:
-        <span style={{
-          color: slotStatusColor(slotStatus[time]?.status),
-          fontWeight: selectedTime === time ? 700 : 500,
-          marginLeft: 4,
-          textDecoration: selectedTime === time ? "underline" : "none"
-        }}>
-          {slotStatus[time]?.status === "available" && "Available"}
-          {slotStatus[time]?.status === "waiting" && "Waiting List"}
-          {slotStatus[time]?.status === "booked" && "Booked"}
-        </span>
-      </span>
+        <div>
+          <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{time}</div>
+          <div style={{ 
+            fontSize: '0.8rem', 
+            color: slotStatusColor(slotStatus[time]?.status),
+            fontWeight: 500 
+          }}>
+            {slotStatus[time]?.status === "available" && "Available"}
+            {slotStatus[time]?.status === "waiting" && "Waiting List"}
+            {slotStatus[time]?.status === "booked" && "Booked"}
+          </div>
+        </div>
+      </div>
     ))}
   </div>
 ));

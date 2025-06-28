@@ -323,8 +323,8 @@ const Menu = () => (
                 <span>Live Entertainment</span>
               </div>
               <div className="feature-item">
-                <span className="emoji-visible">🎯</span>
-                <span>Personalized Service</span>
+                <span className="emoji-visible">💯</span>
+                <span>Satisfaction Guaranteed</span>
               </div>
             </div>
           </div>
