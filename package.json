@@ -20,7 +20,9 @@
   ],
   "scripts": {
     "dev": "vite",
+    "dev:fresh": "vite --force",
     "build": "vite build",
+    "build:clean": "rmdir /s /q dist && vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",

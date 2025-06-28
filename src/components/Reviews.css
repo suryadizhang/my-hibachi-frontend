@@ -1,7 +1,5 @@
-/* Reviews Component Styles */
+/* Modern Reviews Component Styles */
 .reviews-section {
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  min-height: 100vh;
   position: relative;
   overflow: hidden;
 }
@@ -14,42 +12,75 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(0, 102, 204, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(0, 68, 153, 0.03) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(0, 102, 204, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 68, 153, 0.05) 0%, transparent 50%);
   pointer-events: none;
+  z-index: 0;
 }
 
-.reviews-title {
-  background: linear-gradient(135deg, #0066cc, #004499);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: titlePulse 3s ease-in-out infinite;
+.reviews-section > * {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
-@keyframes titlePulse {
-  0%, 100% { 
-    transform: scale(1); 
-    filter: brightness(1);
-  }
-  50% { 
-    transform: scale(1.02); 
-    filter: brightness(1.1);
-  }
+/* Hero Badge Animation */
+.hero-badge {
+  animation: float 3s ease-in-out infinite;
 }
 
-.reviews-stats {
-  animation: statsSlideUp 1s ease-out;
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Review Card Styles */
+.review-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
   position: relative;
-  z-index: 2;
+  overflow: hidden;
 }
 
-@keyframes statsSlideUp {
+.review-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transition: left 0.5s;
+}
+
+.review-card:hover::before {
+  left: 100%;
+}
+
+.review-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 102, 204, 0.15);
+  border-color: rgba(0, 102, 204, 0.2);
+}
+
+.shadow-hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation Classes */
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.opacity-0 {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -57,19 +88,255 @@
   }
 }
 
-.stat-number {
-  font-size: 1.8rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #0066cc, #004499);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Star Rating Enhancements */
+.star-rating i {
+  transition: all 0.2s ease;
+  filter: drop-shadow(0 1px 3px rgba(255, 193, 7, 0.3));
 }
 
-.stat-item {
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.8);
+.star-rating:hover i {
+  transform: scale(1.1);
+}
+
+/* Verified Badge */
+.verified-badge {
+  animation: pulse 2s infinite;
+  box-shadow: 0 2px 8px rgba(25, 135, 84, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Review Quote Styling */
+.review-quote {
+  position: relative;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.review-quote::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #0066cc, #004499);
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+/* Service Badge */
+.service-badge {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.service-badge:hover {
+  background-color: rgba(0, 102, 204, 0.1);
+  border-color: rgba(0, 102, 204, 0.3);
+}
+
+/* Stats Card */
+.stats-card {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.3);
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 102, 204, 0.4);
+}
+
+.stat-number {
+  font-size: 3rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+  from { 
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Filter and Sort Controls */
+.form-select {
+  border: 2px solid rgba(0, 102, 204, 0.1);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.form-select:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+}
+
+/* Load More Button */
+.load-more-btn:hover {
+  background-color: #0066cc;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 102, 204, 0.3);
+}
+
+/* CTA Section */
+.cta-card {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 15px 35px rgba(0, 102, 204, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: rotate 10s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.cta-button {
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 12px 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Trust Indicators */
+.trust-item {
+  padding: 20px;
   border-radius: 15px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.trust-item:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.trust-item i {
+  transition: all 0.3s ease;
+}
+
+.trust-item:hover i {
+  transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reviews-section {
+    padding: 20px 0;
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .cta-card {
+    padding: 30px 20px;
+  }
+  
+  .trust-item {
+    margin-bottom: 20px;
+  }
+  
+  .reviews-grid .col-md-6 {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-badge {
+    margin-bottom: 20px;
+  }
+  
+  .stats-card .row > div {
+    margin-bottom: 20px;
+  }
+  
+  .cta-card .d-flex {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .load-more-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Performance Optimizations */
+.reviews-section * {
+  will-change: transform;
+}
+
+.review-card {
+  contain: layout style paint;
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .review-card,
+  .hero-badge,
+  .verified-badge,
+  .trust-item i,
+  .cta-button {
+    animation: none;
+    transition: none;
+  }
+  
+  .review-card:hover {
+    transform: none;
+  }
+}
+
+/* Focus States */
+.review-card:focus-within {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+.cta-button:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
