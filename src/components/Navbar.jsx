@@ -33,7 +33,7 @@ const CustomNavbar = () => {
           <Nav className="navbar-nav-custom">
             {[
               { path: "/", label: "About", icon: "🏠" },
-              { path: "/services", label: "Book Now", icon: "📅" },
+              { path: "/BookUs", label: "Book Now", icon: "📅" },
               { path: "/menu", label: "Menu", icon: "🍱" },
               { path: "/reviews", label: "Reviews", icon: "⭐" },
               { path: "/faqs", label: "FAQs", icon: "❓" },

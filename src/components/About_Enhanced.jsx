@@ -104,15 +104,15 @@ const About = () => {
           <div className="stats-grid">
             <div className="stat-item">
               <span className="stat-number">1000+</span>
-              <span className="stat-label">Happy Events</span>
+              <span className="stat-label">Events Served</span>
             </div>
             <div className="stat-item">
-              <span className="stat-number">15+</span>
-              <span className="stat-label">Years Experience</span>
+              <span className="stat-number">8+</span>
+              <span className="stat-label">Expert Experience</span>
             </div>
             <div className="stat-item">
               <span className="stat-number">5⭐</span>
-              <span className="stat-label">Customer Rating</span>
+              <span className="stat-label">Quality Service</span>
             </div>
             <div className="stat-item">
               <span className="stat-number">50+</span>

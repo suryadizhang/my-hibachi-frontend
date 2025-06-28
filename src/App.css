@@ -52,3 +52,40 @@
   border: 2px solid #646cff !important;
   color: #646cff !important;
 }
+
+/* Global emoji visibility - ensure all emojis are visible without visual effects */
+* {
+  box-sizing: border-box;
+}
+
+/* Universal emoji visibility rules */
+span[role="img"], 
+.emoji-visible,
+[class*="emoji"],
+[aria-label*="emoji"] {
+  filter: none !important;
+  background: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  color: inherit !important;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline !important;
+  text-shadow: none !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* Remove any visual effects from emojis */
+*:contains("👨‍🍳"), *:contains("🎭"), *:contains("💯"), *:contains("⭐"), 
+*:contains("🏠"), *:contains("🍱"), *:contains("💰"), *:contains("👥"),
+*:contains("🧒"), *:contains("👶"), *:contains("🎯"), *:contains("💡"),
+*:contains("🍽️"), *:contains("🍚"), *:contains("🥬"), *:contains("🥗"),
+*:contains("🥄"), *:contains("🍯"), *:contains("🎪"), *:contains("🥩"),
+*:contains("🚗") {
+  filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}

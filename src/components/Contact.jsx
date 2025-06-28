@@ -22,7 +22,7 @@ const Contact = () => {
   const navigate = useNavigate();
 
   const handleBookEvent = () => {
-    navigate('/services');
+    navigate('/BookUs');
   };
 
   const handleGetQuote = () => {

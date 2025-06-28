@@ -23,7 +23,7 @@ function App() {
       <div className="container mt-4">
         <Routes>
           <Route path="/" element={<About />} />
-          <Route path="/services" element={<OrderServices />} />
+          <Route path="/BookUs" element={<OrderServices />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/faqs" element={<FAQs />} />

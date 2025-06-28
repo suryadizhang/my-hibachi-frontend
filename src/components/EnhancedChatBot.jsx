@@ -119,7 +119,7 @@ const EnhancedChatBot = () => {
         
       case 'booking':
         return {
-          text: `📅 **Easy Booking Process:**\n\n**🚀 Quick Steps:**\n1️⃣ Visit our [Booking Page](/services)\n2️⃣ Select your preferred date & time\n3️⃣ Choose your menu options\n4️⃣ Add party details & special requests\n5️⃣ Submit booking form\n6️⃣ Pay ${WEBSITE_DATA.booking.deposit} within 6 hours\n\n**📋 What We Need:**\n${WEBSITE_DATA.booking.requirements.map(req => `• ${req}`).join('\n')}\n\n**⏰ Important:** ${WEBSITE_DATA.booking.advance_notice}\n\n**✅ Confirmation:** ${WEBSITE_DATA.booking.confirmation}`,
+          text: `📅 **Easy Booking Process:**\n\n**🚀 Quick Steps:**\n1️⃣ Visit our [Booking Page](/BookUs)\n2️⃣ Select your preferred date & time\n3️⃣ Choose your menu options\n4️⃣ Add party details & special requests\n5️⃣ Submit booking form\n6️⃣ Pay ${WEBSITE_DATA.booking.deposit} within 6 hours\n\n**📋 What We Need:**\n${WEBSITE_DATA.booking.requirements.map(req => `• ${req}`).join('\n')}\n\n**⏰ Important:** ${WEBSITE_DATA.booking.advance_notice}\n\n**✅ Confirmation:** ${WEBSITE_DATA.booking.confirmation}`,
           options: ['Start Booking', 'Check Availability', 'Menu & Pricing', 'Setup Requirements']
         };
         
@@ -163,7 +163,7 @@ const EnhancedChatBot = () => {
           };
         }
         return {
-          text: `📋 **Our Policies & Guarantees:**\n\n**🔄 Flexibility:**\n• Cancellation: ${WEBSITE_DATA.policies.cancellation}\n• Rescheduling: ${WEBSITE_DATA.policies.rescheduling}\n• Weather: ${WEBSITE_DATA.policies.weather}\n\n**💳 Payment:**\n• ${WEBSITE_DATA.policies.payment}\n• Tipping: ${WEBSITE_DATA.policies.tipping}\n\n**🛡️ Peace of Mind:**\n• ${WEBSITE_DATA.policies.insurance}\n• Professional, certified chefs\n• Satisfaction guaranteed`,
+          text: `📋 **Our Policies & Guarantees:**\n\n**🔄 Flexibility:**\n• Cancellation: ${WEBSITE_DATA.policies.cancellation}\n• Rescheduling: ${WEBSITE_DATA.policies.rescheduling}\n• Weather: ${WEBSITE_DATA.policies.weather}\n\n**💳 Payment:**\n• ${WEBSITE_DATA.policies.payment}\n• Tipping: ${WEBSITE_DATA.policies.tipping}\n\n**🛡️ Peace of Mind:**\n• ${WEBSITE_DATA.policies.insurance}\n• Professional, certified chefs\n• Premium quality service`,
           options: ['Book Now', 'Contact Support', 'Payment Options', 'Chef Info']
         };
 

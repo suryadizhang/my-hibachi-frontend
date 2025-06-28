@@ -57,7 +57,7 @@ export const WEBSITE_DATA = {
   },
 
   booking: {
-    process: "Visit /services page, select date/time, fill comprehensive booking form",
+    process: "Visit /BookUs page, select date/time, fill comprehensive booking form",
     advance_notice: "Minimum 48 hours advance booking required",
     requirements: ["Guest count (minimum 10 people)", "Complete address with parking info", "Dietary restrictions and allergies", "Special occasion details", "Preferred cooking time"],
     deposit: "$100 deposit required within 6 hours to secure your booking",

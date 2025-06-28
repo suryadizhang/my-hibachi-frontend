@@ -365,14 +365,14 @@ const ReviewStats = ({ reviews }) => {
               <Col md={4} className="mb-3 mb-md-0">
                 <div className="stat-item">
                   <h2 className="stat-number mb-0 fw-bold">{totalReviews}</h2>
-                  <p className="stat-label mb-0 opacity-75">Happy Customers</p>
+                  <p className="stat-label mb-0 opacity-75">Total Reviews</p>
                   <small className="opacity-75">All verified reviews</small>
                 </div>
               </Col>
               <Col md={4}>
                 <div className="stat-item">
                   <h2 className="stat-number mb-0 fw-bold">100%</h2>
-                  <p className="stat-label mb-0 opacity-75">Satisfaction Rate</p>
+                  <p className="stat-label mb-0 opacity-75">Premium Quality</p>
                   <small className="opacity-75">5-star experiences</small>
                 </div>
               </Col>
@@ -418,7 +418,7 @@ const Reviews = () => {
 
   // Navigation handlers
   const handleBookEvent = () => {
-    navigate('/services');
+    navigate('/BookUs');
   };
 
   const handleGetQuote = () => {
@@ -558,7 +558,7 @@ const Reviews = () => {
             <div className="mt-4">
               <small className="opacity-75">
                 <i className="bi bi-shield-check me-2"></i>
-                100% Satisfaction Guarantee • Professional Service • Premium Ingredients
+                Premium Quality • Professional Service • Premium Ingredients
               </small>
             </div>
           </div>

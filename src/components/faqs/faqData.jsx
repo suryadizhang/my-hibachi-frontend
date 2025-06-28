@@ -455,7 +455,7 @@ const faqData = {
         <>
           <strong>Our Safety Standards:</strong>
           <ul>
-            <li>All chefs have 5-10 years of experience</li>
+            <li>All chefs have 8+ years of experience</li>
             <li>Comprehensive fire safety training for all staff</li>
             <li>Portable fire extinguisher at every event</li>
             <li>Pre-cooking equipment safety checks</li>

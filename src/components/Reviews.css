@@ -880,3 +880,25 @@
     border: 2px solid #6c757d;
   }
 }
+
+/* Global emoji visibility rules for Reviews page */
+.emoji-visible,
+span[role="img"],
+[class*="emoji"],
+[aria-label*="emoji"] {
+  filter: none !important;
+  background: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  color: inherit !important;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline !important;
+  text-shadow: none !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* Reviews Page Styles */

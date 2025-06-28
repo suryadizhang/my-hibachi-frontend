@@ -156,13 +156,13 @@ const About = () => {
           <Col md={3} className="text-center mb-4">
             <div className="stat-item">
               <div className="stat-number">500+</div>
-              <div className="stat-label">Happy Events</div>
+              <div className="stat-label">Events Served</div>
             </div>
           </Col>
           <Col md={3} className="text-center mb-4">
             <div className="stat-item">
               <div className="stat-number">5★</div>
-              <div className="stat-label">Average Rating</div>
+              <div className="stat-label">Quality Service</div>
             </div>
           </Col>
           <Col md={3} className="text-center mb-4">
@@ -173,8 +173,8 @@ const About = () => {
           </Col>
           <Col md={3} className="text-center mb-4">
             <div className="stat-item">
-              <div className="stat-number">10+</div>
-              <div className="stat-label">Years Experience</div>
+              <div className="stat-number">8+</div>
+              <div className="stat-label">Expert Experience</div>
             </div>
           </Col>
         </Row>
@@ -187,7 +187,7 @@ const About = () => {
               <h3 className="card-title">Meet Our Expert Chefs</h3>
               <p className="card-text">
                 At <span className="highlight-text">My Hibachi</span>, our talented chefs are true maestros of the teppanyaki grill, 
-                blending years of experience with an unwavering passion for flavor and flair. Having honed their skills in renowned 
+                bringing over 8 years of professional experience with an unwavering passion for flavor and flair. Having honed their skills in renowned 
                 Japanese kitchens, our chefs fuse traditional techniques with a modern twist, ensuring each dish is a unique encounter 
                 that delights both the palate and the memory.
               </p>
@@ -342,11 +342,11 @@ const About = () => {
             <p className="offer-text">Book now and let us create memories that will last a lifetime!</p>
           </div>
           <div className="cta-buttons">
-            <a href="/services" className="btn btn-primary btn-lg me-3">🔥 Book Your Hibachi Party Now!</a>
+            <a href="/BookUs" className="btn btn-primary btn-lg me-3">🔥 Book Your Hibachi Party Now!</a>
             <a href="/contact" className="btn btn-outline-primary btn-lg">💬 Get Your Free Quote</a>
           </div>
           <p className="cta-footer">
-            <small>📞 Questions? Call us for instant assistance! • 🚗 We travel to you! • 💯 Satisfaction guaranteed!</small>
+            <small>📞 Questions? Call us for instant assistance! • 🚗 We travel to you! • 🎉 Premium experience!</small>
           </p>
         </div>
       </Container>

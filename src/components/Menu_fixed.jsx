@@ -305,7 +305,7 @@ const Menu = () => (
               Book your premium hibachi experience today and create memories that will last a lifetime
             </p>
             
-            <Link to="/services" aria-label="Order your hibachi experience now">
+            <Link to="/BookUs" aria-label="Order your hibachi experience now">
               <button className="cta-button">
                 <span className="emoji-visible">🍽️</span>
                 <span className="cta-text">Order Your Hibachi Experience</span>
@@ -323,8 +323,8 @@ const Menu = () => (
                 <span>Live Entertainment</span>
               </div>
               <div className="feature-item">
-                <span className="emoji-visible">💯</span>
-                <span>Satisfaction Guaranteed</span>
+                <span className="emoji-visible">🎯</span>
+                <span>Personalized Service</span>
               </div>
             </div>
           </div>
