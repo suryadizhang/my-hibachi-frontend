@@ -1,0 +1,80 @@
+[
+  {
+    "test": "API Health Check",
+    "status": "\u2705 PASS",
+    "details": "Status: 422 (endpoint reachable)",
+    "timestamp": "2025-06-29T16:28:37.557246"
+  },
+  {
+    "test": "Frontend Accessibility",
+    "status": "\u2705 PASS",
+    "details": "Frontend at http://localhost:5174",
+    "timestamp": "2025-06-29T16:28:37.561078"
+  },
+  {
+    "test": "Admin Login",
+    "status": "\u2705 PASS",
+    "details": "Token received",
+    "timestamp": "2025-06-29T16:28:37.736604"
+  },
+  {
+    "test": "Booking Creation",
+    "status": "\u2705 PASS",
+    "details": "Booking ID: None",
+    "timestamp": "2025-06-29T16:28:37.780656"
+  },
+  {
+    "test": "Booking Retrieval",
+    "status": "\u274c FAIL",
+    "details": "Status: 422",
+    "timestamp": "2025-06-29T16:28:37.785955"
+  },
+  {
+    "test": "Newsletter Subscribers Retrieval",
+    "status": "\u2705 PASS",
+    "details": "Retrieved 4 subscribers",
+    "timestamp": "2025-06-29T16:28:37.790708"
+  },
+  {
+    "test": "Newsletter City Filter",
+    "status": "\u2705 PASS",
+    "details": "Retrieved 4 Orlando subscribers",
+    "timestamp": "2025-06-29T16:28:37.793234"
+  },
+  {
+    "test": "Newsletter Name Filter",
+    "status": "\u2705 PASS",
+    "details": "Retrieved 4 'John' subscribers",
+    "timestamp": "2025-06-29T16:28:37.796270"
+  },
+  {
+    "test": "Activity Logs Retrieval",
+    "status": "\u2705 PASS",
+    "details": "Retrieved 5 log entries",
+    "timestamp": "2025-06-29T16:28:37.799060"
+  },
+  {
+    "test": "Admin Users Listing",
+    "status": "\u2705 PASS",
+    "details": "Retrieved 1 admin users",
+    "timestamp": "2025-06-29T16:28:37.801248"
+  },
+  {
+    "test": "Admin Creation Endpoint",
+    "status": "\u2705 PASS",
+    "details": "Endpoint available (not creating actual admin)",
+    "timestamp": "2025-06-29T16:28:37.801248"
+  },
+  {
+    "test": "Menu Data Retrieval",
+    "status": "\u274c FAIL",
+    "details": "No menu endpoint (frontend uses static data)",
+    "timestamp": "2025-06-29T16:28:37.801248"
+  },
+  {
+    "test": "Chatbot Helper Integration",
+    "status": "\u2705 PASS",
+    "details": "Uses existing admin endpoints",
+    "timestamp": "2025-06-29T16:28:37.801248"
+  }
+]

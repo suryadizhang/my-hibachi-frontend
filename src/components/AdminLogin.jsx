@@ -40,7 +40,7 @@ function AdminLogin() {
       form.append("username", username);
       form.append("password", password);
       
-      const res = await axios.post(`${API_BASE}/api/booking/token`, form, {
+      const res = await axios.post(`${API_BASE}/token`, form, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       
