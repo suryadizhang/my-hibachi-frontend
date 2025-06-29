@@ -5,7 +5,8 @@ import { Spinner, Button, Container } from "react-bootstrap";
 import { API_BASE } from '../config/api';
 import AdminConfirmationModal from './AdminConfirmationModal';
 import NewsletterManager from './NewsletterManager';
-// import LogPanel from './LogPanel';
+import LogPanel from './LogPanel';
+import SuperAdminManager from './SuperAdminManager';
 import './AdminPanel.css';
 
 function AdminPanel() {
@@ -21,6 +22,13 @@ function AdminPanel() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [username, setUsername] = useState("");
+  const [userRole, setUserRole] = useState("admin");
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
   
   // Modal state
   const [confirmModal, setConfirmModal] = useState({
@@ -49,11 +57,13 @@ function AdminPanel() {
 
   const fetchCurrentUser = async () => {
     try {
-      // Decode the token to get username
+      // Decode the token to get username and role
       const payload = JSON.parse(atob(token.split('.')[1]));
       setUsername(payload.sub || 'Admin');
+      setUserRole(payload.role || 'admin');
     } catch (error) {
       setUsername('Admin');
+      setUserRole('admin');
     }
   };
 
@@ -120,6 +130,48 @@ function AdminPanel() {
         setConfirmModal(prev => ({ ...prev, show: false }));
       }
     });
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setError("New passwords do not match");
+      return;
+    }
+
+    if (passwordForm.newPassword.length < 6) {
+      setError("New password must be at least 6 characters long");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('current_password', passwordForm.currentPassword);
+      formData.append('new_password', passwordForm.newPassword);
+
+      await axios.post(`${API_BASE}/api/booking/admin/change_password`, formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      setShowPasswordModal(false);
+      setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setError('');
+      
+      setConfirmModal({
+        show: true,
+        title: "Password Changed",
+        message: "Your password has been successfully changed!",
+        actionType: "success",
+        confirmButtonText: "OK",
+        requiresReason: false,
+        onConfirm: () => {
+          setConfirmModal(prev => ({ ...prev, show: false }));
+        }
+      });
+    } catch (err) {
+      setError("Failed to change password: " + (err.response?.data?.detail || err.message));
+    }
   };
 
   useEffect(() => {
@@ -302,14 +354,24 @@ function AdminPanel() {
                 Welcome, {username}! • Booking Management & Analytics Portal
               </p>
             </div>
-            <Button 
-              className="admin-logout-btn"
-              onClick={handleLogout}
-              aria-label="Logout from admin panel"
-            >
-              <span className="emoji-visible">🚪</span>
-              Logout
-            </Button>
+            <div className="admin-header-buttons">
+              <Button 
+                className="admin-change-password-btn"
+                onClick={() => setShowPasswordModal(true)}
+                aria-label="Change password"
+              >
+                <span className="emoji-visible">🔑</span>
+                Change Password
+              </Button>
+              <Button 
+                className="admin-logout-btn"
+                onClick={handleLogout}
+                aria-label="Logout from admin panel"
+              >
+                <span className="emoji-visible">🚪</span>
+                Logout
+              </Button>
+            </div>
           </div>
         </Container>
       </div>
@@ -339,6 +401,15 @@ function AdminPanel() {
               <span className="emoji-visible">📊</span>
               Activity Logs
             </button>
+            {userRole === "superadmin" && (
+              <button 
+                className={`tab-btn ${activeTab === "superadmin" ? "active" : ""}`}
+                onClick={() => setActiveTab("superadmin")}
+              >
+                <span className="emoji-visible">⚙️</span>
+                Super Admin
+              </button>
+            )}
           </div>
         </Container>
       </div>
@@ -672,12 +743,85 @@ function AdminPanel() {
 
         {/* Activity Logs Tab */}
         {activeTab === "logs" && (
-          <div className="text-center py-5">
-            <h4>Activity Logs</h4>
-            <p className="text-muted">Activity logging is being implemented. Check back soon!</p>
-          </div>
+          <LogPanel />
+        )}
+
+        {/* Super Admin Management Tab */}
+        {activeTab === "superadmin" && userRole === "superadmin" && (
+          <SuperAdminManager />
         )}
       </div>
+
+      {/* Change Password Modal */}
+      {showPasswordModal && (
+        <div className="modal-overlay" onClick={() => setShowPasswordModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Change Password</h3>
+              <button 
+                className="modal-close" 
+                onClick={() => setShowPasswordModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <form onSubmit={handleChangePassword}>
+              <div className="modal-body">
+                <div className="form-group">
+                  <label>Current Password:</label>
+                  <input
+                    type="password"
+                    value={passwordForm.currentPassword}
+                    onChange={(e) => setPasswordForm({
+                      ...passwordForm, 
+                      currentPassword: e.target.value
+                    })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>New Password:</label>
+                  <input
+                    type="password"
+                    value={passwordForm.newPassword}
+                    onChange={(e) => setPasswordForm({
+                      ...passwordForm, 
+                      newPassword: e.target.value
+                    })}
+                    required
+                    minLength={6}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Confirm New Password:</label>
+                  <input
+                    type="password"
+                    value={passwordForm.confirmPassword}
+                    onChange={(e) => setPasswordForm({
+                      ...passwordForm, 
+                      confirmPassword: e.target.value
+                    })}
+                    required
+                    minLength={6}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="submit" className="btn btn-primary">
+                  Change Password
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-secondary"
+                  onClick={() => setShowPasswordModal(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Admin Confirmation Modal */}
       <AdminConfirmationModal
