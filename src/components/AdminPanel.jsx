@@ -7,7 +7,6 @@ import AdminConfirmationModal from './AdminConfirmationModal';
 import NewsletterManager from './NewsletterManager';
 import LogPanel from './LogPanel';
 import SuperAdminManager from './SuperAdminManager';
-import AdminHelper from './AdminHelper';
 import './AdminPanel.css';
 
 function AdminPanel() {
@@ -838,12 +837,6 @@ function AdminPanel() {
         reasonPlaceholder={confirmModal.reasonPlaceholder}
         bookingDetails={confirmModal.bookingDetails}
         isLoading={confirmModal.isLoading}
-      />
-
-      {/* Admin Helper Chatbot */}
-      <AdminHelper 
-        currentTab={activeTab} 
-        userRole={userRole} 
       />
     </div>
   );

@@ -3,10 +3,10 @@ import { Form, Button, Card, Alert, Spinner, Container, Row, Col } from 'react-b
 import axios from 'axios';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { API_BASE } from '../config/api';
 import './OrderServices.css';
 
 const timeSlots = ['12:00 PM', '3:00 PM', '6:00 PM', '9:00 PM'];
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 const slotStatusColor = (status) => {
   if (status === "waiting") return "#ffc107"; // yellow for waiting list
@@ -79,7 +79,7 @@ const OrderServices = () => {
     // No need to set a default date since we want it to be null initially
     
     // Debug log initial state
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       console.log('Initial state - selectedDate:', selectedDate, 'minSelectableDate:', minSelectableDate);
     }
     // eslint-disable-next-line
@@ -314,7 +314,7 @@ const OrderServices = () => {
     if (slotStatus[formData.timeSlot]?.status === "booked") missing.push('Available Time Slot');
     
     // Debug logging
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       console.log('FormData check:', {
         name: formData.name,
         phone: formData.phone,
