@@ -506,7 +506,74 @@
   opacity: 1 !important;
 }
 
-/* Responsive Design */
+/* Tab Navigation Styles */
+.admin-tabs {
+  background: white;
+  border-bottom: 1px solid #e0e7ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tab-nav {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+  position: relative;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: #4f46e5;
+  background: #f8fafc;
+}
+
+.tab-btn.active {
+  color: #4f46e5;
+  border-bottom-color: #4f46e5;
+  background: linear-gradient(to bottom, #f8fafc, #ffffff);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: white;
+}
+
+.tab-btn .emoji-visible {
+  font-size: 1.1rem;
+}
+
+/* Responsive tabs */
+@media (max-width: 768px) {
+  .tab-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .tab-btn .emoji-visible {
+    display: none;
+  }
+}
+
 @media (max-width: 1200px) {
   .kpi-container {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

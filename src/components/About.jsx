@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Container, Row, Col, Badge } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./About.css";
 import heroPic from "../assets/hero_pic.png";
@@ -342,8 +343,8 @@ const About = () => {
             <p className="offer-text">Book now and let us create memories that will last a lifetime!</p>
           </div>
           <div className="cta-buttons">
-            <a href="/BookUs" className="btn btn-primary btn-lg me-3">🔥 Book Your Hibachi Party Now!</a>
-            <a href="/contact" className="btn btn-outline-primary btn-lg">💬 Get Your Free Quote</a>
+            <Link to="/BookUs" className="btn btn-primary btn-lg me-3">🔥 Book Your Hibachi Party Now!</Link>
+            <Link to="/contact" className="btn btn-outline-primary btn-lg">💬 Get Your Free Quote</Link>
           </div>
           <p className="cta-footer">
             <small>📞 Questions? Call us for instant assistance! • 🚗 We travel to you! • 💯 Satisfaction guaranteed!</small>

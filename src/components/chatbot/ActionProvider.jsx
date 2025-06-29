@@ -48,8 +48,11 @@ class ActionProvider {
   };
 
   handleBooking = () => {
+    // Navigate to booking page
+    window.location.href = '/BookUs';
+    
     const message = this.createChatBotMessage(
-      "To book, click 'Book Now' at the top or 'Order Now' on the Menu page. You can select your date, time, and preferences. Booking must be at least 2 days in advance."
+      "Redirecting you to our booking page where you can select your date, time, and preferences! 📅"
     );
     this.setState((prev) => ({ ...prev, messages: [...prev.messages, message], lastIntent: "booking" }));
   };
