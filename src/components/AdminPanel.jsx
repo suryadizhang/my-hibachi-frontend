@@ -252,10 +252,9 @@ function AdminPanel() {
         setConfirmModal(prev => ({ ...prev, isLoading: true }));
         
         try {
-          await axios.delete(`${API_BASE}/admin/cancel_booking`, {
+          await axios.delete(`${API_BASE}/admin/cancel_booking?booking_id=${booking.id}`, {
             headers: { Authorization: `Bearer ${token}` },
             data: {
-              booking_id: booking.id,
               reason: reason
             }
           });
@@ -306,7 +305,7 @@ function AdminPanel() {
         setConfirmModal(prev => ({ ...prev, isLoading: true }));
         
         try {
-          await axios.post(`${API_BASE}/admin/mark_deposit_received`, {
+          await axios.post(`${API_BASE}/admin/confirm_deposit`, {
             booking_id: booking.id
           }, {
             headers: { Authorization: `Bearer ${token}` }

@@ -234,7 +234,14 @@ const OrderServices = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${API_BASE}/waitlist`, waitlistData);
+      const payload = {
+        name: waitlistData.name,
+        phone: waitlistData.phone,
+        email: waitlistData.email,
+        preferred_date: waitlistData.preferredDate,
+        preferred_time: waitlistData.preferredTime
+      };
+      await axios.post(`${API_BASE}/waitlist`, payload);
       setWaitlistVariant('success');
       setWaitlistMessage('You have been added to the waitlist! We will contact you if a slot opens.');
       setShowWaitlistModal(false);
