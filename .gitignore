@@ -115,3 +115,35 @@ temp/
 .out
 .storybook-out
 storybook-static
+
+# Files with sensitive data
+ADMIN_ACCOUNT_SETUP.md
+PRODUCTION_READY_SUMMARY.md
+*.md
+
+# Test files with credentials
+test_*.py
+*_test.js
+*_test.py
+test_*.js
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+users.db
+
+# Documentation with sensitive info
+*.md
+!README.md
+
+# Python files with credentials
+*.py
+
+# Config files with sensitive data
+src/config/admin.js
+src/config/credentials.js
+
+# Hardcoded credentials in components
+src/components/**/credentials.*
+src/components/**/config.*

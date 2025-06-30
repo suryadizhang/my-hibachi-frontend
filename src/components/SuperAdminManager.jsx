@@ -142,8 +142,8 @@ function SuperAdminManager() {
     }
 
     const defaultAccounts = [
-      { username: 'karen', password: 'myhibachicustomers!' },
-      { username: 'yohan', password: 'gedeinbiji' }
+      { username: 'karen', password: 'CHANGE_ME_IN_PRODUCTION' },
+      { username: 'yohan', password: 'CHANGE_ME_IN_PRODUCTION' }
     ];
 
     try {
