@@ -230,19 +230,17 @@ const Contact = () => {
                   </p>
                   <div className="cta-buttons">
                     <Button 
-                      variant="primary" 
                       size="lg" 
                       onClick={handleBookEvent}
-                      className="cta-button primary-cta"
+                      className="cta-button"
                     >
                       <FaCalendarAlt className="button-icon" />
                       Book Your Event Now
                     </Button>
                     <Button 
-                      variant="outline-primary" 
                       size="lg" 
                       onClick={handleGetQuote}
-                      className="cta-button secondary-cta"
+                      className="cta-button"
                     >
                       <FaEnvelope className="button-icon" />
                       Get Free Quote

@@ -99,7 +99,7 @@ const OrderServices = () => {
         }
         setCalendarLoading(true);
         try {
-          const res = await axios.get(`${API_BASE}/availability?date=${dateStr}`);
+          const res = await axios.get(`${API_BASE}/api/booking/availability?date=${dateStr}`);
           if (JSON.stringify(slotStatus) !== JSON.stringify(res.data)) {
             setSlotStatus(res.data);
             setAvailabilityCache(prev => ({ ...prev, [dateStr]: res.data }));
@@ -109,7 +109,7 @@ const OrderServices = () => {
               prefetchDate.setDate(prefetchDate.getDate() + offset);
               const prefetchStr = prefetchDate.toISOString().split('T')[0];
               if (!availabilityCache[prefetchStr]) {
-                axios.get(`${API_BASE}/availability?date=${prefetchStr}`).then(res => {
+                axios.get(`${API_BASE}/api/booking/availability?date=${prefetchStr}`).then(res => {
                   setAvailabilityCache(prev => ({ ...prev, [prefetchStr]: res.data }));
                 });
               }
@@ -152,13 +152,13 @@ const OrderServices = () => {
       zipcode: formData.zipcode,
     };
     try {
-      await axios.post(`${API_BASE}/book`, payload);
+      await axios.post(`${API_BASE}/api/booking/book`, payload);
       setVariant('success');
       setMessage('Booking submitted!');
       setFormData({ name: '', phone: '', email: '', address: '', city: '', zipcode: '', timeSlot: '', contactPreference: '' });
       // Re-fetch slot availability after booking
       const dateStr = selectedDate.toISOString().split('T')[0];
-      const res = await axios.get(`${API_BASE}/availability?date=${dateStr}`);
+      const res = await axios.get(`${API_BASE}/api/booking/availability?date=${dateStr}`);
       setSlotStatus(res.data);
       setLoading(false);
     } catch (err) {
@@ -191,7 +191,7 @@ const OrderServices = () => {
       date.setDate(date.getDate() + 1);
       const dateStr = date.toISOString().split('T')[0];
       try {
-        const res = await axios.get(`${API_BASE}/availability?date=${dateStr}`);
+        const res = await axios.get(`${API_BASE}/api/booking/availability?date=${dateStr}`);
         if (Object.values(res.data).some(slot => slot.status === "available")) {
           return new Date(date);
         }

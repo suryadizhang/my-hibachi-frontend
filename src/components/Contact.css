@@ -60,7 +60,7 @@ span[role="img"],
 .hero-title {
   font-size: 3.5rem;
   font-weight: 700;
-  color: white;
+  color: rgb(0, 0, 0);
   margin-bottom: 25px;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
   letter-spacing: 1px;
@@ -75,7 +75,7 @@ span[role="img"],
 
 .hero-subtitle {
   font-size: 1.4rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(0, 0, 0, 0.95);
   margin-bottom: 0;
   font-weight: 500;
   line-height: 1.6;
@@ -84,8 +84,9 @@ span[role="img"],
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
 }
 
 /* Container */
@@ -104,8 +105,8 @@ span[role="img"],
 
 .contact-card {
   border: none;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   background: white;
   transition: all 0.3s ease;
   overflow: hidden;
@@ -118,13 +119,14 @@ span[role="img"],
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 4px;
   background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
+  animation: shimmer 3s ease-in-out infinite;
 }
 
 .contact-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
 }
 
 .card-title {
@@ -280,24 +282,24 @@ span[role="img"],
 
 .yelp-button {
   background: linear-gradient(135deg, #d32323 0%, #ff5252 100%);
-  color: white;
+  color: #fff;
   box-shadow: 0 8px 25px rgba(211, 35, 35, 0.3);
 }
 
 .yelp-button:hover {
-  color: white;
+  color: #fff;
   background: linear-gradient(135deg, #b71c1c 0%, #d32323 100%);
   box-shadow: 0 15px 35px rgba(211, 35, 35, 0.4);
 }
 
 .google-button {
   background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
-  color: white;
+  color: #fff;
   box-shadow: 0 8px 25px rgba(66, 133, 244, 0.3);
 }
 
 .google-button:hover {
-  color: white;
+  color: #fff;
   background: linear-gradient(135deg, #1565c0 0%, #2e7d32 100%);
   box-shadow: 0 15px 35px rgba(66, 133, 244, 0.4);
 }
@@ -464,8 +466,8 @@ span[role="img"],
   border: none;
   border-radius: 15px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  color: #fff;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   position: relative;
 }
@@ -476,7 +478,7 @@ span[role="img"],
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 4px;
   background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
 }
 
@@ -488,7 +490,7 @@ span[role="img"],
 
 .quote-icon {
   font-size: 2.5rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(0, 0, 0, 0.4);
   margin-bottom: 20px;
 }
 
@@ -501,7 +503,7 @@ span[role="img"],
   margin-left: auto;
   margin-right: auto;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(0, 0, 0, 0.95);
   text-shadow: none;
 }
 
@@ -527,7 +529,7 @@ span[role="img"],
   margin: 0;
   font-weight: 500;
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: #000000;
   text-shadow: none;
 }
 
@@ -557,7 +559,10 @@ span[role="img"],
 }
 
 .cta-title {
-  color: #2c3e50;
+  background: linear-gradient(135deg, #FF6B35, #F7931E, #FFB347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 15px;
@@ -565,7 +570,10 @@ span[role="img"],
 }
 
 .cta-subtitle {
-  color: #5d4e75;
+  background: linear-gradient(135deg, #FF8C42, #FF6B35, #F7931E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-size: 1.2rem;
   margin-bottom: 30px;
   font-weight: 500;
@@ -579,47 +587,51 @@ span[role="img"],
   flex-wrap: wrap;
 }
 
+/* Unified CTA Buttons Base Style */
 .cta-button {
-  padding: 15px 30px;
+  padding: 18px 35px;
   font-size: 1.1rem;
   font-weight: 700;
   border-radius: 50px;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-width: 200px;
+  gap: 12px;
+  min-width: 220px;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid #e67575;
+  background: #000;
+  color: #09160d !important;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.button-icon {
-  font-size: 1.2rem;
+.cta-button .button-icon {
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
 }
 
-.primary-cta {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  color: white;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+/* Hover and Focus Styles */
+.cta-button:hover,
+.cta-button:focus {
+  background: #FFD700;
+  color: #000 !important;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
-.primary-cta:hover {
-  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+.cta-button:hover .button-icon,
+.cta-button:focus .button-icon {
+  transform: scale(1.1);
 }
 
-.secondary-cta {
-  border: 2px solid #667eea;
-  color: #667eea;
-  background: white;
-}
-
-.secondary-cta:hover {
-  background: #667eea;
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+/* Active Style */
+.cta-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
 /* Trust Indicators */
