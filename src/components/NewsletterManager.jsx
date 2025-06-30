@@ -49,7 +49,7 @@ const NewsletterManager = () => {
   const fetchRecipients = async (cityFilter = '', nameFilter = '') => {
     setLoading(true);
     try {
-      let url = `${API_BASE}/admin/newsletter/recipients`;
+      let url = `${API_BASE}/api/booking/admin/newsletter/recipients`;
       const params = new URLSearchParams();
       if (cityFilter) params.append('city', cityFilter);
       if (nameFilter) params.append('name', nameFilter);
@@ -61,7 +61,7 @@ const NewsletterManager = () => {
       setRecipients(res.data.recipients || []);
       
       // Fetch cities separately
-      const citiesRes = await axios.get(`${API_BASE}/admin/newsletter/cities`, {
+      const citiesRes = await axios.get(`${API_BASE}/api/booking/admin/newsletter/cities`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCities(citiesRes.data.cities || []);
@@ -177,7 +177,7 @@ const NewsletterManager = () => {
         send_type: 'email'
       };
 
-      const res = await axios.post(`${API_BASE}/admin/newsletter/send`, payload, {
+      const res = await axios.post(`${API_BASE}/api/booking/admin/newsletter/send`, payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

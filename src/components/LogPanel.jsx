@@ -47,7 +47,7 @@ const LogPanel = () => {
       if (filters.entityType) params.append('entity_type', filters.entityType);
       if (filters.actionType) params.append('action_type', filters.actionType);
 
-      const res = await axios.get(`${API_BASE}/admin/activity-logs?${params}`, {
+      const res = await axios.get(`${API_BASE}/api/booking/admin/activity-logs?${params}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -111,7 +111,7 @@ const LogPanel = () => {
     setMessage('');
     
     try {
-      const res = await axios.post(`${API_BASE}/admin/create-sample-data`, {}, {
+      const res = await axios.post(`${API_BASE}/api/booking/admin/create-sample-data`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

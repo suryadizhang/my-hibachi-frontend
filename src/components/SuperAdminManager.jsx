@@ -34,7 +34,7 @@ function SuperAdminManager() {
   const fetchAdmins = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE}/superadmin/admins`, {
+      const res = await axios.get(`${API_BASE}/api/booking/superadmin/admins`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAdmins(res.data.admins);
@@ -47,7 +47,7 @@ function SuperAdminManager() {
 
   const fetchActivityLogs = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/superadmin/activity_logs?limit=50`, {
+      const res = await axios.get(`${API_BASE}/api/booking/superadmin/activity_logs?limit=50`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setActivityLogs(res.data.logs);
@@ -68,7 +68,7 @@ function SuperAdminManager() {
       formData.append('username', newAdmin.username);
       formData.append('password', newAdmin.password);
 
-      await axios.post(`${API_BASE}/superadmin/create_admin`, formData, {
+      await axios.post(`${API_BASE}/api/booking/superadmin/create_admin`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -88,7 +88,7 @@ function SuperAdminManager() {
     }
 
     try {
-      await axios.delete(`${API_BASE}/superadmin/admin/${username}`, {
+      await axios.delete(`${API_BASE}/api/booking/superadmin/admin/${username}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchAdmins();
@@ -106,7 +106,7 @@ function SuperAdminManager() {
       }
 
       const res = await axios.post(
-        `${API_BASE}/superadmin/admin/${username}/reset_password`, 
+        `${API_BASE}/api/booking/superadmin/admin/${username}/reset_password`, 
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -125,7 +125,7 @@ function SuperAdminManager() {
       const formData = new FormData();
       formData.append('is_active', !isActive);
 
-      await axios.put(`${API_BASE}/superadmin/admin/${username}`, formData, {
+      await axios.put(`${API_BASE}/api/booking/superadmin/admin/${username}`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -153,7 +153,7 @@ function SuperAdminManager() {
           formData.append('username', account.username);
           formData.append('password', account.password);
 
-          await axios.post(`${API_BASE}/superadmin/create_admin`, formData, {
+          await axios.post(`${API_BASE}/api/booking/superadmin/create_admin`, formData, {
             headers: { Authorization: `Bearer ${token}` }
           });
         } catch (err) {

@@ -72,7 +72,7 @@ function AdminPanel() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get(`${API_BASE}/admin/weekly?start_date=${date}`, {
+      const res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${date}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(res.data);
@@ -96,7 +96,7 @@ function AdminPanel() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get(`${API_BASE}/admin/monthly?year=${year}&month=${month}`, {
+      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${year}&month=${month}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(res.data);
@@ -150,7 +150,7 @@ function AdminPanel() {
       formData.append('current_password', passwordForm.currentPassword);
       formData.append('new_password', passwordForm.newPassword);
 
-      await axios.post(`${API_BASE}/admin/change_password`, formData, {
+      await axios.post(`${API_BASE}/api/booking/admin/change_password`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -178,7 +178,7 @@ function AdminPanel() {
     // Fetch KPIs from backend (create an endpoint or compute from bookings)
     const fetchKpis = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/admin/kpis`, {
+        const res = await axios.get(`${API_BASE}/api/booking/admin/kpis`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setKpis(res.data);
@@ -252,7 +252,7 @@ function AdminPanel() {
         setConfirmModal(prev => ({ ...prev, isLoading: true }));
         
         try {
-          await axios.delete(`${API_BASE}/admin/cancel_booking?booking_id=${booking.id}`, {
+          await axios.delete(`${API_BASE}/api/booking/admin/cancel_booking?booking_id=${booking.id}`, {
             headers: { Authorization: `Bearer ${token}` },
             data: {
               reason: reason
@@ -305,7 +305,7 @@ function AdminPanel() {
         setConfirmModal(prev => ({ ...prev, isLoading: true }));
         
         try {
-          await axios.post(`${API_BASE}/admin/confirm_deposit`, {
+          await axios.post(`${API_BASE}/api/booking/admin/confirm_deposit`, {
             booking_id: booking.id
           }, {
             headers: { Authorization: `Bearer ${token}` }
