@@ -143,14 +143,19 @@ const OrderServices = () => {
     }
     setLoading(true);
     const payload = {
-      ...formData,
-      date: selectedDate.toISOString().split('T')[0],
-      time_slot: formData.timeSlot,
-      contact_preference: formData.contactPreference,
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
       address: formData.address,
       city: formData.city,
       zipcode: formData.zipcode,
+      date: selectedDate.toISOString().split('T')[0],
+      time_slot: formData.timeSlot,
+      contact_preference: formData.contactPreference,
     };
+    
+    console.log('Sending booking payload:', payload);
+    
     try {
       await axios.post(`${API_BASE}/api/booking/book`, payload);
       setVariant('success');
@@ -162,12 +167,17 @@ const OrderServices = () => {
       setSlotStatus(res.data);
       setLoading(false);
     } catch (err) {
+      console.error('Booking submission error:', err);
+      console.error('Error response:', err.response?.data);
       setVariant('danger');
       if (err.response?.data?.detail) {
         if (typeof err.response.data.detail === "string") {
           setMessage(err.response.data.detail);
         } else if (Array.isArray(err.response.data.detail)) {
-          setMessage(err.response.data.detail.map(d => d.msg).join(", "));
+          const errorMessages = err.response.data.detail.map(d => 
+            `${d.loc?.join('.')} ${d.msg}`
+          ).join(", ");
+          setMessage(`Validation errors: ${errorMessages}`);
         } else {
           setMessage("Booking failed. Please check your details and try again.");
         }

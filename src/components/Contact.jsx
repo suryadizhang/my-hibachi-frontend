@@ -164,14 +164,14 @@ const Contact = () => {
                     <h5 className="section-subtitle">🔗 Connect With Our Community</h5>
                     <div className="social-links">
                       <a
-                        href="https://www.instagram.com/my_hibachi/"
+                        href="https://www.instagram.com/my_hibachi_chef/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="social-link instagram-link"
                       >
                         <FaInstagram className="social-icon" />
                         <div>
-                          <strong>@my_hibachi</strong>
+                          <strong>@my_hibachi_chef</strong>
                           <small>Exclusive content & culinary inspiration</small>
                         </div>
                       </a>

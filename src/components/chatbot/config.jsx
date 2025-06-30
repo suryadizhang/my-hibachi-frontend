@@ -20,6 +20,7 @@ const config = {
           <button className="btn btn-outline-warning btn-sm m-1" onClick={() => props.actionProvider.handleMenu()}>Menu</button>
           <button className="btn btn-outline-warning btn-sm m-1" onClick={() => props.actionProvider.handlePricing()}>Pricing</button>
           <button className="btn btn-outline-warning btn-sm m-1" onClick={() => props.actionProvider.handleBooking()}>Book Now</button>
+          <button className="btn btn-outline-warning btn-sm m-1" onClick={() => props.actionProvider.handlePopularQuestions()}>Popular FAQs</button>
           <button className="btn btn-outline-warning btn-sm m-1" onClick={() => props.actionProvider.handleDiet()}>Dietary Options</button>
           <button className="btn btn-outline-warning btn-sm m-1" onClick={() => props.actionProvider.handleLocation()}>Service Area</button>
           <button className="btn btn-outline-warning btn-sm m-1" onClick={() => props.actionProvider.handleEvents()}>Events</button>

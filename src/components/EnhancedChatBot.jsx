@@ -92,7 +92,7 @@ const EnhancedChatBot = () => {
     return {
       text: FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)],
       contact: true,
-      options: ['Contact Support', 'Popular Questions', 'Start Over']
+      options: ['Contact Support', 'Popular Questions']
     };
   };
 
@@ -146,7 +146,7 @@ const EnhancedChatBot = () => {
       case 'event_details':
         if (message.includes('setup') || message.includes('prepare') || message.includes('bring')) {
           return {
-            text: `🏠 **Event Setup Made Easy:**\n\n**✅ You Provide:**\n${WEBSITE_DATA.event_details.setup_required.map(item => `• ${item}`).join('\n')}\n\n**🎉 We Bring & Handle:**\n${WEBSITE_DATA.event_details.provided.map(item => `• ${item}`).join('\n')}\n\n**📏 Space Requirements:**\n• ${WEBSITE_DATA.event_details.space_requirements}\n• Access to power outlet\n• Level surface for cooking\n\n**⏱️ Timeline:**\n• Chef arrives 30 minutes early\n• ${WEBSITE_DATA.event_details.duration}\n• Complete cleanup included`,
+            text: `🏠 **Event Setup Made Easy:**\n\n**✅ You Provide:**\n${WEBSITE_DATA.event_details.setup_required.map(item => `• ${item}`).join('\n')}\n\n**🎉 We Bring & Handle:**\n${WEBSITE_DATA.event_details.provided.map(item => `• ${item}`).join('\n')}\n\n**📏 Space Requirements:**\n• ${WEBSITE_DATA.event_details.space_requirements}\n• Access to power outlet\n• Level surface for cooking\n\n**⏱️ Timeline:**\n• Chef arrives 20 minutes early\n• ${WEBSITE_DATA.event_details.duration}\n• Complete cleanup included`,
             options: ['Book Now', 'Group Size Info', 'Menu & Pricing', 'Weather Policy']
           };
         }

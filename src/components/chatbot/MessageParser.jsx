@@ -72,6 +72,8 @@ class MessageParser {
       this.actionProvider.handleTipping();
     } else if (msg.includes("weather") || msg.includes("rain") || msg.includes("cancel") || msg.includes("reschedule")) {
       this.actionProvider.handleWeather();
+    } else if (msg.includes("popular") || msg.includes("common") || msg.includes("frequent") || msg.includes("faq") || msg.includes("questions")) {
+      this.actionProvider.handlePopularQuestions();
     } else {
       this.actionProvider.handleDefault();
     }

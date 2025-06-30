@@ -18,17 +18,32 @@ class ActionProvider {
         Our premium menu includes farm-fresh Chicken, USDA Choice NY Strip Steak, fresh Gulf Shrimp, wild-caught Salmon, and organic Tofu. Every meal comes with quality hibachi fried rice, fresh mixed vegetables, garden salad, and our signature house-made sauces. 
         <br />Premium upgrades: Authentic Yakisoba Noodles, fresh Sea Scallops, premium Filet Mignon (+$5), Maine Lobster Tail, 3rd Protein (+$10).
         <br /><br />
-        <a href="/menu" style={{ 
-          display: 'inline-block',
-          padding: '10px 20px',
-          backgroundColor: '#FFD700',
-          color: '#000',
-          textDecoration: 'none',
-          borderRadius: '25px',
-          fontWeight: 'bold',
-          border: '2px solid #000',
-          marginTop: '10px'
-        }}>📋 View Full Menu</a>
+        <button 
+          onClick={() => window.location.href = '/menu'}
+          style={{ 
+            display: 'inline-block',
+            padding: '12px 24px',
+            backgroundColor: '#FFD700',
+            color: '#000',
+            border: '2px solid #000',
+            borderRadius: '25px',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            cursor: 'pointer',
+            marginTop: '10px',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = '#000';
+            e.target.style.color = '#FFD700';
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = '#FFD700';
+            e.target.style.color = '#000';
+          }}
+        >
+          📋 View Full Menu
+        </button>
       </>
     );
     this.setState((prev) => ({
@@ -76,7 +91,7 @@ class ActionProvider {
 
   handleDuration = () => {
     const message = this.createChatBotMessage(
-      "A typical hibachi event lasts about 1.5–2 hours depending on your party size, including setup, cooking show, and dining."
+      "A typical hibachi event lasts about 2 hours depending on your party size, including setup, cooking show, and dining."
     );
     this.setState((prev) => ({ ...prev, messages: [...prev.messages, message], lastIntent: "duration" }));
   };
@@ -111,7 +126,7 @@ class ActionProvider {
 
   handleWeather = () => {
     const message = this.createChatBotMessage(
-      "If bad weather is expected, please contact us to reschedule or discuss indoor options. We can cook indoors if notified ahead and there is proper ventilation."
+      "🌧️ For rainy weather: YOU must provide a covered cooking area (gazebo, covered patio, garage with ventilation). Please notify us 24+ hours in advance if weather concerns arise. We don't bring portable exhaust fans - proper ventilation is required for indoor cooking."
     );
     this.setState((prev) => ({ ...prev, messages: [...prev.messages, message], lastIntent: "weather" }));
   };
@@ -119,16 +134,85 @@ class ActionProvider {
   handleDefault = () => {
     const message = this.createChatBotMessage(
       <>
-        {"I'm not sure about that. For more help, please contact our customer service:"}
+        {"I'd be happy to help! Here are some popular questions I can answer:"}
         <br /><br />
+        <strong>💰 Pricing:</strong> $55/adult, $30/child (6-12), FREE for 5 & under. $550 minimum.<br />
+        <strong>🍽️ Menu:</strong> Choose 2 proteins: Chicken, Steak, Shrimp, Salmon, or Tofu + sides<br />
+        <strong>⏰ Duration:</strong> 2 hours depending on party size<br />
+        <strong>👥 Capacity:</strong> Up to 150 people with multiple chefs<br />
+        <strong>🎉 Events:</strong> Birthdays, weddings, corporate events, reunions, and more!<br />
+        <strong>🌱 Dietary:</strong> Vegetarian, vegan, gluten-free options available<br /><br />
+        
+        <button 
+          onClick={() => window.location.href = '/faqs'}
+          style={{ 
+            display: 'inline-block',
+            padding: '8px 16px',
+            backgroundColor: '#007bff',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '20px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            marginRight: '10px'
+          }}
+        >
+          📚 View All FAQs
+        </button>
+        
+        {"For detailed questions, contact us:"}
+        <br />
         <strong>📧 Email:</strong> <a href="mailto:cs@myhibachichef.com" target="_blank" rel="noopener noreferrer">cs@myhibachichef.com</a><br />
-        <strong>📱 Text:</strong> <a href="sms:+19167408768" target="_blank" rel="noopener noreferrer">+1 (916) 740-8768</a> (Text only)<br />
-        <strong>📸 Instagram:</strong> <a href="https://www.instagram.com/my_hibachi_chef/" target="_blank" rel="noopener noreferrer">@my_hibachi_chef</a><br />
-        <strong>📘 Facebook:</strong> <a href="https://www.facebook.com/profile.php?id=61577483702847" target="_blank" rel="noopener noreferrer">My Hibachi Facebook Page</a><br /><br />
-        Or visit our <a href="/contact">Contact page</a>.
+        <strong>📱 Text:</strong> <a href="sms:+19167408768" target="_blank" rel="noopener noreferrer">+1 (916) 740-8768</a><br />
+        <strong>📸 Instagram:</strong> <a href="https://www.instagram.com/my_hibachi_chef/" target="_blank" rel="noopener noreferrer">@my_hibachi_chef</a>
       </>
     );
     this.setState((prev) => ({ ...prev, messages: [...prev.messages, message], lastIntent: "default" }));
+  };
+
+  handlePopularQuestions = () => {
+    const message = this.createChatBotMessage(
+      <>
+        <strong>🔥 Most Popular Questions & Quick Answers:</strong>
+        <br /><br />
+        <strong>1. 💰 How much does it cost?</strong><br />
+        Adults: $55 | Kids (6-12): $30 | Under 5: FREE | $550 minimum
+        <br /><br />
+        <strong>2. 🍽️ What's included in the menu?</strong><br />
+        Choose 2 proteins + hibachi rice + vegetables + salad + sauces + unlimited sake
+        <br /><br />
+        <strong>3. ⏰ How long does it take?</strong><br />
+        2 hours total depending on party size (setup + cooking show + dining)
+        <br /><br />
+        <strong>4. 👥 How many people can you serve?</strong><br />
+        Up to 150 people with multiple chefs
+        <br /><br />
+        <strong>5. 🎉 What events do you cater?</strong><br />
+        Birthdays, weddings, corporate events, bachelor/bachelorette parties, reunions
+        <br /><br />
+        <strong>6. 🌱 Dietary restrictions?</strong><br />
+        Yes! Vegetarian, vegan, gluten-free, halal, kosher options available
+        <br /><br />
+        
+        <button 
+          onClick={() => window.location.href = '/faqs'}
+          style={{ 
+            display: 'inline-block',
+            padding: '10px 20px',
+            backgroundColor: '#28a745',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '25px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            marginTop: '10px'
+          }}
+        >
+          📋 See All FAQ Details
+        </button>
+      </>
+    );
+    this.setState((prev) => ({ ...prev, messages: [...prev.messages, message], lastIntent: "popular" }));
   };
 
   handleHello = () => {

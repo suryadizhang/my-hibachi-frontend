@@ -302,7 +302,7 @@ const faqData = {
       header: "What time will the chef arrive?",
       body: (
         <>
-          The chef will arrive <strong>15-30 minutes before</strong> your reservation time to set up. Setup is quick and easy, typically taking 10-15 minutes.
+          The chef will arrive <strong>20 minutes before</strong> your reservation time to set up. Setup is quick and easy, typically taking 10-15 minutes.
         </>
       )
     },
@@ -407,11 +407,11 @@ const faqData = {
           <br /><strong>Indoor cooking:</strong> Possible with proper conditions:
           <ul>
             <li>High ceilings (at least 10 feet)</li>
-            <li>Excellent ventilation</li>
+            <li>Excellent ventilation (YOU must provide - we don't bring portable exhaust fans)</li>
             <li>Advance notification required</li>
-            <li>Open garage doors or windows</li>
+            <li>Open garage doors or windows for proper airflow</li>
           </ul>
-          Please notify us during booking if you need indoor cooking.
+          <strong>⚠️ Important:</strong> Host must ensure adequate ventilation for indoor cooking. Please notify us during booking if you need indoor cooking.
         </>
       )
     },
@@ -478,9 +478,10 @@ const faqData = {
           </ul>
           <strong>Weather Policy:</strong>
           <ul>
-            <li>If it rains, you must provide a covered cooking area</li>
-            <li>Notify us of weather concerns 24+ hours in advance</li>
-            <li>We can cook under gazebos, covered patios, or garages</li>
+            <li><strong>Rain:</strong> YOU must provide a covered cooking area (gazebo, covered patio, garage with ventilation)</li>
+            <li><strong>Notice:</strong> Notify us of weather concerns 24+ hours in advance</li>
+            <li><strong>Equipment:</strong> We don't bring portable exhaust fans - proper ventilation is your responsibility</li>
+            <li><strong>Safety:</strong> Chef needs protection from rain while cooking</li>
           </ul>
         </>
       )

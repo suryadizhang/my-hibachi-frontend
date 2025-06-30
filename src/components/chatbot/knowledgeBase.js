@@ -62,7 +62,7 @@ export const WEBSITE_DATA = {
     requirements: ["Guest count (minimum 10 people)", "Complete address with parking info", "Dietary restrictions and allergies", "Special occasion details", "Preferred cooking time"],
     deposit: "$100 deposit required within 6 hours to secure your booking",
     confirmation: "You'll receive email confirmation with chef contact info",
-    preparation_time: "Chef arrives 30 minutes early for setup",
+    preparation_time: "Chef arrives 20 minutes early for setup",
     flexibility: "We can accommodate last-minute changes with advance notice"
   },
 
@@ -100,7 +100,7 @@ export const WEBSITE_DATA = {
   },
 
   event_details: {
-    duration: "2-2.5 hours including setup, cooking show, and cleanup",
+    duration: "2 hours depending on party size, including setup, cooking show, and cleanup",
     group_sizes: {
       minimum: "10 people minimum",
       optimal: "15-25 people for best experience",
