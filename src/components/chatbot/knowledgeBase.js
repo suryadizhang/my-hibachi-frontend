@@ -104,7 +104,7 @@ export const WEBSITE_DATA = {
     group_sizes: {
       minimum: "10 people minimum",
       optimal: "15-25 people for best experience",
-      maximum: "Up to 50 people with multiple chefs"
+      maximum: "Up to 150 people with multiple chefs"
     },
     setup_required: [
       "Tables and chairs for all guests",

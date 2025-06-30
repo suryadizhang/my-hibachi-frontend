@@ -17,8 +17,18 @@ class ActionProvider {
         </div>
         Our premium menu includes farm-fresh Chicken, USDA Choice NY Strip Steak, fresh Gulf Shrimp, wild-caught Salmon, and organic Tofu. Every meal comes with quality hibachi fried rice, fresh mixed vegetables, garden salad, and our signature house-made sauces. 
         <br />Premium upgrades: Authentic Yakisoba Noodles, fresh Sea Scallops, premium Filet Mignon (+$5), Maine Lobster Tail, 3rd Protein (+$10).
-        <br />
-        <a href="/menu" target="_blank" rel="noopener noreferrer">See full menu with quality details</a>
+        <br /><br />
+        <a href="/menu" style={{ 
+          display: 'inline-block',
+          padding: '10px 20px',
+          backgroundColor: '#FFD700',
+          color: '#000',
+          textDecoration: 'none',
+          borderRadius: '25px',
+          fontWeight: 'bold',
+          border: '2px solid #000',
+          marginTop: '10px'
+        }}>📋 View Full Menu</a>
       </>
     );
     this.setState((prev) => ({
@@ -66,7 +76,7 @@ class ActionProvider {
 
   handleDuration = () => {
     const message = this.createChatBotMessage(
-      "A typical hibachi event lasts about 2–2.5 hours, depending on your group size and menu choices."
+      "A typical hibachi event lasts about 1.5–2 hours depending on your party size, including setup, cooking show, and dining."
     );
     this.setState((prev) => ({ ...prev, messages: [...prev.messages, message], lastIntent: "duration" }));
   };
@@ -87,7 +97,7 @@ class ActionProvider {
 
   handleEvents = () => {
     const message = this.createChatBotMessage(
-      "We cater for birthdays, weddings, proposals, family reunions, corporate events, anniversaries, holiday parties, and more. Kids are welcome!"
+      "🎉 We cater for all special occasions including: birthdays, bachelor/bachelorette parties, family reunions, weddings, proposals, corporate events, anniversaries, holiday parties, graduations, and more. Kids are always welcome! Every event becomes unforgettable with our hibachi experience."
     );
     this.setState((prev) => ({ ...prev, messages: [...prev.messages, message], lastIntent: "events" }));
   };
@@ -113,7 +123,7 @@ class ActionProvider {
         <br /><br />
         <strong>📧 Email:</strong> <a href="mailto:cs@myhibachichef.com" target="_blank" rel="noopener noreferrer">cs@myhibachichef.com</a><br />
         <strong>📱 Text:</strong> <a href="sms:+19167408768" target="_blank" rel="noopener noreferrer">+1 (916) 740-8768</a> (Text only)<br />
-        <strong>📸 Instagram:</strong> <a href="https://www.instagram.com/my_hibachi/" target="_blank" rel="noopener noreferrer">@my_hibachi</a><br />
+        <strong>📸 Instagram:</strong> <a href="https://www.instagram.com/my_hibachi_chef/" target="_blank" rel="noopener noreferrer">@my_hibachi_chef</a><br />
         <strong>📘 Facebook:</strong> <a href="https://www.facebook.com/profile.php?id=61577483702847" target="_blank" rel="noopener noreferrer">My Hibachi Facebook Page</a><br /><br />
         Or visit our <a href="/contact">Contact page</a>.
       </>

@@ -66,7 +66,7 @@ class MessageParser {
       this.actionProvider.handleSetup();
     } else if (msg.includes("area") || msg.includes("location") || msg.includes("where") || msg.includes("serve")) {
       this.actionProvider.handleLocation();
-    } else if (msg.includes("kids") || msg.includes("children") || msg.includes("birthday")) {
+    } else if (msg.includes("kids") || msg.includes("children") || msg.includes("birthday") || msg.includes("occasion") || msg.includes("event") || msg.includes("party") || msg.includes("celebration") || msg.includes("wedding") || msg.includes("bachelor") || msg.includes("reunion") || msg.includes("corporate") || msg.includes("anniversary")) {
       this.actionProvider.handleEvents();
     } else if (msg.includes("tip") || msg.includes("tipping") || msg.includes("gratuity")) {
       this.actionProvider.handleTipping();

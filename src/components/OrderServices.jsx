@@ -145,8 +145,8 @@ const OrderServices = () => {
     const payload = {
       ...formData,
       date: selectedDate.toISOString().split('T')[0],
-      timeSlot: formData.timeSlot,
-      contactPreference: formData.contactPreference,
+      time_slot: formData.timeSlot,
+      contact_preference: formData.contactPreference,
       address: formData.address,
       city: formData.city,
       zipcode: formData.zipcode,
