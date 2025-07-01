@@ -256,7 +256,7 @@ const WaitlistModal = ({
                 minWidth: "140px",
                 justifyContent: "center"
               }}
-              disabled={loading}
+              disabled={isFormDisabled()}
             >
               {loading ? (
                 <>

@@ -6,13 +6,11 @@ import { API_BASE } from '../config/api';
 import './NewsletterManager.css';
 
 const NewsletterManager = () => {
-  const [newsletters, setNewsletters] = useState([]);
   const [recipients, setRecipients] = useState([]);
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [variant, setVariant] = useState('');
-  const [showPreview, setShowPreview] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [sendingStats, setSendingStats] = useState({ total: 0, sent: 0, failed: 0 });
   
@@ -44,7 +42,7 @@ const NewsletterManager = () => {
     }
     fetchRecipients();
     loadDrafts();
-  }, [token, navigate]);
+  }, [token, navigate, fetchRecipients]);
 
   const fetchRecipients = async (cityFilter = '', nameFilter = '') => {
     setLoading(true);
@@ -65,7 +63,7 @@ const NewsletterManager = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCities(citiesRes.data.cities || []);
-    } catch (error) {
+    } catch {
       setMessage("Failed to fetch newsletter recipients");
       setVariant("danger");
     }

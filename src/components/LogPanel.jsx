@@ -32,7 +32,7 @@ const LogPanel = () => {
       return;
     }
     fetchLogs();
-  }, [token, navigate, pagination.page, filters]);
+  }, [token, navigate, pagination.page, filters, fetchLogs]);
 
   const fetchLogs = async () => {
     setLoading(true);

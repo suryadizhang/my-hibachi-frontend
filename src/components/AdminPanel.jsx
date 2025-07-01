@@ -53,14 +53,14 @@ function AdminPanel() {
   useEffect(() => {
     if (!token) navigate("/admin-login");
     else fetchCurrentUser();
-  }, [token, navigate]);
+  }, [token, navigate, fetchCurrentUser]);
 
   // Auto-load upcoming bookings when component mounts and user is authenticated
   useEffect(() => {
     if (token && mode === "upcoming") {
       fetchUpcoming();
     }
-  }, [token, mode]);
+  }, [token, mode, fetchUpcoming]);
 
   // KPI card click handlers
   const handleThisWeekClick = async () => {
@@ -188,7 +188,7 @@ function AdminPanel() {
       const payload = JSON.parse(atob(token.split('.')[1]));
       setUsername(payload.sub || 'Admin');
       setUserRole(payload.role || 'admin');
-    } catch (error) {
+    } catch {
       setUsername('Admin');
       setUserRole('admin');
     }
@@ -251,9 +251,6 @@ function AdminPanel() {
       const fourteenDaysLater = new Date();
       fourteenDaysLater.setDate(now.getDate() + 14);
       
-      const startDate = now.toISOString().split('T')[0];
-      const endDate = fourteenDaysLater.toISOString().split('T')[0];
-      
       // Collect bookings from all months that overlap with our 14-day range
       const monthsToFetch = new Set();
       
@@ -275,7 +272,7 @@ function AdminPanel() {
             headers: { Authorization: `Bearer ${token}` }
           });
           allBookings = allBookings.concat(res.data);
-        } catch (monthError) {
+        } catch {
           console.log(`No bookings found for ${year}-${month}`);
         }
       }
@@ -392,7 +389,6 @@ function AdminPanel() {
       }
     };
     if (token) fetchKpis();
-    // eslint-disable-next-line
   }, [bookings, token]);
 
   const filteredBookings = bookings.filter(b => {

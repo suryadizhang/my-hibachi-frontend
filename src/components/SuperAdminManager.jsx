@@ -29,7 +29,7 @@ function SuperAdminManager() {
   useEffect(() => {
     fetchAdmins();
     fetchActivityLogs();
-  }, []);
+  }, [fetchAdmins, fetchActivityLogs]);
 
   const fetchAdmins = async () => {
     setLoading(true);

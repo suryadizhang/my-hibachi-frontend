@@ -606,6 +606,7 @@ const OrderServices = () => {
                         {timeSlots.map(time => (
                           <option key={time} value={time}
                             disabled={slotStatus[time]?.status === "booked"}
+                            className={isSelectedTime(time) ? "selected-time" : ""}
                           >
                             {time}
                             {slotStatus[time]?.status === "available" && " (Available)"}
@@ -621,7 +622,7 @@ const OrderServices = () => {
                     <Button
                       type="button"
                       className="enhanced-btn"
-                      disabled={loading}
+                      disabled={loading || isBookingDisabled()}
                       onClick={handleSubmitClick}
                       aria-label="Submit Booking"
                     >
