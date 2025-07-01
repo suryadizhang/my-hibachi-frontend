@@ -14,7 +14,7 @@ import EnhancedChatBot from "./components/EnhancedChatBot";
 import CreditCardPayment from "./components/CreditCardPayment";
 import PartyGuestProteinForm from "./components/PartyGuestProteinForm";
 import AdminLogin from './components/AdminLogin';
-import AdminPanel from "./components/AdminPanel-test-step6";
+import AdminPanel from "./components/AdminPanel-test-step8";
 
 function App() {
   return (
