@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
-import { UltraFastPage } from '../components/StreamingComponents'
+import { UltraFastPage } from '../src/components/performance/StreamingComponents'
 
 // Ultra-fast dynamic imports with priority loading
 const About = dynamic(() => import('../components/About'), {

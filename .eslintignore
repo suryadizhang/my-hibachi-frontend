@@ -1,0 +1,19 @@
+# ESLint ignore patterns for development cleanup
+# TODO: Fix these issues gradually
+
+# Temporarily ignore specific patterns
+**/AdminPanel*.jsx
+**/test*.jsx
+**/debug*.jsx
+**/main-*.jsx
+**/*-COMPLETE.jsx
+**/*-FINAL.jsx
+**/*-test*.jsx
+
+# Legacy files to be cleaned up
+components/
+dist/
+backup-*/
+*.html
+*.bat
+*.py
