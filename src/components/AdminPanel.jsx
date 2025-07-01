@@ -11,7 +11,7 @@ import './AdminPanel.css';
 
 function AdminPanel() {
   const [activeTab, setActiveTab] = useState("bookings");
-  const [mode, setMode] = useState("weekly");
+  const [mode, setMode] = useState("upcoming"); // Changed default to "upcoming"
   const [date, setDate] = useState("");
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [month, setMonth] = useState((new Date().getMonth() + 1).toString());
@@ -54,6 +54,13 @@ function AdminPanel() {
     if (!token) navigate("/admin-login");
     else fetchCurrentUser();
   }, [token, navigate]);
+
+  // Auto-load upcoming bookings when component mounts and user is authenticated
+  useEffect(() => {
+    if (token && mode === "upcoming") {
+      fetchUpcoming();
+    }
+  }, [token, mode]);
 
   const fetchCurrentUser = async () => {
     try {
@@ -105,6 +112,52 @@ function AdminPanel() {
         e.response?.status === 401
           ? "Session expired. Please log in again."
           : e.response?.data?.detail || "Error fetching monthly data."
+      );
+      if (e.response?.status === 401) {
+        localStorage.removeItem("adminToken");
+        navigate("/admin-login");
+      }
+      setBookings([]);
+    }
+    setLoading(false);
+  };
+
+  const fetchUpcoming = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      // Get current date and 14 days from now
+      const now = new Date();
+      const fourteenDaysLater = new Date();
+      fourteenDaysLater.setDate(now.getDate() + 14);
+      
+      const startDate = now.toISOString().split('T')[0];
+      const endDate = fourteenDaysLater.toISOString().split('T')[0];
+      
+      // Fetch bookings for the next 14 days using monthly endpoint with date range
+      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${now.getFullYear()}&month=${now.getMonth() + 1}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Filter bookings to only show next 14 days
+      const upcomingBookings = res.data.filter(booking => {
+        const bookingDate = new Date(booking.date);
+        return bookingDate >= now && bookingDate <= fourteenDaysLater;
+      });
+      
+      // Sort by date and time
+      upcomingBookings.sort((a, b) => {
+        const dateCompare = new Date(a.date) - new Date(b.date);
+        if (dateCompare !== 0) return dateCompare;
+        return (a.time_slot || '').localeCompare(b.time_slot || '');
+      });
+      
+      setBookings(upcomingBookings);
+    } catch (e) {
+      setError(
+        e.response?.status === 401
+          ? "Session expired. Please log in again."
+          : e.response?.data?.detail || "Error fetching upcoming bookings."
       );
       if (e.response?.status === 401) {
         localStorage.removeItem("adminToken");
@@ -262,6 +315,8 @@ function AdminPanel() {
           // Refresh the bookings list
           if (mode === "weekly") {
             await fetchWeekly();
+          } else if (mode === "upcoming") {
+            await fetchUpcoming();
           } else {
             await fetchMonthly();
           }
@@ -314,6 +369,8 @@ function AdminPanel() {
           // Refresh the bookings list
           if (mode === "weekly") {
             await fetchWeekly();
+          } else if (mode === "upcoming") {
+            await fetchUpcoming();
           } else {
             await fetchMonthly();
           }
@@ -425,6 +482,13 @@ function AdminPanel() {
               </h3>
               <div>
                 <Button
+                  className={`mode-btn ${mode === "upcoming" ? "active" : ""}`}
+                  onClick={() => setMode("upcoming")}
+                >
+                  <span className="emoji-visible">⏰</span>
+                  Upcoming (14 days)
+                </Button>
+                <Button
                   className={`mode-btn ${mode === "weekly" ? "active" : ""}`}
                   onClick={() => setMode("weekly")}
                 >
@@ -453,6 +517,38 @@ function AdminPanel() {
                 <span className="emoji-visible">🔍</span>
                 Filter Bookings
               </h3>
+              
+              {mode === "upcoming" && (
+                <div className="filter-form">
+                  <div className="upcoming-info">
+                    <p className="upcoming-description">
+                      <span className="emoji-visible">⏰</span>
+                      Showing bookings for the next 14 days from today
+                    </p>
+                    <p className="upcoming-date-range">
+                      <span className="emoji-visible">📅</span>
+                      From: {new Date().toLocaleDateString()} to {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <Button 
+                    className="fetch-btn"
+                    onClick={fetchUpcoming} 
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <Spinner size="sm" />
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        <span className="emoji-visible">🔄</span>
+                        Refresh Upcoming Events
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
               
               {mode === "weekly" && (
                 <div className="filter-form">
