@@ -14,7 +14,7 @@ import EnhancedChatBot from "./components/EnhancedChatBot";
 import CreditCardPayment from "./components/CreditCardPayment";
 import PartyGuestProteinForm from "./components/PartyGuestProteinForm";
 import AdminLogin from './components/AdminLogin';
-import AdminPanel from "./components/AdminPanel";
+import AdminPanel from "./components/AdminPanel-FULL-FEATURES";
 
 function App() {
   return (
@@ -23,13 +23,13 @@ function App() {
       <div className="container mt-4">
         <Routes>
           <Route path="/" element={<About />} />
-          <Route path="/BookUs" element={<OrderServices />} />
+          <Route path="/order" element={<OrderServices />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/payment" element={<CreditCardPayment />} />
-          <Route path="/party" element={<PartyGuestProteinForm />} />
+          <Route path="/party-protein" element={<PartyGuestProteinForm />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminPanel />} />
         </Routes>
