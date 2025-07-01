@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Spinner, Button, Container } from "react-bootstrap";
-import { API_BASE } from '../config/api';
+import { API_BASE } from '../config/api-simple';
 import AdminConfirmationModal from './AdminConfirmationModal';
 import NewsletterManager from './NewsletterManager';
 import LogPanel from './LogPanel';

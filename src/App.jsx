@@ -8,7 +8,7 @@ import About from "./components/About";
 import Menu from "./components/Menu";
 import Reviews from "./components/Reviews";
 import AdminLogin from "./components/AdminLogin";
-import AdminPanel from "./components/AdminPanel-test-modal";
+import AdminPanel from "./components/AdminPanel";
 
 // Step 5: Add AdminPanel component (CRITICAL TEST)
 function App() {
@@ -18,12 +18,12 @@ function App() {
       <div className="container mt-4">
         <div style={{
           padding: '10px',
-          backgroundColor: 'lightcoral',
-          border: '2px solid darkred',
+          backgroundColor: 'lightgreen',
+          border: '2px solid green',
           marginBottom: '20px'
         }}>
-          <h2>⚠️ STEP 5 - Added AdminPanel Component</h2>
-          <p>If this shows blank, AdminPanel is the problem!</p>
+          <h2>� TESTING ORIGINAL AdminPanel with Fixed API</h2>
+          <p>Testing if API config was the root cause</p>
         </div>
         <Routes>
           <Route path="/" element={<About />} />
