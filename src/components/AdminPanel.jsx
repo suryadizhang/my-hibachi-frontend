@@ -49,6 +49,19 @@ function AdminPanel() {
   const token = localStorage.getItem("adminToken");
   const pageSize = 10;
 
+  // Define fetchCurrentUser BEFORE using it in useEffect
+  const fetchCurrentUser = useCallback(async () => {
+    try {
+      // Decode the token to get username and role
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      setUsername(payload.sub || 'Admin');
+      setUserRole(payload.role || 'admin');
+    } catch {
+      setUsername('Admin');
+      setUserRole('admin');
+    }
+  }, [token]);
+
   // Redirect to login if no token
   useEffect(() => {
     console.log('AdminPanel: Checking authentication...', { hasToken: !!token });
@@ -189,18 +202,6 @@ function AdminPanel() {
     }
     setLoading(false);
   };
-
-  const fetchCurrentUser = useCallback(async () => {
-    try {
-      // Decode the token to get username and role
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      setUsername(payload.sub || 'Admin');
-      setUserRole(payload.role || 'admin');
-    } catch {
-      setUsername('Admin');
-      setUserRole('admin');
-    }
-  }, [token]);
 
   const fetchWeekly = async () => {
     if (!date) return;
