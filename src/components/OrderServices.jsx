@@ -384,9 +384,9 @@ const OrderServices = () => {
   return (
     <div className="bookus-container">
       <SEO
-        title="Book Hibachi Catering Services - My Hibachi Chef | Dallas, TX"
-        description="Book your premium hibachi catering experience with My Hibachi Chef. Professional hibachi chefs bring authentic Japanese cuisine to your home in Dallas, Texas. Available time slots and instant booking."
-        keywords="book hibachi catering, reserve hibachi chef, hibachi booking dallas, private hibachi service, hibachi party booking, japanese chef catering, teppanyaki reservation, hibachi at home booking"
+        title="Book Private Hibachi Chef | Hibachi Catering Near Me | San Jose Bay Area"
+        description="Book your private hibachi chef today! In-home teppanyaki catering with mobile hibachi chef bringing live cooking show to your backyard party. Available for birthday parties, corporate events, and special occasions throughout Bay Area."
+        keywords="book private hibachi chef, hibachi catering near me, hire hibachi chef, mobile hibachi chef booking, in-home hibachi chef reservation, backyard hibachi party booking, birthday hibachi party catering, private teppanyaki catering, San Jose hibachi booking"
         url="/BookUs"
         type="webpage"
         structuredData={{

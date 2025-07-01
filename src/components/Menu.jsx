@@ -31,9 +31,9 @@ const additionalOptions = [
 const Menu = () => (
   <div className="menu-container">
     <SEO
-      title="Hibachi Menu - Authentic Japanese Cuisine | My Hibachi Chef Dallas"
-      description="Explore our authentic hibachi menu featuring premium Angus sirloin, fresh seafood, chicken, and vegetarian options. Professional hibachi chef brings restaurant-quality Japanese cuisine to your home in Dallas, TX."
-      keywords="hibachi menu, japanese cuisine menu, teppanyaki menu, hibachi steak, hibachi chicken, hibachi shrimp, filet mignon, lobster tail, vegetarian hibachi, dallas hibachi menu"
+      title="Hibachi Menu | All-Inclusive Mobile Chef Service | Steak Shrimp Chicken | Bay Area"
+      description="Complete hibachi menu for your private party! Our mobile hibachi chef brings everything - grill, ingredients, live cooking show with flame tricks. Choose from premium steak, fresh shrimp, chicken, and vegetarian options for your backyard hibachi party."
+      keywords="hibachi menu with steak shrimp chicken, all-inclusive hibachi catering, chef brings grill and ingredients, mobile hibachi menu, private hibachi chef menu, teppanyaki menu at home, hibachi catering menu Bay Area, backyard hibachi party menu"
       url="/menu"
       structuredData={{
         "@context": "https://schema.org",

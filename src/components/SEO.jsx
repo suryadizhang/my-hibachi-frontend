@@ -2,9 +2,9 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SEO = ({
-  title = "My Hibachi Chef - Premium Hibachi Catering Services",
-  description = "Experience authentic Japanese hibachi cuisine with My Hibachi Chef. Professional hibachi catering for parties, events, and special occasions in Dallas area.",
-  keywords = "hibachi catering, japanese cuisine, teppanyaki chef, private chef, dallas catering, hibachi party, authentic japanese food, private dining, event catering, hibachi grill",
+  title = "Private Hibachi Chef | In-Home Teppanyaki Catering | San Jose Bay Area",
+  description = "Book a private hibachi chef for your backyard party! Mobile hibachi catering with live cooking show, flame tricks, and all-inclusive service. Serving San Jose, Bay Area, Sacramento, and San Francisco.",
+  keywords = "private hibachi chef, hibachi catering near me, in-home hibachi chef, teppanyaki at home, backyard hibachi party, mobile hibachi chef, hibachi chef for hire, San Jose hibachi catering, Bay Area private chef",
   image = "/src/assets/My%20Hibachi%20logo.png",
   url = "https://myhibachichef.com",
   type = "website",

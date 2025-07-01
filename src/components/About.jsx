@@ -61,16 +61,16 @@ const About = () => {
   return (
     <section className="about-section">
       <SEO
-        title="My Hibachi Chef - Premium Hibachi Catering at Your Home | Dallas, TX"
-        description="Experience authentic Japanese hibachi cuisine at your home with My Hibachi Chef. Professional private hibachi chef services for parties, events, and special occasions in Dallas, Fort Worth, and surrounding areas."
-        keywords="hibachi at home, hibachi catering dallas, private hibachi chef texas, teppanyaki chef, hibachi party, japanese cuisine catering, hibachi grill service, private chef dallas, hibachi entertainment, authentic japanese food"
+        title="About My Hibachi Chef | Mobile Hibachi Catering with Live Cooking Show | Bay Area"
+        description="Professional mobile hibachi chef bringing authentic teppanyaki experience to your backyard, beachside, or any location. Live hibachi cooking show with flame tricks for birthday parties, corporate events, and special occasions in San Jose, Bay Area, Sacramento, and San Francisco."
+        keywords="mobile hibachi chef, live hibachi cooking show, flame tricks hibachi chef, all-inclusive hibachi catering, backyard hibachi party, birthday hibachi party at home, corporate hibachi catering, private chef for anniversary dinner, hibachi menu with steak shrimp chicken, chef brings grill and ingredients"
         url="/"
         image="/src/assets/hero_pic.png"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Restaurant",
           "name": "My Hibachi Chef",
-          "description": "Premium hibachi catering services bringing authentic Japanese cuisine directly to your home",
+          "description": "Premium private hibachi chef services bringing authentic Japanese cuisine directly to your backyard, beachside, park, or any location for unforgettable dining experiences",
           "url": "https://myhibachichef.com/",
           "logo": "https://myhibachichef.com/src/assets/My%20Hibachi%20logo.png",
           "image": "https://myhibachichef.com/src/assets/hero_pic.png",
@@ -78,32 +78,40 @@ const About = () => {
           "email": "info@myhibachichef.com",
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "Dallas",
-            "addressRegion": "TX",
+            "addressLocality": "San Jose",
+            "addressRegion": "CA",
             "addressCountry": "US"
           },
           "geo": {
             "@type": "GeoCoordinates",
-            "latitude": 32.7767,
-            "longitude": -96.7970
+            "latitude": 37.3382,
+            "longitude": -121.8863
           },
           "servesCuisine": ["Japanese", "Hibachi", "Teppanyaki"],
           "areaServed": [
             {
               "@type": "City",
-              "name": "Dallas"
+              "name": "San Jose"
             },
             {
               "@type": "City", 
-              "name": "Fort Worth"
+              "name": "San Francisco"
             },
             {
               "@type": "City",
-              "name": "Plano"
+              "name": "Sacramento"
             },
             {
               "@type": "City",
-              "name": "Irving"
+              "name": "Fremont"
+            },
+            {
+              "@type": "City",
+              "name": "Sunnyvale"
+            },
+            {
+              "@type": "City",
+              "name": "Mountain View"
             }
           ],
           "priceRange": "$$$",

@@ -29,15 +29,15 @@ const FAQs = () => {
   return (
     <Container fluid className="faq-container">
       <SEO
-        title="Frequently Asked Questions - My Hibachi Chef Catering | Dallas, TX"
-        description="Get answers to frequently asked questions about My Hibachi Chef's hibachi catering services in Dallas. Learn about pricing, booking, menu options, equipment requirements, and more."
-        keywords="hibachi catering FAQ, hibachi chef questions, dallas hibachi information, private chef FAQ, hibachi party questions, japanese catering FAQ, hibachi booking questions"
+        title="FAQ | Mobile Hibachi Chef Questions | Backyard Party Catering | Bay Area"
+        description="Get answers to frequently asked questions about hiring a mobile hibachi chef for your backyard party, birthday celebration, or corporate event. Learn about pricing, booking, and our all-inclusive hibachi catering service in San Jose, Bay Area, Sacramento."
+        keywords="mobile hibachi chef FAQ, backyard hibachi party questions, birthday hibachi party at home FAQ, private chef questions Bay Area, hibachi catering FAQ San Jose, kids hibachi party questions, corporate hibachi catering FAQ"
         url="/faqs"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "FAQPage",
           "name": "Frequently Asked Questions - My Hibachi Chef",
-          "description": "Common questions and answers about hibachi catering services",
+          "description": "Common questions and answers about private hibachi chef services for backyard parties and outdoor events",
           "mainEntity": [
             {
               "@type": "Question",
@@ -52,7 +52,7 @@ const FAQs = () => {
               "name": "What areas do you serve?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "We provide hibachi catering services throughout Dallas, Fort Worth, Plano, Irving, and surrounding areas in Texas. Contact us to confirm service availability for your specific location."
+                "text": "We provide private hibachi chef services throughout San Jose, San Francisco, Sacramento, Bay Area, and surrounding areas in Northern California. We can cook at your backyard, beachside, park, vineyard, winery, or any location you prefer. Contact us to confirm service availability for your specific location."
               }
             },
             {

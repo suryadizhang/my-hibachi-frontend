@@ -36,9 +36,9 @@ const Contact = () => {
   return (
     <div className="contact-page">
       <SEO
-        title="Contact My Hibachi Chef - Book Your Private Hibachi Experience | Dallas, TX"
-        description="Contact My Hibachi Chef for private hibachi catering services in Dallas, Texas. Get quotes, book events, and reach our professional hibachi chefs. Phone, email, and social media contact information."
-        keywords="contact hibachi chef dallas, hibachi catering quote, book hibachi event, private chef contact, dallas hibachi booking, hibachi party quote, japanese chef contact"
+        title="Contact My Hibachi Chef | Book Mobile Hibachi Catering | San Jose Sacramento Bay Area"
+        description="Contact My Hibachi Chef for mobile hibachi catering in San Jose, Bay Area, Sacramento, and San Francisco. Get quotes for backyard hibachi parties, birthday celebrations, corporate events, and private chef services. Book your live hibachi cooking show today!"
+        keywords="contact hibachi chef San Jose, hibachi catering Bay Area, Sacramento hibachi at home, San Francisco hibachi catering, mobile hibachi chef contact, book backyard hibachi party, private chef contact Bay Area, hibachi party quote"
         url="/contact"
         structuredData={{
           "@context": "https://schema.org",
@@ -53,7 +53,7 @@ const Contact = () => {
                 "@type": "ContactPoint",
                 "telephone": "+1-XXX-XXX-XXXX",
                 "contactType": "customer service",
-                "areaServed": "Dallas, TX",
+                "areaServed": "Northern California",
                 "availableLanguage": ["English", "Spanish"],
                 "hoursAvailable": {
                   "@type": "OpeningHoursSpecification",
