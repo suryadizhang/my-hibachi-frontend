@@ -384,9 +384,9 @@ const OrderServices = () => {
   return (
     <div className="bookus-container">
       <SEO
-        title="Book Private Hibachi Chef | Hibachi Catering Near Me | San Jose Bay Area"
-        description="Book your private hibachi chef today! In-home teppanyaki catering with mobile hibachi chef bringing live cooking show to your backyard party. Available for birthday parties, corporate events, and special occasions throughout Bay Area."
-        keywords="book private hibachi chef, hibachi catering near me, hire hibachi chef, mobile hibachi chef booking, in-home hibachi chef reservation, backyard hibachi party booking, birthday hibachi party catering, private teppanyaki catering, San Jose hibachi booking"
+        title="Book Private Hibachi Chef | Silicon Valley Mobile Catering | Same-Day Booking Available"
+        description="Book your private hibachi chef today! Premium mobile hibachi catering serving Silicon Valley, Peninsula, East Bay, and North Bay. Same-day booking available for last-minute parties. Professional chef brings live cooking show, flame tricks, and all equipment to your backyard, beachside, or venue."
+        keywords="book private hibachi chef Silicon Valley, mobile hibachi catering Peninsula, same-day hibachi booking, last-minute hibachi chef, private hibachi chef East Bay, North Bay hibachi catering, weekend hibachi party booking, hibachi chef for tonight, emergency hibachi catering, instant hibachi booking"
         url="/BookUs"
         type="webpage"
         structuredData={{

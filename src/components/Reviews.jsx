@@ -429,9 +429,9 @@ const Reviews = () => {
   return (
     <div className="reviews-section" style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)', minHeight: '100vh' }}>
       <SEO
-        title="Customer Reviews | 5-Star Mobile Hibachi Chef | Birthday Party & Event Catering"
-        description="Read authentic customer reviews for My Hibachi Chef's mobile hibachi catering services. See why families choose us for birthday hibachi parties at home, corporate events, and backyard celebrations in San Jose, Bay Area, and Sacramento."
-        keywords="hibachi chef reviews, mobile hibachi catering reviews, birthday hibachi party reviews, backyard hibachi party testimonials, private chef reviews Bay Area, kids hibachi party reviews, corporate hibachi catering feedback"
+        title="5-Star Reviews | Best Mobile Hibachi Chef Bay Area | 500+ Happy Families"
+        description="Read verified reviews from 500+ happy families who chose My Hibachi Chef for birthday parties, corporate events, and backyard celebrations. See why we're rated #1 mobile hibachi service in Silicon Valley, Peninsula, and Bay Area. Real testimonials from San Jose, Sacramento, and San Francisco customers."
+        keywords="best mobile hibachi chef Bay Area, top-rated hibachi catering reviews, 5-star hibachi chef testimonials, verified hibachi party reviews, Silicon Valley hibachi chef reviews, Peninsula mobile chef feedback, family hibachi party testimonials, corporate hibachi event reviews, birthday hibachi success stories"
         url="/reviews"
         structuredData={{
           "@context": "https://schema.org",

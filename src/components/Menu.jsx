@@ -31,9 +31,9 @@ const additionalOptions = [
 const Menu = () => (
   <div className="menu-container">
     <SEO
-      title="Hibachi Menu | All-Inclusive Mobile Chef Service | Steak Shrimp Chicken | Bay Area"
-      description="Complete hibachi menu for your private party! Our mobile hibachi chef brings everything - grill, ingredients, live cooking show with flame tricks. Choose from premium steak, fresh shrimp, chicken, and vegetarian options for your backyard hibachi party."
-      keywords="hibachi menu with steak shrimp chicken, all-inclusive hibachi catering, chef brings grill and ingredients, mobile hibachi menu, private hibachi chef menu, teppanyaki menu at home, hibachi catering menu Bay Area, backyard hibachi party menu"
+      title="Mobile Hibachi Chef Menu | Premium Steak Shrimp Chicken | All-Inclusive Bay Area Service"
+      description="Complete hibachi menu for your private party! Our mobile hibachi chef brings everything - grill, ingredients, live cooking show with flame tricks. Premium Angus steak, jumbo shrimp, organic chicken, and vegetarian options. Perfect for backyard hibachi parties in San Jose, Bay Area, Sacramento."
+      keywords="mobile hibachi chef menu, hibachi menu with steak shrimp chicken, all-inclusive hibachi catering, chef brings grill and ingredients, premium hibachi menu Bay Area, backyard hibachi party menu, San Jose hibachi catering menu, private chef menu Northern California, hibachi birthday party menu, corporate hibachi menu"
       url="/menu"
       structuredData={{
         "@context": "https://schema.org",
