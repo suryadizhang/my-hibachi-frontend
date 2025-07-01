@@ -1,0 +1,235 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+img {
+  display: block;/* this to make the image center*/
+  margin-left: auto;
+  margin-right: auto;
+  size-adjust: 100%;/* this to make the image fit the screen*/
+  width: 70%;
+  border-radius: 15px; /* this to make round shape on the corner*/
+  max-width: 100%;
+  height: auto;
+}
+img:hover{
+    transform: scale(1.1);
+    transition: transform 0.5s;
+}/* this to make the image bigger when hover on it*/
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+
+  background-image: url('/assets/background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.fully-booked-day {
+  background: #e60505 !important;
+  color: #fff !important;
+}
+.available-day {
+  background: #01db34 !important;
+  color: #fff !important;
+}
+.past-day {
+  background: #b0b0b0 !important;
+  color: #fff !important;
+}
+.waiting-list-day {
+  background: #ffc107 !important;
+  color: #222 !important;
+}
+.selected-calendar-day {
+  background: #0056b3 !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  border: 2px solid #FFD700 !important;
+}
+.badge {
+  transition: background 0.3s, color 0.3s;
+}
+.slot-status-dot {
+  transition: background 0.3s;
+}
+
+@media (max-width: 600px) {
+  .menu-silver-garden {
+    font-size: 1.1em;
+  }
+  .card {
+    padding: 1em;
+  }
+  .navbar img {
+    height: 80px !important;
+  }
+  .modal-content {
+    min-width: 90vw !important;
+    max-width: 98vw !important;
+    padding: 10px !important;
+  }
+}
+
+/* Chatbot floating action button and popup */
+.chatbot-fab-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1100;
+}
+
+.chatbot-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #222;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.chatbot-fab:hover {
+  background: #ffc107;
+}
+
+.chatbot-popup {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  width: 350px;
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  overflow: hidden;
+}
+
+.chatbot-fab-text {
+  position: absolute;
+  left: 56px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 110px;
+  height: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.chatbot-fab-marquee {
+  display: inline-block;
+  color: #222;
+  font-size: 1em;
+  font-weight: bold;
+  animation: chatbot-marquee 3s linear infinite;
+}
+
+@keyframes chatbot-marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-110%);
+  }
+}
+
+/* Dashboard widget hover effect */
+.bg-primary:hover, .bg-success:hover, .bg-warning:hover, .bg-danger:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+.faq-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-category-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #fff;
+  background-color: #343a40;
+}
+
+.accordion-body {
+  background-color: #fff;
+  color: #212529;
+}

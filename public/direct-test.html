@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct JS Test</title>
+</head>
+<body>
+    <div id="root">Loading...</div>
+    
+    <script>
+        console.log("🔥 DIRECT SCRIPT LOADING...");
+        
+        document.title = "🚨 DIRECT JS WORKING!";
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("✅ DOM READY");
+            
+            const root = document.getElementById("root");
+            console.log("📍 Root element:", root);
+            
+            if (root) {
+                root.innerHTML = `
+                    <div style="
+                        padding: 50px; 
+                        background-color: #00ff00; 
+                        color: black; 
+                        font-size: 40px; 
+                        text-align: center;
+                        font-family: Arial;
+                        border: 5px solid red;
+                    ">
+                        🎉 DIRECT JAVASCRIPT IS WORKING!
+                        <br>
+                        Time: ${new Date().toLocaleString()}
+                        <br>
+                        <button onclick="alert('Direct JS Button clicked!')">Test Button</button>
+                    </div>
+                `;
+                console.log("✅ DIRECT CONTENT RENDERED!");
+                
+                document.body.style.backgroundColor = "#ffff00";
+                
+            } else {
+                console.error("❌ ROOT NOT FOUND!");
+                document.body.innerHTML = "<h1 style='color: red;'>ROOT ELEMENT NOT FOUND!</h1>";
+            }
+        });
+        
+        console.log("🔥 DIRECT SCRIPT LOADED");
+    </script>
+</body>
+</html>

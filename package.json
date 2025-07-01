@@ -1,87 +1,39 @@
 {
-  "name": "my-hibachi-frontend",
-  "description": "Premium Hibachi Catering Service - Frontend React Application",
-  "version": "1.0.0",
+  "name": "my-hibachi-nextjs",
+  "version": "0.1.0",
   "private": true,
-  "type": "module",
-  "author": "My Hibachi Chef",
-  "license": "MIT",
-  "homepage": "https://myhibachichef.com",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/myhibachi/frontend.git"
-  },
-  "keywords": [
-    "hibachi",
-    "catering",
-    "react",
-    "booking",
-    "restaurant"
-  ],
   "scripts": {
-    "dev": "vite",
-    "dev:fresh": "vite --force",
-    "build": "vite build",
-    "build:clean": "rmdir /s /q dist && vite build",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "preview": "vite preview",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.8.2",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.10.0",
-    "bootstrap": "^5.3.6",
+    "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "react": "^18.3.1",
+    "chart.js": "^4.5.0",
+    "next": "15.3.4",
+    "react": "^19.0.0",
     "react-bootstrap": "^2.10.10",
-    "react-bootstrap-icons": "^1.11.6",
     "react-calendar": "^6.0.0",
+    "react-chartjs-2": "^5.3.0",
     "react-datepicker": "^8.4.0",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.0.0",
     "react-helmet-async": "^2.0.5",
     "react-icons": "^5.5.0",
-    "react-redux": "^9.2.0",
-    "react-router-dom": "^7.6.2",
-    "sqlite3": "^5.1.7"
+    "react-router-dom": "^7.6.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.4",
-    "@babel/preset-env": "^7.27.2",
-    "@babel/preset-react": "^7.27.1",
-    "@eslint/js": "^9.25.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.4.1",
-    "babel-jest": "^30.0.1",
-    "babel-plugin-transform-import-meta": "^2.3.3",
-    "eslint": "^9.25.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^16.0.0",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^30.0.1",
-    "jest-environment-jsdom": "^30.0.1",
-    "vite": "^6.3.5"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.(js|jsx)$": "babel-jest"
-    },
-    "testEnvironment": "jsdom",
-    "moduleNameMapper": {
-      "^react-calendar$": "<rootDir>/__mocks__/react-calendar.js",
-      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.js"
-    ]
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
