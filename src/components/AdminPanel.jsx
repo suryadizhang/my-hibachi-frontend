@@ -62,6 +62,126 @@ function AdminPanel() {
     }
   }, [token, mode]);
 
+  // KPI card click handlers
+  const handleThisWeekClick = async () => {
+    setMode("weekly");
+    setError("");
+    
+    // Get current week's Monday
+    const now = new Date();
+    const monday = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+    const mondayStr = monday.toISOString().split('T')[0];
+    
+    setDate(mondayStr);
+    
+    // Fetch current week data
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${mondayStr}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBookings(res.data);
+      setPage(1); // Reset to first page
+    } catch (e) {
+      setError("Error loading current week data: " + (e.response?.data?.detail || e.message));
+    }
+    setLoading(false);
+  };
+
+  const handleThisMonthClick = async () => {
+    setMode("monthly");
+    setError("");
+    
+    // Get current month and year
+    const now = new Date();
+    const currentYear = now.getFullYear().toString();
+    const currentMonth = (now.getMonth() + 1).toString();
+    
+    setYear(currentYear);
+    setMonth(currentMonth);
+    
+    // Fetch current month data
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${currentYear}&month=${currentMonth}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBookings(res.data);
+      setPage(1); // Reset to first page
+    } catch (e) {
+      setError("Error loading current month data: " + (e.response?.data?.detail || e.message));
+    }
+    setLoading(false);
+  };
+
+  const handleTotalBookingsClick = async () => {
+    setMode("total");
+    setError("");
+    
+    // Fetch all bookings from all time periods and sort by date (earliest first) and deposit status
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_BASE}/api/booking/admin/all-bookings`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Sort by date (earliest first), then by deposit status (pending first)
+      const sortedBookings = res.data.sort((a, b) => {
+        // First sort by date (earliest first)
+        const dateCompare = new Date(a.date) - new Date(b.date);
+        if (dateCompare !== 0) return dateCompare;
+        
+        // Then by time slot
+        const timeCompare = (a.time_slot || '').localeCompare(b.time_slot || '');
+        if (timeCompare !== 0) return timeCompare;
+        
+        // Finally by deposit status (pending deposits first)
+        const aDeposit = a.deposit_received || 0;
+        const bDeposit = b.deposit_received || 0;
+        return aDeposit - bDeposit;
+      });
+      
+      setBookings(sortedBookings);
+      setPage(1); // Reset to first page
+    } catch (e) {
+      setError("Error loading all bookings: " + (e.response?.data?.detail || e.message));
+    }
+    setLoading(false);
+  };
+
+  const handleWaitlistClick = async () => {
+    setMode("waitlist");
+    setError("");
+    
+    // Fetch all waitlist entries sorted by earliest date
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_BASE}/api/booking/admin/waitlist`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Sort by preferred date (earliest first), then by created_at
+      const sortedWaitlist = res.data.sort((a, b) => {
+        // First sort by preferred date (earliest first)
+        const dateCompare = new Date(a.preferred_date) - new Date(b.preferred_date);
+        if (dateCompare !== 0) return dateCompare;
+        
+        // Then by preferred time
+        const timeCompare = (a.preferred_time || '').localeCompare(b.preferred_time || '');
+        if (timeCompare !== 0) return timeCompare;
+        
+        // Finally by creation time (earliest first)
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+      
+      setBookings(sortedWaitlist);
+      setPage(1); // Reset to first page
+    } catch (e) {
+      setError("Error loading waitlist: " + (e.response?.data?.detail || e.message));
+    }
+    setLoading(false);
+  };
+
   const fetchCurrentUser = async () => {
     try {
       // Decode the token to get username and role
@@ -134,15 +254,37 @@ function AdminPanel() {
       const startDate = now.toISOString().split('T')[0];
       const endDate = fourteenDaysLater.toISOString().split('T')[0];
       
-      // Fetch bookings for the next 14 days using monthly endpoint with date range
-      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${now.getFullYear()}&month=${now.getMonth() + 1}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // Collect bookings from all months that overlap with our 14-day range
+      const monthsToFetch = new Set();
+      
+      // Add current month
+      monthsToFetch.add(`${now.getFullYear()}-${now.getMonth() + 1}`);
+      
+      // Add next month if 14 days later is in a different month
+      if (fourteenDaysLater.getMonth() !== now.getMonth() || fourteenDaysLater.getFullYear() !== now.getFullYear()) {
+        monthsToFetch.add(`${fourteenDaysLater.getFullYear()}-${fourteenDaysLater.getMonth() + 1}`);
+      }
+      
+      let allBookings = [];
+      
+      // Fetch bookings from each month
+      for (const monthKey of monthsToFetch) {
+        const [year, month] = monthKey.split('-');
+        try {
+          const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${year}&month=${month}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          allBookings = allBookings.concat(res.data);
+        } catch (monthError) {
+          console.log(`No bookings found for ${year}-${month}`);
+        }
+      }
       
       // Filter bookings to only show next 14 days
-      const upcomingBookings = res.data.filter(booking => {
+      const upcomingBookings = allBookings.filter(booking => {
         const bookingDate = new Date(booking.date);
-        return bookingDate >= now && bookingDate <= fourteenDaysLater;
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        return bookingDate >= todayStart && bookingDate <= fourteenDaysLater;
       });
       
       // Sort by date and time
@@ -259,7 +401,8 @@ function AdminPanel() {
       (b.name && b.name.toLowerCase().includes(searchTerm)) ||
       (b.phone && b.phone.includes(search)) ||
       (b.email && b.email.toLowerCase().includes(searchTerm)) ||
-      (b.date && b.date.includes(search))
+      (b.date && b.date.includes(search)) ||
+      (b.preferred_date && b.preferred_date.includes(search))
     );
   });
 
@@ -287,6 +430,24 @@ function AdminPanel() {
       return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
     }
     return phone;
+  };
+
+  // Get current view title for display
+  const getCurrentViewTitle = () => {
+    switch (mode) {
+      case "upcoming":
+        return "📋 Upcoming Events (Next 14 Days)";
+      case "weekly":
+        return "📅 This Week's Bookings";
+      case "monthly":
+        return "📆 This Month's Bookings";
+      case "total":
+        return "📊 All Bookings (Sorted by Date & Deposit)";
+      case "waitlist":
+        return "📝 Waitlist Entries";
+      default:
+        return "📋 Booking Records";
+    }
   };
 
   // Admin action handlers
@@ -354,14 +515,15 @@ function AdminPanel() {
       actionType: "warning",
       confirmButtonText: "Mark as Received",
       cancelButtonText: "Cancel",
-      requiresReason: false,
+      requiresReason: true,
+      reasonPlaceholder: "Please provide confirmation details (e.g., payment method, transaction ID)...",
       bookingDetails: booking,
-      onConfirm: async () => {
+      onConfirm: async (reason) => {
         setConfirmModal(prev => ({ ...prev, isLoading: true }));
         
         try {
-          await axios.post(`${API_BASE}/api/booking/admin/confirm_deposit`, {
-            booking_id: booking.id
+          await axios.post(`${API_BASE}/api/booking/admin/confirm_deposit?booking_id=${booking.id}&date=${booking.date}`, {
+            reason: reason || "Deposit confirmed by admin"
           }, {
             headers: { Authorization: `Bearer ${token}` }
           });
@@ -384,6 +546,81 @@ function AdminPanel() {
             e.response?.status === 401
               ? "Session expired. Please log in again."
               : e.response?.data?.detail || "Error updating deposit status. Please try again."
+          );
+          
+          if (e.response?.status === 401) {
+            localStorage.removeItem("adminToken");
+            navigate("/admin-login");
+          }
+        }
+      }
+    });
+  };
+
+  const handleContactWaitlistCustomer = (waitlistEntry) => {
+    setConfirmModal({
+      show: true,
+      title: "Contact Waitlist Customer",
+      message: `Do you want to contact ${waitlistEntry.name} about their waitlist request for ${waitlistEntry.preferred_date} at ${waitlistEntry.preferred_time}?`,
+      actionType: "info",
+      confirmButtonText: "Open Contact Info",
+      cancelButtonText: "Cancel",
+      requiresReason: false,
+      bookingDetails: waitlistEntry,
+      onConfirm: () => {
+        // Open contact information - could be enhanced to open email/phone app
+        const contactInfo = `
+Customer: ${waitlistEntry.name}
+Phone: ${waitlistEntry.phone}
+Email: ${waitlistEntry.email}
+Preferred Date: ${waitlistEntry.preferred_date}
+Preferred Time: ${waitlistEntry.preferred_time}
+        `.trim();
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(contactInfo).then(() => {
+          alert('Contact information copied to clipboard!');
+        }).catch(() => {
+          alert(contactInfo);
+        });
+        
+        setConfirmModal(prev => ({ ...prev, show: false }));
+      }
+    });
+  };
+
+  const handleRemoveFromWaitlist = (waitlistEntry) => {
+    setConfirmModal({
+      show: true,
+      title: "Remove from Waitlist",
+      message: `Are you sure you want to remove ${waitlistEntry.name} from the waitlist?`,
+      actionType: "danger",
+      confirmButtonText: "Remove",
+      cancelButtonText: "Cancel",
+      requiresReason: true,
+      reasonPlaceholder: "Please provide a reason for removing from waitlist...",
+      bookingDetails: waitlistEntry,
+      onConfirm: async (reason) => {
+        setConfirmModal(prev => ({ ...prev, isLoading: true }));
+        
+        try {
+          await axios.delete(`${API_BASE}/api/booking/admin/waitlist/${waitlistEntry.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+            data: { reason: reason }
+          });
+          
+          // Refresh the waitlist
+          await handleWaitlistClick();
+          
+          setConfirmModal(prev => ({ ...prev, show: false, isLoading: false }));
+          setError("");
+          
+        } catch (e) {
+          setConfirmModal(prev => ({ ...prev, isLoading: false }));
+          setError(
+            e.response?.status === 401
+              ? "Session expired. Please log in again."
+              : e.response?.data?.detail || "Error removing from waitlist. Please try again."
           );
           
           if (e.response?.status === 401) {
@@ -659,25 +896,50 @@ function AdminPanel() {
 
             {/* KPI Cards */}
             <div className="kpi-container">
-              <div className="kpi-card primary">
+              <div 
+                className="kpi-card primary clickable" 
+                onClick={handleTotalBookingsClick}
+                role="button"
+                tabIndex={0}
+                aria-label="View all bookings sorted by date and deposit status"
+              >
                 <div className="kpi-icon emoji-visible">📊</div>
                 <div className="kpi-value">{kpis.total}</div>
                 <div className="kpi-label">Total Bookings</div>
+                <div className="kpi-hint">Click to view all</div>
               </div>
-              <div className="kpi-card success">
+              <div 
+                className="kpi-card success clickable" 
+                onClick={handleThisWeekClick}
+                role="button"
+                tabIndex={0}
+                aria-label="View current week bookings"
+              >
                 <div className="kpi-icon emoji-visible">📅</div>
                 <div className="kpi-value">{kpis.week}</div>
                 <div className="kpi-label">This Week</div>
+                <div className="kpi-hint">Click for current week</div>
               </div>
-              <div className="kpi-card warning">
+              <div 
+                className="kpi-card warning clickable" 
+                onClick={handleThisMonthClick}
+                role="button"
+                tabIndex={0}
+                aria-label="View current month bookings"
+              >
                 <div className="kpi-icon emoji-visible">📆</div>
                 <div className="kpi-value">{kpis.month}</div>
                 <div className="kpi-label">This Month</div>
+                <div className="kpi-hint">Click for current month</div>
               </div>
-              <div className="kpi-card danger">
+              <div 
+                className="kpi-card danger clickable"
+                onClick={handleWaitlistClick}
+              >
                 <div className="kpi-icon emoji-visible">⏳</div>
                 <div className="kpi-value">{kpis.waitlist}</div>
                 <div className="kpi-label">Waitlist</div>
+                <div className="kpi-hint">Click to view waitlist</div>
               </div>
             </div>
 
@@ -685,8 +947,7 @@ function AdminPanel() {
             <div className="table-container">
               <div className="table-header">
                 <h3 className="table-title">
-                  <span className="emoji-visible">📋</span>
-                  Booking Records ({filteredBookings.length})
+                  {getCurrentViewTitle()} ({filteredBookings.length})
                 </h3>
                 <div className="search-container">
                   <span className="search-icon emoji-visible">🔍</span>
@@ -705,36 +966,91 @@ function AdminPanel() {
                 <table className="enhanced-table">
                   <thead>
                     <tr>
-                      <th>📅 Date</th>
-                      <th>⏰ Time</th>
-                      <th>👤 Name</th>
-                      <th>📞 Phone</th>
-                      <th>✉️ Email</th>
-                      <th>🏠 Address</th>
-                      <th>📱 Contact Pref</th>
-                      <th>💰 Deposit</th>
-                      <th>⚡ Actions</th>
+                      {mode === 'waitlist' ? (
+                        <>
+                          <th>📅 Preferred Date</th>
+                          <th>⏰ Preferred Time</th>
+                          <th>👤 Name</th>
+                          <th>📞 Phone</th>
+                          <th>✉️ Email</th>
+                          <th>📅 Created</th>
+                          <th>⚡ Actions</th>
+                        </>
+                      ) : (
+                        <>
+                          <th>📅 Date</th>
+                          <th>⏰ Time</th>
+                          <th>👤 Name</th>
+                          <th>📞 Phone</th>
+                          <th>✉️ Email</th>
+                          <th>🏠 Address</th>
+                          <th>📱 Contact Pref</th>
+                          <th>💰 Deposit</th>
+                          <th>⚡ Actions</th>
+                        </>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
                     {paginatedBookings.length === 0 && !loading ? (
                       <tr>
-                        <td colSpan={9} className="no-bookings">
+                        <td colSpan={mode === 'waitlist' ? 7 : 9} className="no-bookings">
                           <div className="no-bookings-icon emoji-visible">📭</div>
-                          <div>No bookings found.</div>
+                          <div>{mode === 'waitlist' ? 'No waitlist entries found.' : 'No bookings found.'}</div>
                           <small>Try adjusting your search or date filters.</small>
                         </td>
                       </tr>
                     ) : (
                       paginatedBookings.map((b, index) => (
-                        <tr key={b.id + b.date + index}>
-                          <td>{formatDate(b.date)}</td>
-                          <td>{b.time_slot}</td>
-                          <td>{b.name}</td>
-                          <td>{formatPhone(b.phone)}</td>
-                          <td>{b.email}</td>
-                          <td>{`${b.address}, ${b.city} ${b.zipcode}`}</td>
-                          <td>
+                        <tr key={b.id + (b.date || b.preferred_date) + index}>
+                          {mode === 'waitlist' ? (
+                            <>
+                              <td>{formatDate(b.preferred_date)}</td>
+                              <td>{b.preferred_time}</td>
+                              <td>{b.name}</td>
+                              <td>{formatPhone(b.phone)}</td>
+                              <td>{b.email}</td>
+                              <td>{formatDate(b.created_at ? b.created_at.split(' ')[0] : '')}</td>
+                              <td>
+                                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                  <Button
+                                    size="sm"
+                                    variant="outline-primary"
+                                    onClick={() => handleContactWaitlistCustomer(b)}
+                                    style={{
+                                      borderRadius: '15px',
+                                      fontSize: '0.75rem',
+                                      padding: '0.25rem 0.75rem'
+                                    }}
+                                    title="Contact customer"
+                                  >
+                                    <span className="emoji-visible">📞</span>
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline-danger"
+                                    onClick={() => handleRemoveFromWaitlist(b)}
+                                    style={{
+                                      borderRadius: '15px',
+                                      fontSize: '0.75rem',
+                                      padding: '0.25rem 0.75rem'
+                                    }}
+                                    title="Remove from waitlist"
+                                  >
+                                    <span className="emoji-visible">🗑️</span>
+                                  </Button>
+                                </div>
+                              </td>
+                            </>
+                          ) : (
+                            <>
+                              <td>{formatDate(b.date)}</td>
+                              <td>{b.time_slot}</td>
+                              <td>{b.name}</td>
+                              <td>{formatPhone(b.phone)}</td>
+                              <td>{b.email}</td>
+                              <td>{`${b.address}, ${b.city} ${b.zipcode}`}</td>
+                              <td>
                             <span style={{ 
                               padding: '0.25rem 0.5rem', 
                               borderRadius: '6px', 
@@ -794,6 +1110,8 @@ function AdminPanel() {
                               </Button>
                             </div>
                           </td>
+                            </>
+                          )}
                         </tr>
                       ))
                     )}

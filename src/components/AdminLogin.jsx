@@ -36,12 +36,13 @@ function AdminLogin() {
     setLoading(true);
     
     try {
-      const form = new FormData();
-      form.append("username", username);
-      form.append("password", password);
+      const loginData = {
+        username: username,
+        password: password
+      };
       
-      const res = await axios.post(`${API_BASE}/api/booking/token`, form, {
-        headers: { "Content-Type": "multipart/form-data" }
+      const res = await axios.post(`${API_BASE}/api/booking/admin/login`, loginData, {
+        headers: { "Content-Type": "application/json" }
       });
       
       localStorage.setItem("adminToken", res.data.access_token);

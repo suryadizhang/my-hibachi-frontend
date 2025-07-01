@@ -305,6 +305,112 @@
   font-weight: 500;
 }
 
+/* Enhanced KPI card styling for clickable cards */
+.kpi-card.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+}
+
+.kpi-card.clickable:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.kpi-card.clickable:active {
+  transform: translateY(-4px);
+}
+
+.kpi-card.clickable:focus {
+  outline: 3px solid rgba(0, 123, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* KPI hint text */
+.kpi-hint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-weight: 500;
+  text-align: center;
+}
+
+.kpi-card.clickable:hover .kpi-hint {
+  opacity: 1;
+}
+
+/* Enhanced hover effects for specific card types */
+.kpi-card.primary.clickable:hover {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.kpi-card.success.clickable:hover {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+.kpi-card.warning.clickable:hover {
+  background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+}
+
+/* Add pulse animation on click */
+.kpi-card.clickable:active::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%) scale(0);
+  animation: pulse-click 0.3s ease-out;
+}
+
+@keyframes pulse-click {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* Loading state for KPI cards */
+.kpi-card.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.kpi-card.loading .kpi-value {
+  position: relative;
+}
+
+.kpi-card.loading .kpi-value::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Search and Table */
 .table-container {
   background: white;
