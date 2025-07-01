@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Reviews.css';
+import SEO from './SEO';
 
 const reviewsData = [
   {
@@ -427,6 +428,59 @@ const Reviews = () => {
 
   return (
     <div className="reviews-section" style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)', minHeight: '100vh' }}>
+      <SEO
+        title="Customer Reviews - My Hibachi Chef | 5-Star Hibachi Catering Dallas"
+        description="Read authentic customer reviews and testimonials for My Hibachi Chef's hibachi catering services in Dallas, TX. See why we're rated 5 stars with 150+ happy customers for private hibachi dining experiences."
+        keywords="hibachi chef reviews, hibachi catering testimonials, dallas hibachi reviews, private chef reviews, japanese catering reviews, hibachi party reviews, 5 star hibachi service"
+        url="/reviews"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Customer Reviews - My Hibachi Chef",
+          "description": "Authentic customer reviews and testimonials for hibachi catering services",
+          "mainEntity": {
+            "@type": "Organization",
+            "name": "My Hibachi Chef",
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "bestRating": "5",
+              "worstRating": "1",
+              "reviewCount": "150"
+            },
+            "review": [
+              {
+                "@type": "Review",
+                "author": {
+                  "@type": "Person",
+                  "name": "Jessica M."
+                },
+                "reviewRating": {
+                  "@type": "Rating",
+                  "ratingValue": "5",
+                  "bestRating": "5"
+                },
+                "reviewBody": "The best hibachi experience I've ever had! Chef was entertaining and the food was incredible. The quality was restaurant-level and the pricing was so reasonable!",
+                "datePublished": "2025-06-15"
+              },
+              {
+                "@type": "Review",
+                "author": {
+                  "@type": "Person", 
+                  "name": "Mike R."
+                },
+                "reviewRating": {
+                  "@type": "Rating",
+                  "ratingValue": "5",
+                  "bestRating": "5"
+                },
+                "reviewBody": "Amazing flavors and fun! My guests are still talking about it weeks later. The chef was professional and the interactive cooking show was fantastic.",
+                "datePublished": "2025-06-10"
+              }
+            ]
+          }
+        }}
+      />
       <Container className="py-5">
         {/* Hero Section */}
         <div className="text-center mb-5">

@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { API_BASE } from '../config/api';
 import './OrderServices.css';
+import SEO from './SEO';
 
 const timeSlots = ['12:00 PM', '3:00 PM', '6:00 PM', '9:00 PM'];
 
@@ -382,6 +383,53 @@ const OrderServices = () => {
 
   return (
     <div className="bookus-container">
+      <SEO
+        title="Book Hibachi Catering Services - My Hibachi Chef | Dallas, TX"
+        description="Book your premium hibachi catering experience with My Hibachi Chef. Professional hibachi chefs bring authentic Japanese cuisine to your home in Dallas, Texas. Available time slots and instant booking."
+        keywords="book hibachi catering, reserve hibachi chef, hibachi booking dallas, private hibachi service, hibachi party booking, japanese chef catering, teppanyaki reservation, hibachi at home booking"
+        url="/BookUs"
+        type="webpage"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Hibachi Catering Booking Service",
+          "description": "Professional hibachi catering booking platform for private events and parties",
+          "provider": {
+            "@type": "Organization",
+            "name": "My Hibachi Chef",
+            "url": "https://myhibachichef.com"
+          },
+          "areaServed": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {
+              "@type": "GeoCoordinates",
+              "latitude": 32.7767,
+              "longitude": -96.7970
+            },
+            "geoRadius": "50 miles"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Hibachi Catering Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Private Hibachi Chef Service",
+                  "description": "Professional hibachi chef brings authentic Japanese cuisine to your home"
+                }
+              }
+            ]
+          },
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "USD",
+            "category": "Food Service"
+          }
+        }}
+      />
       <Container fluid className="px-lg-5">
         {/* Enhanced Hero Section */}
         <div className="bookus-hero">

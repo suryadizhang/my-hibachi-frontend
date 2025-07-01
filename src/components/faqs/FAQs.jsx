@@ -3,6 +3,7 @@ import { Accordion, Spinner, Badge, Container, Row, Col, Card } from 'react-boot
 import FAQCategory from './FAQCategory';
 import faqData from './faqData';
 import './FAQs.css';
+import SEO from '../SEO';
 
 const FAQs = () => {
   const [activeCategory, setActiveCategory] = useState('');
@@ -27,6 +28,52 @@ const FAQs = () => {
 
   return (
     <Container fluid className="faq-container">
+      <SEO
+        title="Frequently Asked Questions - My Hibachi Chef Catering | Dallas, TX"
+        description="Get answers to frequently asked questions about My Hibachi Chef's hibachi catering services in Dallas. Learn about pricing, booking, menu options, equipment requirements, and more."
+        keywords="hibachi catering FAQ, hibachi chef questions, dallas hibachi information, private chef FAQ, hibachi party questions, japanese catering FAQ, hibachi booking questions"
+        url="/faqs"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "name": "Frequently Asked Questions - My Hibachi Chef",
+          "description": "Common questions and answers about hibachi catering services",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What does My Hibachi Chef provide for events?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We provide a professional hibachi chef, all cooking equipment, fresh ingredients, hibachi grill setup, and complete cleanup service. Everything needed for an authentic hibachi dining experience at your location."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What areas do you serve?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We provide hibachi catering services throughout Dallas, Fort Worth, Plano, Irving, and surrounding areas in Texas. Contact us to confirm service availability for your specific location."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How much does hibachi catering cost?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Pricing varies based on menu selections, number of guests, location, and event requirements. Contact us for a personalized quote based on your specific needs and preferences."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How far in advance should I book?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We recommend booking at least 2-3 weeks in advance to ensure availability, especially for weekend events and holidays. However, we may accommodate last-minute bookings based on our schedule."
+              }
+            }
+          ]
+        }}
+      />
       <div className="faq-header text-center mb-5">
         <h1 className="faq-title">
           <span className="faq-emoji">❓</span>

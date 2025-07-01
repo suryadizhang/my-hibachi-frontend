@@ -1,0 +1,29 @@
+{
+  "name": "My Hibachi Chef - Premium Hibachi Catering",
+  "short_name": "My Hibachi Chef",
+  "description": "Premium hibachi catering services offering authentic Japanese cuisine for private events and parties",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#d4af37",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/src/assets/My%20Hibachi%20logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/src/assets/My%20Hibachi%20logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["food", "restaurants", "catering"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

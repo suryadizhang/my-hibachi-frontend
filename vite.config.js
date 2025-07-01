@@ -4,6 +4,10 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  css: {
+    postcss: './postcss.config.js',
+    devSourcemap: true
+  },
   server: {
     // Force refresh on file changes
     hmr: {
@@ -15,6 +19,8 @@ export default defineConfig({
   build: {
     // Increase chunk size warning limit to 1000kb (1MB)
     chunkSizeWarningLimit: 1000,
+    // CSS optimization
+    cssCodeSplit: true,
     // Prevent build caching issues
     rollupOptions: {
       output: {

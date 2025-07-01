@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./About.css";
 import heroPic from "../assets/hero_pic.png";
 import heroVideo from "../assets/hero_video.mp4";
+import SEO from "./SEO";
 
 const About = () => {
   useEffect(() => {
@@ -60,42 +60,73 @@ const About = () => {
 
   return (
     <section className="about-section">
-      <Helmet>
-        <title>My Hibachi | Hibachi at Home | Private Hibachi Chef & Catering in Bay Area & Sacramento</title>
-        <meta
-          name="description"
-          content="Experience hibachi at home with My Hibachi. Private chef entertainment and catering for San Francisco, San Jose, Sacramento, and the Bay Area."
-        />
-        <meta
-          name="keywords"
-          content="hibachi at home, hibachi catering, private hibachi chef, San Francisco, San Jose, Sacramento, Bay Area, teppanyaki, hibachi party"
-        />
-        <link rel="canonical" href="https://myhibachichef.com/" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FoodEstablishment",
-            name: "My Hibachi",
-            image: "https://myhibachichef.com/assets/hero_pic.png",
-            telephone: "(408) 123-4567",
-            email: "cs@myhibachichef.com",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "San Francisco",
-              addressRegion: "CA",
-              addressCountry: "US",
+      <SEO
+        title="My Hibachi Chef - Premium Hibachi Catering at Your Home | Dallas, TX"
+        description="Experience authentic Japanese hibachi cuisine at your home with My Hibachi Chef. Professional private hibachi chef services for parties, events, and special occasions in Dallas, Fort Worth, and surrounding areas."
+        keywords="hibachi at home, hibachi catering dallas, private hibachi chef texas, teppanyaki chef, hibachi party, japanese cuisine catering, hibachi grill service, private chef dallas, hibachi entertainment, authentic japanese food"
+        url="/"
+        image="/src/assets/hero_pic.png"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Restaurant",
+          "name": "My Hibachi Chef",
+          "description": "Premium hibachi catering services bringing authentic Japanese cuisine directly to your home",
+          "url": "https://myhibachichef.com/",
+          "logo": "https://myhibachichef.com/src/assets/My%20Hibachi%20logo.png",
+          "image": "https://myhibachichef.com/src/assets/hero_pic.png",
+          "telephone": "+1-XXX-XXX-XXXX",
+          "email": "info@myhibachichef.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dallas",
+            "addressRegion": "TX",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 32.7767,
+            "longitude": -96.7970
+          },
+          "servesCuisine": ["Japanese", "Hibachi", "Teppanyaki"],
+          "areaServed": [
+            {
+              "@type": "City",
+              "name": "Dallas"
             },
-            servesCuisine: ["Japanese", "Hibachi", "Teppanyaki"],
-            areaServed: [
-              "San Francisco",
-              "San Jose",
-              "Sacramento",
-              "Bay Area",
-            ],
-            url: "https://myhibachichef.com/",
-          })}
-        </script>
-      </Helmet>
+            {
+              "@type": "City", 
+              "name": "Fort Worth"
+            },
+            {
+              "@type": "City",
+              "name": "Plano"
+            },
+            {
+              "@type": "City",
+              "name": "Irving"
+            }
+          ],
+          "priceRange": "$$$",
+          "paymentAccepted": ["Credit Card", "Cash", "Venmo", "Zelle"],
+          "currenciesAccepted": "USD",
+          "openingHours": "Mo-Su 10:00-22:00",
+          "hasMenu": "https://myhibachichef.com/menu",
+          "acceptsReservations": true,
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "150+",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "offers": {
+            "@type": "Offer",
+            "description": "Private hibachi chef services for events and parties",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          }
+        }}
+      />
 
       {/* Hero Video Section */}
       <div className="hero-media-container">

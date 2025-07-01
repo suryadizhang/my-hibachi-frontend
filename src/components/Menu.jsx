@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Row, Col, Badge, ListGroup, Alert, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Menu.css';
+import SEO from './SEO';
 
 const proteinOptions = [
   { name: 'Chicken', description: 'Tender grilled chicken breast with signature hibachi seasonings and teriyaki glaze' },
@@ -15,7 +16,7 @@ const proteinOptions = [
 const upgradeOptions = [
   { name: 'Salmon', extra: 5, description: 'Wild-caught Atlantic salmon with teriyaki glaze' },
   { name: 'Scallops', extra: 5, description: 'Fresh sea scallops grilled to perfection' },
-  { name: 'Filet Mignon', extra: 8, description: 'Premium tender beef filet' },
+  { name: 'Filet Mignon', extra: 5, description: 'Premium tender beef filet' },
   { name: 'Lobster Tail', extra: 15, description: 'Fresh lobster tail with garlic butter' }
 ].sort((a, b) => a.extra - b.extra);
 
@@ -29,6 +30,65 @@ const additionalOptions = [
 
 const Menu = () => (
   <div className="menu-container">
+    <SEO
+      title="Hibachi Menu - Authentic Japanese Cuisine | My Hibachi Chef Dallas"
+      description="Explore our authentic hibachi menu featuring premium Angus sirloin, fresh seafood, chicken, and vegetarian options. Professional hibachi chef brings restaurant-quality Japanese cuisine to your home in Dallas, TX."
+      keywords="hibachi menu, japanese cuisine menu, teppanyaki menu, hibachi steak, hibachi chicken, hibachi shrimp, filet mignon, lobster tail, vegetarian hibachi, dallas hibachi menu"
+      url="/menu"
+      structuredData={{
+        "@context": "https://schema.org",
+        "@type": "Menu",
+        "name": "My Hibachi Chef Menu",
+        "description": "Authentic Japanese hibachi cuisine menu featuring premium proteins and fresh ingredients",
+        "provider": {
+          "@type": "Restaurant",
+          "name": "My Hibachi Chef",
+          "url": "https://myhibachichef.com"
+        },
+        "hasMenuItem": [
+          {
+            "@type": "MenuItem",
+            "name": "Premium Angus Sirloin Steak",
+            "description": "Premium Angus Sirloin steak cooked to your preferred temperature",
+            "menuAddOn": {
+              "@type": "MenuItemOption",
+              "value": "Included in base price"
+            }
+          },
+          {
+            "@type": "MenuItem", 
+            "name": "Chicken Hibachi",
+            "description": "Tender grilled chicken breast with signature hibachi seasonings and teriyaki glaze"
+          },
+          {
+            "@type": "MenuItem",
+            "name": "Hibachi Shrimp",
+            "description": "Fresh jumbo shrimp with garlic butter and hibachi spices"
+          },
+          {
+            "@type": "MenuItem",
+            "name": "Filet Mignon Upgrade",
+            "description": "Premium tender beef filet",
+            "offers": {
+              "@type": "Offer",
+              "price": "+5",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "MenuItem",
+            "name": "Lobster Tail Upgrade", 
+            "description": "Fresh lobster tail with garlic butter",
+            "offers": {
+              "@type": "Offer",
+              "price": "+15",
+              "priceCurrency": "USD"
+            }
+          }
+        ],
+        "inLanguage": "en-US"
+      }}
+    />
     <Container fluid className="px-lg-5">
       {/* Enhanced Hero Section */}
       <div className="hero-section text-center mb-5">

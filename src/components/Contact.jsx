@@ -17,6 +17,7 @@ import {
   FaPhone
 } from 'react-icons/fa';
 import './Contact.css';
+import SEO from './SEO';
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -34,6 +35,47 @@ const Contact = () => {
 
   return (
     <div className="contact-page">
+      <SEO
+        title="Contact My Hibachi Chef - Book Your Private Hibachi Experience | Dallas, TX"
+        description="Contact My Hibachi Chef for private hibachi catering services in Dallas, Texas. Get quotes, book events, and reach our professional hibachi chefs. Phone, email, and social media contact information."
+        keywords="contact hibachi chef dallas, hibachi catering quote, book hibachi event, private chef contact, dallas hibachi booking, hibachi party quote, japanese chef contact"
+        url="/contact"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "name": "Contact My Hibachi Chef",
+          "description": "Contact information and booking details for My Hibachi Chef catering services",
+          "mainEntity": {
+            "@type": "Organization",
+            "name": "My Hibachi Chef",
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "telephone": "+1-XXX-XXX-XXXX",
+                "contactType": "customer service",
+                "areaServed": "Dallas, TX",
+                "availableLanguage": ["English", "Spanish"],
+                "hoursAvailable": {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                  "opens": "10:00",
+                  "closes": "22:00"
+                }
+              },
+              {
+                "@type": "ContactPoint",
+                "email": "info@myhibachichef.com",
+                "contactType": "customer service"
+              }
+            ],
+            "sameAs": [
+              "https://www.instagram.com/myhibachichef",
+              "https://www.facebook.com/myhibachichef",
+              "https://www.yelp.com/biz/my-hibachi-chef"
+            ]
+          }
+        }}
+      />
       <Container fluid className="px-0">
         {/* Hero Section */}
         <div className="contact-hero">
