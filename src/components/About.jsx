@@ -6,7 +6,7 @@ import "./About.css";
 import heroPic from "../assets/hero_pic.png";
 import heroVideo from "../assets/hero_video.mp4";
 import SEO from "./SEO";
-import { eventSchema, localBusinessSchema } from '../utils/advancedSEO';
+import { eventSchema, localBusinessSchema, chefPersonSchema, howToBookSchema, serviceSchema } from '../utils/advancedSEO';
 
 const About = () => {
   useEffect(() => {
@@ -59,113 +59,67 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Enhanced structured data with multiple schema types
+  // Elite multi-schema structured data for maximum SEO impact
   const enhancedStructuredData = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Restaurant",
-      "name": "My Hibachi Chef",
-      "description": "Premium private hibachi chef services bringing authentic Japanese cuisine directly to your backyard, beachside, park, or any location for unforgettable dining experiences",
-      "url": "https://myhibachichef.com/",
-      "logo": "https://myhibachichef.com/src/assets/My%20Hibachi%20logo.png",
-      "image": "https://myhibachichef.com/src/assets/hero_pic.png",
-      "telephone": "+1-XXX-XXX-XXXX",
-      "email": "info@myhibachichef.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "San Jose",
-        "addressRegion": "CA",
-        "addressCountry": "US"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 37.3382,
-        "longitude": -121.8863
-      },
-      "servesCuisine": ["Japanese", "Hibachi", "Teppanyaki"],
-      "areaServed": [
-        {
-          "@type": "City",
-          "name": "San Jose"
-        },
-        {
-          "@type": "City", 
-          "name": "San Francisco"
-        },
-        {
-          "@type": "City",
-          "name": "Sacramento"
-        },
-        {
-          "@type": "City",
-          "name": "Fremont"
-        },
-        {
-          "@type": "City",
-          "name": "Sunnyvale"
-        },
-        {
-          "@type": "City",
-          "name": "Mountain View"
-        }
-      ],
-      "priceRange": "$$$",
-      "paymentAccepted": ["Credit Card", "Cash", "Venmo", "Zelle"],
-      "currenciesAccepted": "USD",
-      "openingHours": "Mo-Su 10:00-22:00",
-      "hasMenu": "https://myhibachichef.com/menu",
-      "acceptsReservations": true,
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "150+",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
-      "offers": {
-        "@type": "Offer",
-        "description": "Private hibachi chef services for events and parties",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
-      }
-    },
-    eventSchema,
+    // Import all advanced schemas
     localBusinessSchema,
+    chefPersonSchema,
+    howToBookSchema,
+    serviceSchema,
+    eventSchema,
     {
       "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Mobile Hibachi Chef Experience",
-      "description": "Professional hibachi chef brings live cooking show with flame tricks to your location",
-      "provider": {
-        "@type": "Organization",
-        "name": "My Hibachi Chef"
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://myhibachichef.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://myhibachichef.com/about"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Services",
+          "item": "https://myhibachichef.com/services"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Menu",
+          "item": "https://myhibachichef.com/menu"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Contact",
+          "item": "https://myhibachichef.com/contact"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "My Hibachi Chef",
+      "url": "https://myhibachichef.com",
+      "description": "Elite mobile hibachi chef service bringing authentic Japanese teppanyaki experiences to your location",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://myhibachichef.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
       },
-      "areaServed": {
-        "@type": "State",
-        "name": "California"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Hibachi Services",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service", 
-              "name": "Backyard Hibachi Party",
-              "description": "Transform your backyard into a hibachi restaurant with live cooking entertainment"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Beachside Hibachi Experience", 
-              "description": "Mobile hibachi chef for beach parties and waterfront events"
-            }
-          }
-        ]
-      }
+      "sameAs": [
+        "https://www.facebook.com/myhibachichef",
+        "https://www.instagram.com/myhibachichef",
+        "https://www.yelp.com/biz/my-hibachi-chef",
+        "https://www.google.com/maps/place/my-hibachi-chef"
+      ]
     }
   ];
 

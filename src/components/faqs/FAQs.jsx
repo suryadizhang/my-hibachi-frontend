@@ -27,90 +27,9 @@ const FAQs = () => {
     }, 100);
   };
 
-  // Enhanced FAQ with breadcrumb schema
+  // Elite FAQ structured data for voice search and featured snippets
   const enhancedStructuredData = [
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "name": "Frequently Asked Questions - My Hibachi Chef",
-      "description": "Common questions and answers about private hibachi chef services for backyard parties and outdoor events",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What does My Hibachi Chef provide for events?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "We provide a professional hibachi chef, all cooking equipment, fresh ingredients, hibachi grill setup, and complete cleanup service. Everything needed for an authentic hibachi dining experience at your location."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What areas do you serve?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "We provide private hibachi chef services throughout San Jose, San Francisco, Sacramento, Bay Area, and surrounding areas in Northern California. We can cook at your backyard, beachside, park, vineyard, winery, or any location you prefer. Contact us to confirm service availability for your specific location."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much does hibachi catering cost?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Pricing varies based on menu selections, number of guests, location, and event requirements. Contact us for a personalized quote based on your specific needs and preferences."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How far in advance should I book?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "We recommend booking at least 2-3 weeks in advance to ensure availability, especially for weekend events and holidays. However, we may accommodate last-minute bookings based on our schedule."
-          }
-        }
-      ]
-    },
-    faqSchema,
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://myhibachichef.com"
-        },
-        {
-          "@type": "ListItem", 
-          "position": 2,
-          "name": "FAQ",
-          "item": "https://myhibachichef.com/faqs"
-        }
-      ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": "How to Book a Private Hibachi Chef in Bay Area",
-      "description": "Step-by-step guide to booking mobile hibachi catering for your event",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "name": "Choose Your Date",
-          "text": "Select your preferred date and time for the hibachi experience"
-        },
-        {
-          "@type": "HowToStep", 
-          "name": "Select Menu",
-          "text": "Choose from our premium hibachi menu options including steak, shrimp, and chicken"
-        },
-        {
-          "@type": "HowToStep",
-          "name": "Confirm Location",
-          "text": "Provide your backyard, venue, or outdoor location details"
-        }
-      ]
-    }
+    faqSchema
   ];
 
   return (
