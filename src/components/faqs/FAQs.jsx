@@ -3,6 +3,8 @@ import { Accordion, Spinner, Badge, Container, Row, Col, Card } from 'react-boot
 import FAQCategory from './FAQCategory';
 import faqData from './faqData';
 import './FAQs.css';
+import SEO from '../SEO';
+import { faqSchema } from '../../utils/advancedSEO';
 
 const FAQs = () => {
   const [activeCategory, setActiveCategory] = useState('');
@@ -25,8 +27,20 @@ const FAQs = () => {
     }, 100);
   };
 
+  // Elite FAQ structured data for voice search and featured snippets
+  const enhancedStructuredData = [
+    faqSchema
+  ];
+
   return (
     <Container fluid className="faq-container">
+      <SEO
+        title="FAQ | Mobile Hibachi Chef Questions | Backyard Party Catering | Bay Area"
+        description="Get answers to frequently asked questions about hiring a mobile hibachi chef for your backyard party, birthday celebration, or corporate event. Learn about pricing, booking, and our all-inclusive hibachi catering service in San Jose, Bay Area, Sacramento."
+        keywords="mobile hibachi chef FAQ, backyard hibachi party questions, birthday hibachi party at home FAQ, private chef questions Bay Area, hibachi catering FAQ San Jose, kids hibachi party questions, corporate hibachi catering FAQ"
+        url="/faqs"
+        structuredData={enhancedStructuredData}
+      />
       <div className="faq-header text-center mb-5">
         <h1 className="faq-title">
           <span className="faq-emoji">❓</span>

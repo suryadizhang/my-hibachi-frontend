@@ -17,6 +17,7 @@ import {
   FaPhone
 } from 'react-icons/fa';
 import './Contact.css';
+import SEO from './SEO';
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -34,6 +35,47 @@ const Contact = () => {
 
   return (
     <div className="contact-page">
+      <SEO
+        title="Contact My Hibachi Chef | Book Mobile Hibachi Catering | San Jose Sacramento Bay Area"
+        description="Contact My Hibachi Chef for mobile hibachi catering in San Jose, Bay Area, Sacramento, and San Francisco. Get quotes for backyard hibachi parties, birthday celebrations, corporate events, and private chef services. Book your live hibachi cooking show today!"
+        keywords="contact hibachi chef San Jose, hibachi catering Bay Area, Sacramento hibachi at home, San Francisco hibachi catering, mobile hibachi chef contact, book backyard hibachi party, private chef contact Bay Area, hibachi party quote"
+        url="/contact"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "name": "Contact My Hibachi Chef",
+          "description": "Contact information and booking details for My Hibachi Chef catering services",
+          "mainEntity": {
+            "@type": "Organization",
+            "name": "My Hibachi Chef",
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "telephone": "+1-XXX-XXX-XXXX",
+                "contactType": "customer service",
+                "areaServed": "Northern California",
+                "availableLanguage": ["English", "Spanish"],
+                "hoursAvailable": {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                  "opens": "10:00",
+                  "closes": "22:00"
+                }
+              },
+              {
+                "@type": "ContactPoint",
+                "email": "info@myhibachichef.com",
+                "contactType": "customer service"
+              }
+            ],
+            "sameAs": [
+              "https://www.instagram.com/myhibachichef",
+              "https://www.facebook.com/myhibachichef",
+              "https://www.yelp.com/biz/my-hibachi-chef"
+            ]
+          }
+        }}
+      />
       <Container fluid className="px-0">
         {/* Hero Section */}
         <div className="contact-hero">

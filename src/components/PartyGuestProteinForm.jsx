@@ -5,7 +5,7 @@ import MissingFieldsModal from "./MissingFieldsModal";
 const proteins = [
   { name: "Chicken", adultExtra: 0, childExtra: 0 },
   { name: "NY Strip Steak", adultExtra: 0, childExtra: 0 },
-  { name: "Filet Mignon", adultExtra: 10, childExtra: 5 },
+  { name: "Filet Mignon", adultExtra: 5, childExtra: 5 },
   { name: "Calamari", adultExtra: 0, childExtra: 0 },
   { name: "Shrimp", adultExtra: 0, childExtra: 0 },
   { name: "Scallops", adultExtra: 5, childExtra: 5 },

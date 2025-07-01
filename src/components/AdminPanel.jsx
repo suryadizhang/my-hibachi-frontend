@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Spinner, Button, Container } from "react-bootstrap";
-import { API_BASE } from '../config/api';
+import { API_BASE } from '../config/api-simple';
 import AdminConfirmationModal from './AdminConfirmationModal';
 import NewsletterManager from './NewsletterManager';
 import LogPanel from './LogPanel';
@@ -49,15 +49,36 @@ function AdminPanel() {
   const token = localStorage.getItem("adminToken");
   const pageSize = 10;
 
+  // Define fetchCurrentUser BEFORE using it in useEffect
+  const fetchCurrentUser = useCallback(async () => {
+    try {
+      // Decode the token to get username and role
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      setUsername(payload.sub || 'Admin');
+      setUserRole(payload.role || 'admin');
+    } catch {
+      setUsername('Admin');
+      setUserRole('admin');
+    }
+  }, [token]);
+
   // Redirect to login if no token
   useEffect(() => {
-    if (!token) navigate("/admin-login");
-    else fetchCurrentUser();
+    console.log('AdminPanel: Checking authentication...', { hasToken: !!token });
+    if (!token) {
+      console.log('AdminPanel: No token found, redirecting to login');
+      navigate("/admin-login");
+    } else {
+      console.log('AdminPanel: Token found, fetching current user');
+      fetchCurrentUser();
+    }
   }, [token, navigate, fetchCurrentUser]);
 
   // Auto-load upcoming bookings when component mounts and user is authenticated
   useEffect(() => {
+    console.log('AdminPanel useEffect triggered:', { token: !!token, mode });
     if (token && mode === "upcoming") {
+      console.log('Calling fetchUpcoming...');
       fetchUpcoming();
     }
   }, [token, mode, fetchUpcoming]);
@@ -182,18 +203,6 @@ function AdminPanel() {
     setLoading(false);
   };
 
-  const fetchCurrentUser = async () => {
-    try {
-      // Decode the token to get username and role
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      setUsername(payload.sub || 'Admin');
-      setUserRole(payload.role || 'admin');
-    } catch {
-      setUsername('Admin');
-      setUserRole('admin');
-    }
-  };
-
   const fetchWeekly = async () => {
     if (!date) return;
     setLoading(true);
@@ -242,7 +251,8 @@ function AdminPanel() {
     setLoading(false);
   };
 
-  const fetchUpcoming = async () => {
+  const fetchUpcoming = useCallback(async () => {
+    console.log('fetchUpcoming called');
     setLoading(true);
     setError("");
     try {
@@ -272,6 +282,7 @@ function AdminPanel() {
             headers: { Authorization: `Bearer ${token}` }
           });
           allBookings = allBookings.concat(res.data);
+          console.log(`Loaded ${res.data.length} bookings for ${year}-${month}`);
         } catch {
           console.log(`No bookings found for ${year}-${month}`);
         }
@@ -291,8 +302,10 @@ function AdminPanel() {
         return (a.time_slot || '').localeCompare(b.time_slot || '');
       });
       
+      console.log(`Found ${upcomingBookings.length} upcoming bookings`);
       setBookings(upcomingBookings);
     } catch (e) {
+      console.error('fetchUpcoming error:', e);
       setError(
         e.response?.status === 401
           ? "Session expired. Please log in again."
@@ -305,7 +318,7 @@ function AdminPanel() {
       setBookings([]);
     }
     setLoading(false);
-  };
+  }, [token, navigate]);
 
   const handleLogout = () => {
     setConfirmModal({
@@ -367,29 +380,49 @@ function AdminPanel() {
   };
 
   useEffect(() => {
-    // Fetch KPIs from backend (create an endpoint or compute from bookings)
+    // Fetch KPIs from backend independently of bookings
     const fetchKpis = async () => {
+      console.log('AdminPanel: Starting KPIs fetch...');
       try {
         const res = await axios.get(`${API_BASE}/api/booking/admin/kpis`, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        console.log('AdminPanel: KPIs loaded successfully:', res.data);
         setKpis(res.data);
-      } catch {
-        // fallback: compute from bookings if endpoint not available
-        const now = new Date();
-        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        
-        setKpis({
-          total: bookings.length,
-          week: bookings.filter(b => new Date(b.date) >= startOfWeek).length,
-          month: bookings.filter(b => new Date(b.date) >= startOfMonth).length,
-          waitlist: 0 // add waitlist logic if available
+      } catch (error) {
+        console.error('AdminPanel: KPIs fetch failed:', error);
+        console.error('AdminPanel: Error details:', {
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          data: error.response?.data
         });
+        // Only use fallback if we have bookings data
+        if (bookings.length > 0) {
+          console.log('AdminPanel: Using fallback KPI calculation');
+          const now = new Date();
+          const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+          
+          const fallbackKpis = {
+            total: bookings.length,
+            week: bookings.filter(b => new Date(b.date) >= startOfWeek).length,
+            month: bookings.filter(b => new Date(b.date) >= startOfMonth).length,
+            waitlist: 0 // add waitlist logic if available
+          };
+          console.log('AdminPanel: Fallback KPIs:', fallbackKpis);
+          setKpis(fallbackKpis);
+        } else {
+          console.log('AdminPanel: No bookings available for fallback KPI calculation');
+        }
       }
     };
-    if (token) fetchKpis();
-  }, [bookings, token]);
+    if (token) {
+      console.log('AdminPanel: Token available, fetching KPIs...');
+      fetchKpis();
+    } else {
+      console.log('AdminPanel: No token available for KPIs fetch');
+    }
+  }, [token]); // Only depend on token, not bookings
 
   const filteredBookings = bookings.filter(b => {
     const searchTerm = search.toLowerCase();
@@ -628,6 +661,17 @@ Preferred Time: ${waitlistEntry.preferred_time}
     });
   };
 
+  console.log('AdminPanel: Rendering component', {
+    hasToken: !!token,
+    username,
+    userRole,
+    kpis,
+    bookingsCount: bookings.length,
+    mode,
+    loading,
+    error
+  });
+
   return (
     <div className="admin-panel-container">
       {/* Enhanced Header */}
@@ -663,6 +707,19 @@ Preferred Time: ${waitlistEntry.preferred_time}
             </div>
           </div>
         </Container>
+      </div>
+
+      {/* DEBUG PANEL - Remove in production */}
+      <div style={{ backgroundColor: '#f8f9fa', padding: '10px', margin: '10px', border: '1px solid #ddd', fontSize: '12px' }}>
+        <strong>🔧 DEBUG INFO:</strong><br/>
+        Token: {token ? 'Present' : 'Missing'}<br/>
+        Username: {username}<br/>
+        KPIs: Total={kpis.total}, Week={kpis.week}, Month={kpis.month}, Waitlist={kpis.waitlist}<br/>
+        Bookings: {bookings.length} loaded<br/>
+        Mode: {mode}<br/>
+        Loading: {loading ? 'Yes' : 'No'}<br/>
+        Error: {error || 'None'}<br/>
+        Active Tab: {activeTab}
       </div>
 
       {/* Tab Navigation */}

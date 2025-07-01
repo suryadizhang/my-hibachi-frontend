@@ -38,7 +38,7 @@ export const WEBSITE_DATA = {
       "Homemade teriyaki sauce"
     ],
     upgrades: [
-      { name: "Filet Mignon", price: "+$8", description: "Premium tender beef filet" },
+      { name: "Filet Mignon", price: "+$5", description: "Premium tender beef filet" },
       { name: "Salmon", price: "+$5", description: "Wild-caught Atlantic salmon with teriyaki glaze" },
       { name: "Scallops", price: "+$5", description: "Fresh sea scallops grilled to perfection" },
       { name: "Lobster Tail", price: "+$15", description: "Fresh lobster tail with garlic butter" }

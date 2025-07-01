@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./About.css";
 import heroPic from "../assets/hero_pic.png";
 import heroVideo from "../assets/hero_video.mp4";
+import SEO from "./SEO";
+import { eventSchema, localBusinessSchema, chefPersonSchema, howToBookSchema, serviceSchema } from '../utils/advancedSEO';
 
 const About = () => {
   useEffect(() => {
@@ -58,44 +59,80 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Elite multi-schema structured data for maximum SEO impact
+  const enhancedStructuredData = [
+    // Import all advanced schemas
+    localBusinessSchema,
+    chefPersonSchema,
+    howToBookSchema,
+    serviceSchema,
+    eventSchema,
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://myhibachichef.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://myhibachichef.com/about"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Services",
+          "item": "https://myhibachichef.com/services"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Menu",
+          "item": "https://myhibachichef.com/menu"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Contact",
+          "item": "https://myhibachichef.com/contact"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "My Hibachi Chef",
+      "url": "https://myhibachichef.com",
+      "description": "Elite mobile hibachi chef service bringing authentic Japanese teppanyaki experiences to your location",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://myhibachichef.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "sameAs": [
+        "https://www.facebook.com/myhibachichef",
+        "https://www.instagram.com/myhibachichef",
+        "https://www.yelp.com/biz/my-hibachi-chef",
+        "https://www.google.com/maps/place/my-hibachi-chef"
+      ]
+    }
+  ];
+
   return (
     <section className="about-section">
-      <Helmet>
-        <title>My Hibachi | Hibachi at Home | Private Hibachi Chef & Catering in Bay Area & Sacramento</title>
-        <meta
-          name="description"
-          content="Experience hibachi at home with My Hibachi. Private chef entertainment and catering for San Francisco, San Jose, Sacramento, and the Bay Area."
-        />
-        <meta
-          name="keywords"
-          content="hibachi at home, hibachi catering, private hibachi chef, San Francisco, San Jose, Sacramento, Bay Area, teppanyaki, hibachi party"
-        />
-        <link rel="canonical" href="https://myhibachichef.com/" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FoodEstablishment",
-            name: "My Hibachi",
-            image: "https://myhibachichef.com/assets/hero_pic.png",
-            telephone: "(408) 123-4567",
-            email: "cs@myhibachichef.com",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "San Francisco",
-              addressRegion: "CA",
-              addressCountry: "US",
-            },
-            servesCuisine: ["Japanese", "Hibachi", "Teppanyaki"],
-            areaServed: [
-              "San Francisco",
-              "San Jose",
-              "Sacramento",
-              "Bay Area",
-            ],
-            url: "https://myhibachichef.com/",
-          })}
-        </script>
-      </Helmet>
+      <SEO
+        title="About My Hibachi Chef | Mobile Hibachi Catering with Live Cooking Show | Bay Area"
+        description="Professional mobile hibachi chef bringing authentic teppanyaki experience to your backyard, beachside, or any location. Live hibachi cooking show with flame tricks for birthday parties, corporate events, and special occasions in San Jose, Bay Area, Sacramento, and San Francisco."
+        keywords="mobile hibachi chef, live hibachi cooking show, flame tricks hibachi chef, all-inclusive hibachi catering, backyard hibachi party, birthday hibachi party at home, corporate hibachi catering, private chef for anniversary dinner, hibachi menu with steak shrimp chicken, chef brings grill and ingredients"
+        url="/"
+        image="/src/assets/hero_pic.png"
+        structuredData={enhancedStructuredData}
+      />
 
       {/* Hero Video Section */}
       <div className="hero-media-container">

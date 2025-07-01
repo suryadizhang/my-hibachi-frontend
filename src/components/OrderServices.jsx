@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { API_BASE } from '../config/api';
 import './OrderServices.css';
+import SEO from './SEO';
 
 const timeSlots = ['12:00 PM', '3:00 PM', '6:00 PM', '9:00 PM'];
 
@@ -382,6 +383,53 @@ const OrderServices = () => {
 
   return (
     <div className="bookus-container">
+      <SEO
+        title="Book Private Hibachi Chef | Silicon Valley Mobile Catering | Same-Day Booking Available"
+        description="Book your private hibachi chef today! Premium mobile hibachi catering serving Silicon Valley, Peninsula, East Bay, and North Bay. Same-day booking available for last-minute parties. Professional chef brings live cooking show, flame tricks, and all equipment to your backyard, beachside, or venue."
+        keywords="book private hibachi chef Silicon Valley, mobile hibachi catering Peninsula, same-day hibachi booking, last-minute hibachi chef, private hibachi chef East Bay, North Bay hibachi catering, weekend hibachi party booking, hibachi chef for tonight, emergency hibachi catering, instant hibachi booking"
+        url="/BookUs"
+        type="webpage"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Hibachi Catering Booking Service",
+          "description": "Professional hibachi catering booking platform for private events and parties",
+          "provider": {
+            "@type": "Organization",
+            "name": "My Hibachi Chef",
+            "url": "https://myhibachichef.com"
+          },
+          "areaServed": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {
+              "@type": "GeoCoordinates",
+              "latitude": 32.7767,
+              "longitude": -96.7970
+            },
+            "geoRadius": "50 miles"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Hibachi Catering Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Private Hibachi Chef Service",
+                  "description": "Professional hibachi chef brings authentic Japanese cuisine to your home"
+                }
+              }
+            ]
+          },
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "USD",
+            "category": "Food Service"
+          }
+        }}
+      />
       <Container fluid className="px-lg-5">
         {/* Enhanced Hero Section */}
         <div className="bookus-hero">
