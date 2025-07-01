@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Spinner, Button, Container } from "react-bootstrap";
@@ -57,7 +57,9 @@ function AdminPanel() {
 
   // Auto-load upcoming bookings when component mounts and user is authenticated
   useEffect(() => {
+    console.log('AdminPanel useEffect triggered:', { token: !!token, mode });
     if (token && mode === "upcoming") {
+      console.log('Calling fetchUpcoming...');
       fetchUpcoming();
     }
   }, [token, mode, fetchUpcoming]);
@@ -182,7 +184,7 @@ function AdminPanel() {
     setLoading(false);
   };
 
-  const fetchCurrentUser = async () => {
+  const fetchCurrentUser = useCallback(async () => {
     try {
       // Decode the token to get username and role
       const payload = JSON.parse(atob(token.split('.')[1]));
@@ -192,7 +194,7 @@ function AdminPanel() {
       setUsername('Admin');
       setUserRole('admin');
     }
-  };
+  }, [token]);
 
   const fetchWeekly = async () => {
     if (!date) return;
@@ -242,7 +244,8 @@ function AdminPanel() {
     setLoading(false);
   };
 
-  const fetchUpcoming = async () => {
+  const fetchUpcoming = useCallback(async () => {
+    console.log('fetchUpcoming called');
     setLoading(true);
     setError("");
     try {
@@ -272,6 +275,7 @@ function AdminPanel() {
             headers: { Authorization: `Bearer ${token}` }
           });
           allBookings = allBookings.concat(res.data);
+          console.log(`Loaded ${res.data.length} bookings for ${year}-${month}`);
         } catch {
           console.log(`No bookings found for ${year}-${month}`);
         }
@@ -291,8 +295,10 @@ function AdminPanel() {
         return (a.time_slot || '').localeCompare(b.time_slot || '');
       });
       
+      console.log(`Found ${upcomingBookings.length} upcoming bookings`);
       setBookings(upcomingBookings);
     } catch (e) {
+      console.error('fetchUpcoming error:', e);
       setError(
         e.response?.status === 401
           ? "Session expired. Please log in again."
@@ -305,7 +311,7 @@ function AdminPanel() {
       setBookings([]);
     }
     setLoading(false);
-  };
+  }, [token, navigate]);
 
   const handleLogout = () => {
     setConfirmModal({
@@ -367,29 +373,33 @@ function AdminPanel() {
   };
 
   useEffect(() => {
-    // Fetch KPIs from backend (create an endpoint or compute from bookings)
+    // Fetch KPIs from backend independently of bookings
     const fetchKpis = async () => {
       try {
         const res = await axios.get(`${API_BASE}/api/booking/admin/kpis`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setKpis(res.data);
-      } catch {
-        // fallback: compute from bookings if endpoint not available
-        const now = new Date();
-        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        
-        setKpis({
-          total: bookings.length,
-          week: bookings.filter(b => new Date(b.date) >= startOfWeek).length,
-          month: bookings.filter(b => new Date(b.date) >= startOfMonth).length,
-          waitlist: 0 // add waitlist logic if available
-        });
+        console.log('KPIs loaded:', res.data); // Debug log
+      } catch (error) {
+        console.error('KPIs fetch failed:', error);
+        // Only use fallback if we have bookings data
+        if (bookings.length > 0) {
+          const now = new Date();
+          const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+          
+          setKpis({
+            total: bookings.length,
+            week: bookings.filter(b => new Date(b.date) >= startOfWeek).length,
+            month: bookings.filter(b => new Date(b.date) >= startOfMonth).length,
+            waitlist: 0 // add waitlist logic if available
+          });
+        }
       }
     };
     if (token) fetchKpis();
-  }, [bookings, token]);
+  }, [token]); // Only depend on token, not bookings
 
   const filteredBookings = bookings.filter(b => {
     const searchTerm = search.toLowerCase();
