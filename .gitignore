@@ -166,3 +166,5 @@ src/
 # JSON test results and logs
 *_test_results*.json
 frontend_integration_test_results*.json
+
+certificates

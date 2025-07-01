@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import ClientLayout from '../src/components/layout/ClientLayout'
 import PerformanceOptimizer from '../src/components/performance/PerformanceOptimizer'
 import WebVitalsMonitor from '../src/components/performance/WebVitalsMonitor'
-import RealTimePerformanceMonitor from '../src/components/performance/RealTimePerformanceMonitor'
 import criticalCSS from '../lib/criticalCSS'
 
 // Optimize font loading
@@ -93,7 +93,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <PerformanceOptimizer />
         <WebVitalsMonitor />
-        <RealTimePerformanceMonitor />
         <ClientLayout>
           {children}
         </ClientLayout>

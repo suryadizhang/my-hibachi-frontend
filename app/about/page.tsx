@@ -80,5 +80,4 @@ export default function AboutPage() {
   );
 }
 
-// Enable ISR - page regenerates every hour if needed
-export const revalidate = 3600; // 1 hour
+// Static Generation - No revalidation needed for fixed about content

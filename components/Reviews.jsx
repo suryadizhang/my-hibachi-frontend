@@ -387,6 +387,7 @@ const ReviewStats = ({ reviews }) => {
 };
 
 const Reviews = () => {
+  const router = useRouter();
   const [showAll, setShowAll] = useState(false);
   const [displayedReviews, setDisplayedReviews] = useState(6);
   const [filter, setFilter] = useState('all');
