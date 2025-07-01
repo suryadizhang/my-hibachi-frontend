@@ -25,6 +25,12 @@ build/
 out/
 *.tsbuildinfo
 
+# Next.js specific
+.next/
+out/
+.swc/
+.turbo/
+
 # Environment variables
 .env
 .env.local
@@ -32,8 +38,10 @@ out/
 .env.test.local
 .env.production.local
 .env.*.local
+.env.example
+*.env
 
-# Vite specific
+# Vite specific (for legacy build system)
 .vite/
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
@@ -69,11 +77,6 @@ jest-coverage/
 .eslintcache
 .stylelintcache
 *.tsbuildinfo
-
-# Package manager files (keep for consistency)
-# package-lock.json
-# yarn.lock  
-# pnpm-lock.yaml
 
 # OS generated files
 .DS_Store
@@ -116,34 +119,50 @@ temp/
 .storybook-out
 storybook-static
 
-# Files with sensitive data
-ADMIN_ACCOUNT_SETUP.md
-PRODUCTION_READY_SUMMARY.md
-*.md
-
-# Test files with credentials
-test_*.py
-*_test.js
-*_test.py
-test_*.js
-
 # Database files
 *.db
 *.sqlite
 *.sqlite3
 users.db
+mh-bookings.db
 
-# Documentation with sensitive info
-*.md
-!README.md
+# Cache files
+.cache/
+*.cache
 
-# Python files with credentials
-*.py
+# Sensitive documentation files (but keep README.md)
+ADMIN_ACCOUNT_SETUP.md
+PRODUCTION_READY_SUMMARY.md
+*_CREDENTIALS.md
+*_SECRET*.md
+
+# Test files with credentials or sensitive data
+test_admin*.py
+test_db*.py
+*_test_credentials.*
+*admin_test.*
+
+# Python files with credentials (specific ones)
+setup_admin*.py
+create_*admin*.py
+*_credentials.py
+admin_helper*.py
 
 # Config files with sensitive data
-src/config/admin.js
-src/config/credentials.js
+**/config/admin.js
+**/config/credentials.js
+**/config/secrets.*
 
-# Hardcoded credentials in components
-src/components/**/credentials.*
-src/components/**/config.*
+# Legacy src directory (old Vite/React files)
+src/
+
+# Backup and temporary files
+*.bak
+*.backup
+*~
+*.swp
+*.tmp
+
+# JSON test results and logs
+*_test_results*.json
+frontend_integration_test_results*.json

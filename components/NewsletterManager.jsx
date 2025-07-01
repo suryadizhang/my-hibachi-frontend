@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Badge, Modal, Spinner, Table, Accordion } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { API_BASE } from '../lib/config/api';
 import './NewsletterManager.css';
@@ -32,17 +32,26 @@ const NewsletterManager = () => {
   const [drafts, setDrafts] = useState([]);
   const [selectedDraft, setSelectedDraft] = useState(null);
 
-  const navigate = useNavigate();
-  const token = localStorage.getItem("adminToken");
+  const router = useRouter();
+  const [token, setToken] = useState(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+    const storedToken = localStorage.getItem("adminToken");
+    setToken(storedToken);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+    
     if (!token) {
-      navigate("/admin-login");
+      router.push("/admin-login");
       return;
     }
     fetchRecipients();
     loadDrafts();
-  }, [token, navigate, fetchRecipients]);
+  }, [token, router, fetchRecipients, isClient]);
 
   const fetchRecipients = async (cityFilter = '', nameFilter = '') => {
     setLoading(true);
@@ -71,11 +80,15 @@ const NewsletterManager = () => {
   };
 
   const loadDrafts = () => {
-    const savedDrafts = JSON.parse(localStorage.getItem('newsletterDrafts') || '[]');
-    setDrafts(savedDrafts);
+    if (typeof window !== 'undefined') {
+      const savedDrafts = JSON.parse(localStorage.getItem('newsletterDrafts') || '[]');
+      setDrafts(savedDrafts);
+    }
   };
 
   const saveDraft = () => {
+    if (typeof window === 'undefined') return;
+    
     const draftId = Date.now();
     const draft = {
       id: draftId,
@@ -108,6 +121,8 @@ const NewsletterManager = () => {
   };
 
   const deleteDraft = (draftId) => {
+    if (typeof window === 'undefined') return;
+    
     const savedDrafts = JSON.parse(localStorage.getItem('newsletterDrafts') || '[]');
     const filtered = savedDrafts.filter(d => d.id !== draftId);
     localStorage.setItem('newsletterDrafts', JSON.stringify(filtered));
@@ -240,7 +255,7 @@ const NewsletterManager = () => {
             <Col xs="auto">
               <Button 
                 variant="outline-secondary" 
-                onClick={() => navigate('/admin')}
+                onClick={() => router.push('/admin')}
                 className="back-btn"
               >
                 <span className="emoji-visible">⬅️</span>

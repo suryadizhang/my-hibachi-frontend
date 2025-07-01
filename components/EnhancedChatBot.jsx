@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
 import { WEBSITE_DATA, QA_PATTERNS, FALLBACK_RESPONSES, CONVERSATION_STARTERS, QUICK_RESPONSES } from './chatbot/knowledgeBase';
 

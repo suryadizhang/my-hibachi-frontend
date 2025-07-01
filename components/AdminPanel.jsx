@@ -29,6 +29,8 @@ function AdminPanel() {
     newPassword: '',
     confirmPassword: ''
   });
+  const [isClient, setIsClient] = useState(false);
+  const [token, setToken] = useState(null);
   
   // Modal state
   const [confirmModal, setConfirmModal] = useState({
@@ -46,21 +48,35 @@ function AdminPanel() {
   });
 
   const router = useRouter();
-  const token = localStorage.getItem("adminToken");
   const pageSize = 10;
 
-  // Redirect to login if no token
+  // Client-side only initialization
   useEffect(() => {
-    if (!token) router.push("/admin-login");
-    else fetchCurrentUser();
-  }, [token, router, fetchCurrentUser]);
+    setIsClient(true);
+    const storedToken = localStorage.getItem("adminToken");
+    setToken(storedToken);
+  }, []);
+
+  // Check authentication when client is ready
+  useEffect(() => {
+    if (isClient && !token) {
+      router.push("/admin-login");
+    }
+  }, [isClient, token, router]);
+
+  // Initialize user data when token is available
+  useEffect(() => {
+    if (isClient && token) {
+      fetchCurrentUser();
+    }
+  }, [token, isClient]);
 
   // Auto-load upcoming bookings when component mounts and user is authenticated
   useEffect(() => {
     if (token && mode === "upcoming") {
       fetchUpcoming();
     }
-  }, [token, mode, fetchUpcoming]);
+  }, [token, mode]);
 
   // KPI card click handlers
   const handleThisWeekClick = async () => {
@@ -630,18 +646,27 @@ Preferred Time: ${waitlistEntry.preferred_time}
 
   return (
     <div className="admin-panel-container">
-      {/* Enhanced Header */}
-      <div className="admin-header">
-        <Container>
-          <div className="admin-header-content d-flex justify-content-between align-items-center">
-            <div>
-              <h1 className="admin-header-title">
-                <span className="admin-header-icon emoji-visible">📊</span>
-                Admin Dashboard
-              </h1>
-              <p className="admin-header-subtitle">
-                Welcome, {username}! • Booking Management & Analytics Portal
-              </p>
+      {/* Show loading while checking authentication */}
+      {!isClient || !token ? (
+        <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      ) : (
+        <>
+          {/* Enhanced Header */}
+          <div className="admin-header">
+            <Container>
+              <div className="admin-header-content d-flex justify-content-between align-items-center">
+                <div>
+                  <h1 className="admin-header-title">
+                    <span className="admin-header-icon emoji-visible">📊</span>
+                    Admin Dashboard
+                  </h1>
+                  <p className="admin-header-subtitle">
+                    Welcome, {username}! • Booking Management & Analytics Portal
+                  </p>
             </div>
             <div className="admin-header-buttons">
               <Button 
@@ -1247,6 +1272,8 @@ Preferred Time: ${waitlistEntry.preferred_time}
         bookingDetails={confirmModal.bookingDetails}
         isLoading={confirmModal.isLoading}
       />
+        </>
+      )}
     </div>
   );
 }

@@ -1,34 +1,24 @@
-# Robots.txt for My Hibachi Chef
-# Allow all web crawlers to access the site
+# Robots.txt for My Hibachi Chef - Performance Optimized
 User-agent: *
 Allow: /
 
-# Sitemap location
+# Sitemap location for faster indexing
 Sitemap: https://myhibachichef.com/sitemap.xml
 
-# Specific rules for important crawlers
+# Optimize crawl budget
 User-agent: Googlebot
-Allow: /
+Crawl-delay: 1
 
 User-agent: Bingbot
-Allow: /
+Crawl-delay: 2
 
-User-agent: facebookexternalhit
-Allow: /
+# Block unnecessary paths for performance
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /api/internal/
+Disallow: *.json$
+Disallow: /logs/
 
-# Disallow admin and private areas
-Disallow: /admin*
-Disallow: /admin-login
-Disallow: /private/
-Disallow: /*.json$
-
-# Allow important pages for SEO
-Allow: /
-Allow: /menu
-Allow: /BookUs
-Allow: /reviews
-Allow: /contact
-Allow: /faqs
-
-# Crawl delay (optional - be respectful)
-Crawl-delay: 1
+# Allow important assets
+Allow: /assets/
+Allow: /_next/static/

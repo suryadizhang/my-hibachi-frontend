@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Table, Form, Badge, Spinner, Alert, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { API_BASE } from '../lib/config/api';
 import './LogPanel.css';
@@ -23,16 +23,25 @@ const LogPanel = () => {
     actionType: ''
   });
 
-  const navigate = useNavigate();
-  const token = localStorage.getItem("adminToken");
+  const router = useRouter();
+  const [token, setToken] = useState(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+    const storedToken = localStorage.getItem("adminToken");
+    setToken(storedToken);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+    
     if (!token) {
-      navigate("/admin-login");
+      router.push("/admin-login");
       return;
     }
     fetchLogs();
-  }, [token, navigate, pagination.page, filters, fetchLogs]);
+  }, [token, router, pagination.page, filters, fetchLogs, isClient]);
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -66,7 +75,7 @@ const LogPanel = () => {
       
       if (err.response?.status === 401) {
         localStorage.removeItem("adminToken");
-        navigate("/admin-login");
+        router.push("/admin-login");
       }
     }
     

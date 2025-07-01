@@ -1,5 +1,8 @@
 /* Enhanced Navbar Styling with Light Tan Background */
 .custom-navbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1030 !important;
   background: #f9e8d0 !important;
   box-shadow: 0 4px 20px rgba(74, 45, 19, 0.15);
   border-bottom: 2px solid rgba(219, 43, 40, 0.1);
@@ -19,7 +22,9 @@
 }
 
 /* Brand Styling */
-.navbar-brand-custom {
+.navbar-brand,
+.navbar-brand-custom,
+.navbar-brand.navbar-brand-custom {
   display: flex !important;
   align-items: center;
   gap: 0.75rem;
@@ -28,8 +33,11 @@
   transition: all 0.3s ease;
 }
 
-.navbar-brand-custom:hover {
+.navbar-brand:hover,
+.navbar-brand-custom:hover,
+.navbar-brand.navbar-brand-custom:hover {
   transform: scale(1.05);
+  text-decoration: none !important;
 }
 
 .navbar-logo {
@@ -59,7 +67,9 @@
   transition: all 0.3s ease;
 }
 
-.navbar-brand-custom:hover .brand-text {
+.navbar-brand:hover .brand-text,
+.navbar-brand-custom:hover .brand-text,
+.navbar-brand.navbar-brand-custom:hover .brand-text {
   color: #DB2B28;
 }
 

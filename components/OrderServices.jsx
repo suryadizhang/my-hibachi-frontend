@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Form, Button, Card, Alert, Spinner, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';

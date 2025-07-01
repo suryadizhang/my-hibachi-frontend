@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { API_BASE } from '../lib/config/api';
 import MissingFieldsModal from './MissingFieldsModal';
 import './AdminLogin.css';
@@ -12,7 +13,7 @@ function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showMissingFieldsModal, setShowMissingFieldsModal] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Get missing fields for validation
   const getMissingFields = () => {
@@ -49,7 +50,7 @@ function AdminLogin() {
       
       // Add success feedback before navigation
       setTimeout(() => {
-        navigate("/admin");
+        router.push("/admin");
       }, 500);
       
     } catch (error) {
@@ -195,7 +196,7 @@ function AdminLogin() {
             <span className="emoji-visible">🔒</span> 
             Secure admin access only
           </p>
-          <Link to="/" className="admin-back-link">
+          <Link href="/" className="admin-back-link">
             <span className="emoji-visible">⬅️</span>
             Back to Main Site
           </Link>

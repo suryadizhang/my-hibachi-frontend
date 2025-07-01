@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Row, Col, Badge, ListGroup, Alert, Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import './Menu.css';
 
 const proteinOptions = [
@@ -360,7 +360,7 @@ const Menu = () => (
             
             {/* Main CTA Button */}
             <div className="cta-button-wrapper mb-5">
-              <Link to="/BookUs" aria-label="Order your hibachi experience now" className="cta-link">
+              <Link href="/BookUs" aria-label="Order your hibachi experience now" className="cta-link">
                 <button className="cta-main-button">
                   <span className="button-icon emoji-visible">🍽️</span>
                   <span className="button-text">Order Your Hibachi Experience</span>

@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Reviews.css';
 
@@ -385,7 +387,6 @@ const ReviewStats = ({ reviews }) => {
 };
 
 const Reviews = () => {
-  const navigate = useNavigate();
   const [showAll, setShowAll] = useState(false);
   const [displayedReviews, setDisplayedReviews] = useState(6);
   const [filter, setFilter] = useState('all');
@@ -418,11 +419,11 @@ const Reviews = () => {
 
   // Navigation handlers
   const handleBookEvent = () => {
-    navigate('/BookUs');
+    router.push('/BookUs');
   };
 
   const handleGetQuote = () => {
-    navigate('/contact');
+    router.push('/contact');
   };
 
   return (

@@ -1,28 +1,33 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import OptimizedImage from './OptimizedImage';
 
 import './Navbar.css';
 
-const CustomNavbar = () => {
-  const location = useLocation();
+const CustomNavbar = memo(() => {
+  const pathname = usePathname();
 
   return (
     <Navbar
       expand="lg"
       sticky="top"
-      className="custom-navbar"
+      className="custom-navbar sticky-top"
       variant="dark"
     >
       <Container fluid className="navbar-container">
-        <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
-          <img
+        <Link href="/" className="navbar-brand navbar-brand-custom">
+          <OptimizedImage
             src="/assets/My Hibachi logo.png"
             alt="My Hibachi Logo"
+            width={140}
+            height={140}
             className="navbar-logo"
+            priority={true}
           />
           <span className="brand-text">My Hibachi</span>
-        </Navbar.Brand>
+        </Link>
         
         <Navbar.Toggle 
           aria-controls="main-navbar-nav" 
@@ -39,21 +44,23 @@ const CustomNavbar = () => {
               { path: "/faqs", label: "FAQs", icon: "❓" },
               { path: "/contact", label: "Contact", icon: "📞" }
             ].map(({ path, label, icon }) => (
-              <Nav.Link
-                as={Link}
-                key={path}
-                to={path}
-                className={`nav-link-custom ${location.pathname === path ? 'active' : ''}`}
-              >
-                <span className="nav-icon">{icon}</span>
-                <span className="nav-text">{label}</span>
-              </Nav.Link>
+              <Nav.Item key={path}>
+                <Link
+                  href={path}
+                  className={`nav-link nav-link-custom ${pathname === path ? 'active' : ''}`}
+                >
+                  <span className="nav-icon">{icon}</span>
+                  <span className="nav-text">{label}</span>
+                </Link>
+              </Nav.Item>
             ))}
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
-};
+});
+
+CustomNavbar.displayName = 'CustomNavbar';
 
 export default CustomNavbar;

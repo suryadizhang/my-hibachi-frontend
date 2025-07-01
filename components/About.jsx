@@ -1,8 +1,9 @@
+"use client";
+
 import React, { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import Head from "next/head";
 import { Container, Row, Col, Badge } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Link from "next/link";
 import "./About.css";
 
 const About = () => {
@@ -58,7 +59,7 @@ const About = () => {
 
   return (
     <section className="about-section">
-      <Helmet>
+      <Head>
         <title>My Hibachi | Hibachi at Home | Private Hibachi Chef & Catering in Bay Area & Sacramento</title>
         <meta
           name="description"
@@ -93,7 +94,7 @@ const About = () => {
             url: "https://myhibachichef.com/",
           })}
         </script>
-      </Helmet>
+      </Head>
 
       {/* Hero Video Section */}
       <div className="hero-media-container">
@@ -341,8 +342,8 @@ const About = () => {
             <p className="offer-text">Book now and let us create memories that will last a lifetime!</p>
           </div>
           <div className="cta-buttons">
-            <Link to="/BookUs" className="btn btn-primary btn-lg me-3">🔥 Book Your Hibachi Party Now!</Link>
-            <Link to="/contact" className="btn btn-outline-primary btn-lg">💬 Get Your Free Quote</Link>
+            <Link href="/BookUs" className="btn btn-primary btn-lg me-3">🔥 Book Your Hibachi Party Now!</Link>
+            <Link href="/contact" className="btn btn-outline-primary btn-lg">💬 Get Your Free Quote</Link>
           </div>
           <p className="cta-footer">
             <small>📞 Questions? Call us for instant assistance! • 🚗 We travel to you! • 💯 Satisfaction guaranteed!</small>

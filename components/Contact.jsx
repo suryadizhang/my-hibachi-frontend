@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Card, Row, Col, Button, Container } from 'react-bootstrap';
 import { 
   FaEnvelope, 
@@ -19,16 +19,18 @@ import {
 import './Contact.css';
 
 const Contact = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleBookEvent = () => {
-    navigate('/BookUs');
+    router.push('/BookUs');
   };
 
   const handleGetQuote = () => {
-    const contactSection = document.getElementById('contact-details');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (typeof window !== 'undefined') {
+      const contactSection = document.getElementById('contact-details');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 

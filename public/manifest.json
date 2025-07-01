@@ -9,13 +9,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/src/assets/My%20Hibachi%20logo.png",
+      "src": "/assets/My Hibachi logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "/src/assets/My%20Hibachi%20logo.png",
+      "src": "/assets/My Hibachi logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
