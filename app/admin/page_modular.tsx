@@ -1,6 +1,6 @@
 'use client'
 
-import AdminDashboard from '../../src/modules/admin/AdminDashboard'
+import AdminDashboard from '../../components/admin/AdminDashboard'
 
 export default function AdminPage() {
   return <AdminDashboard />

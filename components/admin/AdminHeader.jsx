@@ -270,6 +270,9 @@ const _AdminHeader = memo(({
   );
 });
 
-AdminHeader.displayName = 'AdminHeader';
+_AdminHeader.displayName = 'AdminHeader';
+
+// Properly assign and export the component
+const AdminHeader = _AdminHeader;
 
 export default AdminHeader;

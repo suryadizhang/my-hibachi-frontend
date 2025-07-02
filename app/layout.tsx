@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import ClientLayout from '../components/ClientLayout'
 import LoadingBlocker from '../components/LoadingBlocker'
-import PerformanceOptimizer from '../src/components/performance/PerformanceOptimizer'
-import WebVitalsMonitor from '../src/components/performance/WebVitalsMonitor'
+import PerformanceOptimizer from '../components/PerformanceOptimizer'
+import WebVitalsMonitor from '../components/WebVitalsMonitor'
 
 // Optimize font loading
 const inter = Inter({ 
@@ -91,9 +91,9 @@ export default function RootLayout({
         <script src="/block-next-loading.js" defer />
       </head>
       <body className={inter.className}>
-        <LoadingBlocker />
-        <PerformanceOptimizer />
-        <WebVitalsMonitor />
+        {/* <LoadingBlocker /> */}
+        {/* <PerformanceOptimizer /> */}
+        {/* <WebVitalsMonitor /> */}
         <ClientLayout>
           {children}
         </ClientLayout>

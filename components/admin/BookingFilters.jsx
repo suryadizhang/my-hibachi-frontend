@@ -196,6 +196,9 @@ const _BookingFilters = memo(({
   );
 });
 
-BookingFilters.displayName = 'BookingFilters';
+_BookingFilters.displayName = 'BookingFilters';
+
+// Properly assign and export the component
+const BookingFilters = _BookingFilters;
 
 export default BookingFilters;

@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
-import { UltraFastPage } from '../src/components/performance/StreamingComponents'
 
 // Ultra-fast dynamic imports with priority loading
 const About = dynamic(() => import('../components/About'), {
@@ -23,16 +22,12 @@ const About = dynamic(() => import('../components/About'), {
   )
 })
 
-// Edge Runtime for maximum speed
-export const runtime = 'edge'
-export const revalidate = 3600
-
 export default function HomePage() {
   return (
-    <UltraFastPage priority="critical">
-      <Suspense fallback={<div className="ultra-loading">Loading...</div>}>
+    <div className="page-wrapper">
+      <Suspense fallback={<div className="loading">Loading...</div>}>
         <About />
       </Suspense>
-    </UltraFastPage>
+    </div>
   )
 }

@@ -378,5 +378,9 @@ const _SmartNotificationSystem = memo(({
   );
 });
 
-SmartNotificationSystem.displayName = 'SmartNotificationSystem';
+_SmartNotificationSystem.displayName = 'SmartNotificationSystem';
+
+// Properly assign and export the component
+const SmartNotificationSystem = _SmartNotificationSystem;
 export default SmartNotificationSystem;
+

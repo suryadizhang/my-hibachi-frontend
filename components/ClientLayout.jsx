@@ -1,6 +1,6 @@
 'use client'
 
-import CustomNavbar from '../components/Navbar'
+import CustomNavbar from './Navbar'
 
 export default function ClientLayout({ children }) {
   return (

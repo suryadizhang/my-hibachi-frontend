@@ -294,6 +294,10 @@ const _BookingsList = memo(({
   );
 });
 
-BookingsList.displayName = 'BookingsList';
+_BookingsList.displayName = 'BookingsList';
+
+// Properly assign and export the component
+const BookingsList = _BookingsList;
 
 export default BookingsList;
+

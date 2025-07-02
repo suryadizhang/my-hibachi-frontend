@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import OptimizedImage from './OptimizedImage';
+import Image from 'next/image';
 
 import './Navbar.css';
 
@@ -18,7 +18,7 @@ const CustomNavbar = memo(() => {
     >
       <Container fluid className="navbar-container">
         <Link href="/" className="navbar-brand navbar-brand-custom">
-          <OptimizedImage
+          <Image
             src="/assets/My Hibachi logo.png"
             alt="My Hibachi Logo"
             width={140}

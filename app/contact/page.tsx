@@ -1,6 +1,6 @@
 // Ultra-fast Contact page using PPR - Static shell with dynamic form
 import { Metadata } from 'next';
-import Contact from '../../src/components/features/Contact';
+import Contact from '../../components/Contact';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

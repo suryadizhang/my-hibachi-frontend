@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, Row, Col, Button, Container } from 'react-bootstrap';

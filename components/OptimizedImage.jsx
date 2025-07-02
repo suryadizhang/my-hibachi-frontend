@@ -1,4 +1,75 @@
-import Image from 'next/image';
+importimport Image from 'next/image';
+import { useState } from 'react';
+
+const OptimizedImage = ({ 
+  src, 
+  alt, 
+  width, 
+  height, 
+  className = '', 
+  priority = false,
+  placeholder = 'blur',
+  blurDataURL,
+  ...props 
+}) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  // Generate a simple blur placeholder if none provided
+  const defaultBlurDataURL = `data:image/svg+xml;base64,${btoa(
+    `<svg width="${width || 400}" height="${height || 300}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#f3f4f6"/>
+      <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9ca3af" font-family="sans-serif" font-size="14">Loading...</text>
+    </svg>`
+  )}`;
+
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        priority={priority}
+        placeholder={placeholder}
+        blurDataURL={blurDataURL || defaultBlurDataURL}
+        className={`transition-opacity duration-300 ${
+          isLoading ? 'opacity-0' : 'opacity-100'
+        }`}
+        onLoad={() => setIsLoading(false)}
+        onError={() => {
+          setError(true);
+          setIsLoading(false);
+        }}
+        {...props}
+      />
+      
+      {isLoading && !error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="animate-pulse">
+            <div className="h-4 w-4 bg-gray-300 rounded-full"></div>
+          </div>
+        </div>
+      )}
+      
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="text-gray-500 text-sm">
+            Failed to load image
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default OptimizedImage;erate a simple blur placeholder if none provided
+  const defaultBlurDataURL = `data:image/svg+xml;base64,${btoa(
+    `<svg width="${width || 400}" height="${height || 300}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#f3f4f6"/>
+      <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9ca3af" font-family="sans-serif" font-size="14">Loading...</text>
+    </svg>`
+  )}`;image';
 import { useState } from 'react';
 
 const OptimizedImage = ({ 

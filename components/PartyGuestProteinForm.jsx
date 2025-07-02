@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from "react";
 import { Card, Form, Button, Row, Col, Alert } from "react-bootstrap";
 import MissingFieldsModal from "./MissingFieldsModal";

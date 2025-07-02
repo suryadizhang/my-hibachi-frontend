@@ -5,8 +5,14 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
   
-  // Disable default loading indicators
+  // Disable React Strict Mode and hot reloading
   reactStrictMode: false,
+  
+  // Standard development settings (no hot reload)
+  ...(process.env.NODE_ENV === 'development' && {
+    // Disable source maps for faster builds
+    productionBrowserSourceMaps: false,
+  }),
   
   // Temporarily disable ESLint during build to get pages working
   eslint: {
@@ -33,17 +39,15 @@ const nextConfig: NextConfig = {
 
   // Experimental features for ULTRA performance
   experimental: {
-    optimizeCss: true, // Re-enabled with proper Tailwind configuration
+    optimizeCss: true,
     optimizePackageImports: ['react-bootstrap', 'react-icons', 'bootstrap'],
     webpackBuildWorker: true,
     scrollRestoration: true,
     optimizeServerReact: true,
-    serverSourceMaps: false, // Faster builds
+    serverSourceMaps: false,
     
-    // Completely disable loading UI
+    // Disable loading UI
     appDocumentPreloading: false,
-    
-    // Disable router loading indicators
     clientRouterFilter: false,
   },
 

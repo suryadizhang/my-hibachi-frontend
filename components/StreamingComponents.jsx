@@ -1,13 +1,21 @@
 "use client";
 
 import { Suspense } from 'react';
-import { LoadingSpinner } from './LoadingComponents';
+
+// Simple loading spinner component to avoid import issues
+const SimpleSpinner = () => (
+  <div className="d-flex justify-content-center align-items-center p-4">
+    <div className="spinner-border text-primary" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  </div>
+);
 
 // Ultra-fast streaming components with granular loading
 const StreamingWrapper = ({ children, fallback, priority = 'normal' }) => {
   const LoadingComponent = () => (
     <div className={`streaming-loading ${priority}`}>
-      {fallback || <LoadingSpinner size="sm" />}
+      {fallback || <SimpleSpinner />}
     </div>
   );
 
