@@ -62,7 +62,7 @@ const WebVitalsMonitor = () => {
 
       // Cumulative Layout Shift (CLS)
       let clsValue = 0;
-      let clsEntries = [];
+      let _clsEntries = [];
       let sessionValue = 0;
       let sessionEntries = [];
 
@@ -84,7 +84,7 @@ const WebVitalsMonitor = () => {
 
             if (sessionValue > clsValue) {
               clsValue = sessionValue;
-              clsEntries = [...sessionEntries];
+              _clsEntries = [...sessionEntries];
             }
           }
         }

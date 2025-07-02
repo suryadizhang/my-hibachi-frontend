@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Spinner, Button, Container } from "react-bootstrap";
@@ -7,22 +7,21 @@ import AdminConfirmationModal from './AdminConfirmationModal';
 import NewsletterManager from './NewsletterManager';
 import LogPanel from './LogPanel';
 import SuperAdminManager from './SuperAdminManager';
+import OptimizedBookingCard from './performance/OptimizedBookingCard';
+import { 
+  useOptimizedAdminState, 
+  useOptimizedBookingFilters,
+  useStableCallback,
+  useDebouncedState,
+  useRenderProfiler 
+} from './performance/PerformanceOptimizedHooks';
 import './AdminPanel.css';
 
 function AdminPanel() {
-  const [activeTab, setActiveTab] = useState("bookings");
-  const [mode, setMode] = useState("upcoming"); // Changed default to "upcoming"
-  const [date, setDate] = useState("");
-  const [year, setYear] = useState(new Date().getFullYear().toString());
-  const [month, setMonth] = useState((new Date().getMonth() + 1).toString());
-  const [bookings, setBookings] = useState([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [kpis, setKpis] = useState({ total: 0, week: 0, month: 0, waitlist: 0 });
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [username, setUsername] = useState("");
-  const [userRole, setUserRole] = useState("admin");
+  // Use optimized state management instead of multiple useState calls
+  const [state, actions] = useOptimizedAdminState();
+  
+  // Legacy state for backward compatibility
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
@@ -31,24 +30,37 @@ function AdminPanel() {
   });
   const [isClient, setIsClient] = useState(false);
   const [token, setToken] = useState(null);
-  
-  // Modal state
-  const [confirmModal, setConfirmModal] = useState({
-    show: false,
-    title: "",
-    message: "",
-    actionType: "warning",
-    confirmButtonText: "Confirm",
-    cancelButtonText: "Cancel",
-    requiresReason: false,
-    reasonPlaceholder: "",
-    bookingDetails: null,
-    onConfirm: () => {},
-    isLoading: false
-  });
 
+  // Router and constants
   const router = useRouter();
   const pageSize = 10;
+
+  // Performance monitoring
+  const renderCount = useRenderProfiler('AdminPanel');
+  
+  // Debounced search for better performance
+  const [searchTerm, setSearchTerm, debouncedSearch] = useDebouncedState(state.search, 300);
+
+  
+  // Optimized booking filtering with memoization
+  const filteredBookings = useOptimizedBookingFilters(state.bookings, {
+    search: debouncedSearch,
+    status: null, // Add filtering by status if needed
+    sortBy: 'date',
+    sortOrder: 'asc'
+  });
+
+  // Memoized pagination calculation
+  const paginatedBookings = useMemo(() => {
+    const startIndex = (state.page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return filteredBookings.slice(startIndex, endIndex);
+  }, [filteredBookings, state.page, pageSize]);
+
+  // Total pages calculation
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredBookings.length / pageSize);
+  }, [filteredBookings.length, pageSize]);
 
   // Client-side only initialization
   useEffect(() => {
@@ -69,74 +81,68 @@ function AdminPanel() {
     if (isClient && token) {
       fetchCurrentUser();
     }
-  }, [token, isClient]);
+  }, [token, isClient, fetchCurrentUser]);
 
   // Auto-load upcoming bookings when component mounts and user is authenticated
   useEffect(() => {
-    if (token && mode === "upcoming") {
+    if (token && state.mode === "upcoming") {
       fetchUpcoming();
     }
-  }, [token, mode]);
+  }, [token, state.mode, fetchUpcoming]);
 
-  // KPI card click handlers
-  const handleThisWeekClick = async () => {
-    setMode("weekly");
-    setError("");
+  // KPI card click handlers - optimized with stable callbacks
+  const handleThisWeekClick = useStableCallback(async () => {
+    actions.setFilters({ mode: "weekly" });
     
     // Get current week's Monday
     const now = new Date();
     const monday = new Date(now.setDate(now.getDate() - now.getDay() + 1));
     const mondayStr = monday.toISOString().split('T')[0];
     
-    setDate(mondayStr);
+    actions.setFilters({ date: mondayStr });
     
     // Fetch current week data
     try {
-      setLoading(true);
+      actions.setLoading(true);
       const res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${mondayStr}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBookings(res.data);
-      setPage(1); // Reset to first page
+      actions.setBookings(res.data);
+      actions.setFilters({ page: 1 }); // Reset to first page
     } catch (e) {
-      setError("Error loading current week data: " + (e.response?.data?.detail || e.message));
+      actions.setError("Error loading current week data: " + (e.response?.data?.detail || e.message));
     }
-    setLoading(false);
-  };
+  }, [actions, token]);
 
-  const handleThisMonthClick = async () => {
-    setMode("monthly");
-    setError("");
+  const handleThisMonthClick = useStableCallback(async () => {
+    actions.setFilters({ mode: "monthly" });
     
     // Get current month and year
     const now = new Date();
     const currentYear = now.getFullYear().toString();
     const currentMonth = (now.getMonth() + 1).toString();
     
-    setYear(currentYear);
-    setMonth(currentMonth);
+    actions.setFilters({ year: currentYear, month: currentMonth });
     
     // Fetch current month data
     try {
-      setLoading(true);
+      actions.setLoading(true);
       const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${currentYear}&month=${currentMonth}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBookings(res.data);
-      setPage(1); // Reset to first page
+      actions.setBookings(res.data);
+      actions.setFilters({ page: 1 }); // Reset to first page
     } catch (e) {
-      setError("Error loading current month data: " + (e.response?.data?.detail || e.message));
+      actions.setError("Error loading current month data: " + (e.response?.data?.detail || e.message));
     }
-    setLoading(false);
-  };
+  }, [actions, token]);
 
-  const handleTotalBookingsClick = async () => {
-    setMode("total");
-    setError("");
+  const handleTotalBookingsClick = useStableCallback(async () => {
+    actions.setFilters({ mode: "total" });
     
     // Fetch all bookings from all time periods and sort by date (earliest first) and deposit status
     try {
-      setLoading(true);
+      actions.setLoading(true);
       const res = await axios.get(`${API_BASE}/api/booking/admin/all-bookings`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -157,21 +163,19 @@ function AdminPanel() {
         return aDeposit - bDeposit;
       });
       
-      setBookings(sortedBookings);
-      setPage(1); // Reset to first page
+      actions.setBookings(sortedBookings);
+      actions.setFilters({ page: 1 }); // Reset to first page
     } catch (e) {
-      setError("Error loading all bookings: " + (e.response?.data?.detail || e.message));
+      actions.setError("Error loading all bookings: " + (e.response?.data?.detail || e.message));
     }
-    setLoading(false);
-  };
+  }, [actions, token]);
 
-  const handleWaitlistClick = async () => {
-    setMode("waitlist");
-    setError("");
+  const handleWaitlistClick = useStableCallback(async () => {
+    actions.setFilters({ mode: "waitlist" });
     
     // Fetch all waitlist entries sorted by earliest date
     try {
-      setLoading(true);
+      actions.setLoading(true);
       const res = await axios.get(`${API_BASE}/api/booking/admin/waitlist`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -190,77 +194,67 @@ function AdminPanel() {
         return new Date(a.created_at) - new Date(b.created_at);
       });
       
-      setBookings(sortedWaitlist);
-      setPage(1); // Reset to first page
+      actions.setBookings(sortedWaitlist);
+      actions.setFilters({ page: 1 }); // Reset to first page
     } catch (e) {
-      setError("Error loading waitlist: " + (e.response?.data?.detail || e.message));
+      actions.setError("Error loading waitlist: " + (e.response?.data?.detail || e.message));
     }
-    setLoading(false);
-  };
+  }, [actions, token]);
 
-  const fetchCurrentUser = async () => {
+  const fetchCurrentUser = useStableCallback(async () => {
     try {
       // Decode the token to get username and role
       const payload = JSON.parse(atob(token.split('.')[1]));
-      setUsername(payload.sub || 'Admin');
-      setUserRole(payload.role || 'admin');
+      actions.setUser(payload.sub || 'Admin', payload.role || 'admin');
     } catch {
-      setUsername('Admin');
-      setUserRole('admin');
+      actions.setUser('Admin', 'admin');
     }
-  };
+  }, [token, actions]);
 
-  const fetchWeekly = async () => {
-    if (!date) return;
-    setLoading(true);
-    setError("");
+  const fetchWeekly = useStableCallback(async () => {
+    if (!state.date) return;
+    actions.setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${date}`, {
+      const res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${state.date}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBookings(res.data);
+      actions.setBookings(res.data);
     } catch (e) {
-      setError(
-        e.response?.status === 401
-          ? "Session expired. Please log in again."
-          : e.response?.data?.detail || "Error fetching weekly data."
-      );
+      const errorMsg = e.response?.status === 401
+        ? "Session expired. Please log in again."
+        : e.response?.data?.detail || "Error fetching weekly data.";
+      actions.setError(errorMsg);
       if (e.response?.status === 401) {
         localStorage.removeItem("adminToken");
         router.push("/admin-login");
       }
-      setBookings([]);
+      actions.setBookings([]);
     }
-    setLoading(false);
-  };
+  }, [state.date, token, actions, router]);
 
-  const fetchMonthly = async () => {
-    if (!year || !month) return;
-    setLoading(true);
-    setError("");
+  const fetchMonthly = useStableCallback(async () => {
+    if (!state.year || !state.month) return;
+    actions.setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${year}&month=${month}`, {
+      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${state.year}&month=${state.month}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBookings(res.data);
+      actions.setBookings(res.data);
     } catch (e) {
-      setError(
-        e.response?.status === 401
-          ? "Session expired. Please log in again."
-          : e.response?.data?.detail || "Error fetching monthly data."
-      );
+      const errorMsg = e.response?.status === 401
+        ? "Session expired. Please log in again."
+        : e.response?.data?.detail || "Error fetching monthly data.";
+      actions.setError(errorMsg);
       if (e.response?.status === 401) {
         localStorage.removeItem("adminToken");
         router.push("/admin-login");
       }
-      setBookings([]);
+      actions.setBookings([]);
     }
-    setLoading(false);
-  };
+  }, [state.year, state.month, token, actions, router]);
 
-  const fetchUpcoming = async () => {
-    setLoading(true);
-    setError("");
+  const fetchUpcoming = useStableCallback(async () => {
+    actions.setLoading(true);
     try {
       // Get current date and 14 days from now
       const now = new Date();
@@ -307,24 +301,22 @@ function AdminPanel() {
         return (a.time_slot || '').localeCompare(b.time_slot || '');
       });
       
-      setBookings(upcomingBookings);
+      actions.setBookings(upcomingBookings);
     } catch (e) {
-      setError(
-        e.response?.status === 401
-          ? "Session expired. Please log in again."
-          : e.response?.data?.detail || "Error fetching upcoming bookings."
-      );
+      const errorMsg = e.response?.status === 401
+        ? "Session expired. Please log in again."
+        : e.response?.data?.detail || "Error fetching upcoming bookings.";
+      actions.setError(errorMsg);
       if (e.response?.status === 401) {
         localStorage.removeItem("adminToken");
         router.push("/admin-login");
       }
-      setBookings([]);
+      actions.setBookings([]);
     }
-    setLoading(false);
-  };
+  }, [token, router, actions]);
 
-  const handleLogout = () => {
-    setConfirmModal({
+  const handleLogout = useStableCallback(() => {
+    actions.setModal({
       show: true,
       title: "Confirm Logout",
       message: "Are you sure you want to logout from the admin panel?",
@@ -335,21 +327,21 @@ function AdminPanel() {
       onConfirm: () => {
         localStorage.removeItem("adminToken");
         router.push("/admin-login");
-        setConfirmModal(prev => ({ ...prev, show: false }));
+        actions.setModal({ show: false });
       }
     });
-  };
+  }, [actions, router]);
 
-  const handleChangePassword = async (e) => {
+  const handleChangePassword = useStableCallback(async (e) => {
     e.preventDefault();
     
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      setError("New passwords do not match");
+      actions.setError("New passwords do not match");
       return;
     }
 
     if (passwordForm.newPassword.length < 6) {
-      setError("New password must be at least 6 characters long");
+      actions.setError("New password must be at least 6 characters long");
       return;
     }
 
@@ -364,9 +356,9 @@ function AdminPanel() {
 
       setShowPasswordModal(false);
       setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
-      setError('');
+      actions.setError('');
       
-      setConfirmModal({
+      actions.setModal({
         show: true,
         title: "Password Changed",
         message: "Your password has been successfully changed!",
@@ -374,13 +366,13 @@ function AdminPanel() {
         confirmButtonText: "OK",
         requiresReason: false,
         onConfirm: () => {
-          setConfirmModal(prev => ({ ...prev, show: false }));
+          actions.setModal({ show: false });
         }
       });
     } catch (err) {
-      setError("Failed to change password: " + (err.response?.data?.detail || err.message));
+      actions.setError("Failed to change password: " + (err.response?.data?.detail || err.message));
     }
-  };
+  }, [passwordForm, token, actions]);
 
   useEffect(() => {
     // Fetch KPIs from backend (create an endpoint or compute from bookings)
@@ -389,42 +381,28 @@ function AdminPanel() {
         const res = await axios.get(`${API_BASE}/api/booking/admin/kpis`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setKpis(res.data);
+        actions.setKpis(res.data);
       } catch {
         // fallback: compute from bookings if endpoint not available
         const now = new Date();
         const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         
-        setKpis({
-          total: bookings.length,
-          week: bookings.filter(b => new Date(b.date) >= startOfWeek).length,
-          month: bookings.filter(b => new Date(b.date) >= startOfMonth).length,
+        actions.setKpis({
+          total: state.bookings.length,
+          week: state.bookings.filter(b => new Date(b.date) >= startOfWeek).length,
+          month: state.bookings.filter(b => new Date(b.date) >= startOfMonth).length,
           waitlist: 0 // add waitlist logic if available
         });
       }
     };
     if (token) fetchKpis();
-  }, [bookings, token]);
+  }, [state.bookings, token, actions]);
 
-  const filteredBookings = bookings.filter(b => {
-    const searchTerm = search.toLowerCase();
-    return (
-      (b.name && b.name.toLowerCase().includes(searchTerm)) ||
-      (b.phone && b.phone.includes(search)) ||
-      (b.email && b.email.toLowerCase().includes(searchTerm)) ||
-      (b.date && b.date.includes(search)) ||
-      (b.preferred_date && b.preferred_date.includes(search))
-    );
-  });
-
-  const totalPages = Math.ceil(filteredBookings.length / pageSize);
-  const paginatedBookings = filteredBookings.slice((page - 1) * pageSize, page * pageSize);
-
-  // Reset page when search changes
+  // Reset page when search changes (using optimized debounced search)
   useEffect(() => {
-    setPage(1);
-  }, [search]);
+    actions.setFilters({ search: debouncedSearch });
+  }, [debouncedSearch, actions]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -446,7 +424,7 @@ function AdminPanel() {
 
   // Get current view title for display
   const getCurrentViewTitle = () => {
-    switch (mode) {
+    switch (state.mode) {
       case "upcoming":
         return "📋 Upcoming Events (Next 14 Days)";
       case "weekly":
@@ -462,9 +440,9 @@ function AdminPanel() {
     }
   };
 
-  // Admin action handlers
-  const handleCancelBooking = (booking) => {
-    setConfirmModal({
+  // Admin action handlers  
+  const handleCancelBooking = useStableCallback((booking) => {
+    actions.setModal({
       show: true,
       title: "Cancel Booking",
       message: "This will permanently cancel the booking and send a cancellation email to the customer.",
@@ -475,7 +453,7 @@ function AdminPanel() {
       reasonPlaceholder: "Please provide a reason for canceling this booking (e.g., customer request, scheduling conflict, etc.)",
       bookingDetails: booking,
       onConfirm: async (reason) => {
-        setConfirmModal(prev => ({ ...prev, isLoading: true }));
+        actions.setModal({ isLoading: true });
         
         try {
           await axios.delete(`${API_BASE}/api/booking/admin/cancel_booking?booking_id=${booking.id}`, {
@@ -486,29 +464,23 @@ function AdminPanel() {
           });
           
           // Refresh the bookings list
-          if (mode === "weekly") {
+          if (state.mode === "weekly") {
             await fetchWeekly();
-          } else if (mode === "upcoming") {
+          } else if (state.mode === "upcoming") {
             await fetchUpcoming();
           } else {
             await fetchMonthly();
           }
           
-          setConfirmModal(prev => ({ ...prev, show: false, isLoading: false }));
-          setError("");
-          
-          // Show success message
-          setTimeout(() => {
-            setError(""); // Clear any previous errors
-          }, 100);
+          actions.setModal({ show: false, isLoading: false });
+          actions.setError("");
           
         } catch (e) {
-          setConfirmModal(prev => ({ ...prev, isLoading: false }));
-          setError(
-            e.response?.status === 401
-              ? "Session expired. Please log in again."
-              : e.response?.data?.detail || "Error canceling booking. Please try again."
-          );
+          actions.setModal({ isLoading: false });
+          const errorMsg = e.response?.status === 401
+            ? "Session expired. Please log in again."
+            : e.response?.data?.detail || "Error canceling booking. Please try again.";
+          actions.setError(errorMsg);
           
           if (e.response?.status === 401) {
             localStorage.removeItem("adminToken");
@@ -517,10 +489,10 @@ function AdminPanel() {
         }
       }
     });
-  };
+  }, [actions, token, state.mode, fetchWeekly, fetchUpcoming, fetchMonthly, router]);
 
-  const handleMarkDepositReceived = (booking) => {
-    setConfirmModal({
+  const handleMarkDepositReceived = useStableCallback((booking) => {
+    actions.setModal({
       show: true,
       title: "Mark Deposit as Received",
       message: "This will mark the deposit as received for this booking. This action affects payment tracking.",
@@ -531,7 +503,7 @@ function AdminPanel() {
       reasonPlaceholder: "Please provide confirmation details (e.g., payment method, transaction ID)...",
       bookingDetails: booking,
       onConfirm: async (reason) => {
-        setConfirmModal(prev => ({ ...prev, isLoading: true }));
+        actions.setModal({ isLoading: true });
         
         try {
           await axios.post(`${API_BASE}/api/booking/admin/confirm_deposit?booking_id=${booking.id}&date=${booking.date}`, {
@@ -541,24 +513,23 @@ function AdminPanel() {
           });
           
           // Refresh the bookings list
-          if (mode === "weekly") {
+          if (state.mode === "weekly") {
             await fetchWeekly();
-          } else if (mode === "upcoming") {
+          } else if (state.mode === "upcoming") {
             await fetchUpcoming();
           } else {
             await fetchMonthly();
           }
           
-          setConfirmModal(prev => ({ ...prev, show: false, isLoading: false }));
-          setError("");
+          actions.setModal({ show: false, isLoading: false });
+          actions.setError("");
           
         } catch (e) {
-          setConfirmModal(prev => ({ ...prev, isLoading: false }));
-          setError(
-            e.response?.status === 401
-              ? "Session expired. Please log in again."
-              : e.response?.data?.detail || "Error updating deposit status. Please try again."
-          );
+          actions.setModal({ isLoading: false });
+          const errorMsg = e.response?.status === 401
+            ? "Session expired. Please log in again."
+            : e.response?.data?.detail || "Error updating deposit status. Please try again.";
+          actions.setError(errorMsg);
           
           if (e.response?.status === 401) {
             localStorage.removeItem("adminToken");
@@ -567,10 +538,10 @@ function AdminPanel() {
         }
       }
     });
-  };
+  }, [actions, token, state.mode, fetchWeekly, fetchUpcoming, fetchMonthly, router]);
 
-  const handleContactWaitlistCustomer = (waitlistEntry) => {
-    setConfirmModal({
+  const handleContactWaitlistCustomer = useStableCallback((waitlistEntry) => {
+    actions.setModal({
       show: true,
       title: "Contact Waitlist Customer",
       message: `Do you want to contact ${waitlistEntry.name} about their waitlist request for ${waitlistEntry.preferred_date} at ${waitlistEntry.preferred_time}?`,
@@ -596,13 +567,13 @@ Preferred Time: ${waitlistEntry.preferred_time}
           alert(contactInfo);
         });
         
-        setConfirmModal(prev => ({ ...prev, show: false }));
+        actions.setModal({ show: false });
       }
     });
-  };
+  }, [actions]);
 
-  const handleRemoveFromWaitlist = (waitlistEntry) => {
-    setConfirmModal({
+  const handleRemoveFromWaitlist = useStableCallback((waitlistEntry) => {
+    actions.setModal({
       show: true,
       title: "Remove from Waitlist",
       message: `Are you sure you want to remove ${waitlistEntry.name} from the waitlist?`,
@@ -613,7 +584,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
       reasonPlaceholder: "Please provide a reason for removing from waitlist...",
       bookingDetails: waitlistEntry,
       onConfirm: async (reason) => {
-        setConfirmModal(prev => ({ ...prev, isLoading: true }));
+        actions.setModal({ isLoading: true });
         
         try {
           await axios.delete(`${API_BASE}/api/booking/admin/waitlist/${waitlistEntry.id}`, {
@@ -624,16 +595,15 @@ Preferred Time: ${waitlistEntry.preferred_time}
           // Refresh the waitlist
           await handleWaitlistClick();
           
-          setConfirmModal(prev => ({ ...prev, show: false, isLoading: false }));
-          setError("");
+          actions.setModal({ show: false, isLoading: false });
+          actions.setError("");
           
         } catch (e) {
-          setConfirmModal(prev => ({ ...prev, isLoading: false }));
-          setError(
-            e.response?.status === 401
-              ? "Session expired. Please log in again."
-              : e.response?.data?.detail || "Error removing from waitlist. Please try again."
-          );
+          actions.setModal({ isLoading: false });
+          const errorMsg = e.response?.status === 401
+            ? "Session expired. Please log in again."
+            : e.response?.data?.detail || "Error removing from waitlist. Please try again.";
+          actions.setError(errorMsg);
           
           if (e.response?.status === 401) {
             localStorage.removeItem("adminToken");
@@ -642,7 +612,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
         }
       }
     });
-  };
+  }, [actions, token, handleWaitlistClick, router]);
 
   return (
     <div className="admin-panel-container">
@@ -665,7 +635,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
                     Admin Dashboard
                   </h1>
                   <p className="admin-header-subtitle">
-                    Welcome, {username}! • Booking Management & Analytics Portal
+                    Welcome, {state.username}! • Booking Management & Analytics Portal
                   </p>
             </div>
             <div className="admin-header-buttons">
@@ -695,30 +665,30 @@ Preferred Time: ${waitlistEntry.preferred_time}
         <Container>
           <div className="tab-nav">
             <button 
-              className={`tab-btn ${activeTab === "bookings" ? "active" : ""}`}
-              onClick={() => setActiveTab("bookings")}
+              className={`tab-btn ${state.activeTab === "bookings" ? "active" : ""}`}
+              onClick={() => actions.setFilters({ activeTab: "bookings" })}
             >
               <span className="emoji-visible">📋</span>
               Booking Management
             </button>
             <button 
-              className={`tab-btn ${activeTab === "newsletter" ? "active" : ""}`}
-              onClick={() => setActiveTab("newsletter")}
+              className={`tab-btn ${state.activeTab === "newsletter" ? "active" : ""}`}
+              onClick={() => actions.setFilters({ activeTab: "newsletter" })}
             >
               <span className="emoji-visible">📧</span>
               Newsletter Manager
             </button>
             <button 
-              className={`tab-btn ${activeTab === "logs" ? "active" : ""}`}
-              onClick={() => setActiveTab("logs")}
+              className={`tab-btn ${state.activeTab === "logs" ? "active" : ""}`}
+              onClick={() => actions.setFilters({ activeTab: "logs" })}
             >
               <span className="emoji-visible">📊</span>
               Activity Logs
             </button>
-            {userRole === "superadmin" && (
+            {state.userRole === "superadmin" && (
               <button 
-                className={`tab-btn ${activeTab === "superadmin" ? "active" : ""}`}
-                onClick={() => setActiveTab("superadmin")}
+                className={`tab-btn ${state.activeTab === "superadmin" ? "active" : ""}`}
+                onClick={() => actions.setFilters({ activeTab: "superadmin" })}
               >
                 <span className="emoji-visible">⚙️</span>
                 Super Admin
@@ -730,7 +700,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
 
       <div className="admin-content">
         {/* Booking Management Tab */}
-        {activeTab === "bookings" && (
+        {state.activeTab === "bookings" && (
           <>
             {/* Mode Toggle */}
             <div className="mode-toggle-container">
@@ -740,22 +710,22 @@ Preferred Time: ${waitlistEntry.preferred_time}
               </h3>
               <div>
                 <Button
-                  className={`mode-btn ${mode === "upcoming" ? "active" : ""}`}
-                  onClick={() => setMode("upcoming")}
+                  className={`mode-btn ${state.mode === "upcoming" ? "active" : ""}`}
+                  onClick={() => actions.setFilters({ mode: "upcoming" })}
                 >
                   <span className="emoji-visible">⏰</span>
                   Upcoming (14 days)
                 </Button>
                 <Button
-                  className={`mode-btn ${mode === "weekly" ? "active" : ""}`}
-                  onClick={() => setMode("weekly")}
+                  className={`mode-btn ${state.mode === "weekly" ? "active" : ""}`}
+                  onClick={() => actions.setFilters({ mode: "weekly" })}
                 >
                   <span className="emoji-visible">📅</span>
                   Weekly View
                 </Button>
                 <Button
-                  className={`mode-btn ${mode === "monthly" ? "active" : ""}`}
-                  onClick={() => setMode("monthly")}
+                  className={`mode-btn ${state.mode === "monthly" ? "active" : ""}`}
+                  onClick={() => actions.setFilters({ mode: "monthly" })}
                 >
                   <span className="emoji-visible">📆</span>
                   Monthly View
@@ -765,7 +735,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
 
             {/* Filter Form */}
             <div className="filter-form-container" style={{ position: "relative" }}>
-              {loading && (
+              {state.loading && (
                 <div className="loading-overlay">
                   <div className="loading-spinner-large"></div>
                 </div>
@@ -776,7 +746,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
                 Filter Bookings
               </h3>
               
-              {mode === "upcoming" && (
+              {state.mode === "upcoming" && (
                 <div className="filter-form">
                   <div className="upcoming-info">
                     <p className="upcoming-description">
@@ -791,9 +761,9 @@ Preferred Time: ${waitlistEntry.preferred_time}
                   <Button 
                     className="fetch-btn"
                     onClick={fetchUpcoming} 
-                    disabled={loading}
+                    disabled={state.loading}
                   >
-                    {loading ? (
+                    {state.loading ? (
                       <>
                         <Spinner size="sm" />
                         Loading...
@@ -808,7 +778,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
                 </div>
               )}
               
-              {mode === "weekly" && (
+              {state.mode === "weekly" && (
                 <div className="filter-form">
                   <div className="filter-form-group">
                     <label className="filter-form-label" htmlFor="weekDate">
@@ -819,16 +789,16 @@ Preferred Time: ${waitlistEntry.preferred_time}
                       id="weekDate"
                       type="date"
                       className="filter-form-input"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
+                      value={state.date}
+                      onChange={(e) => actions.setFilters({ date: e.target.value })}
                     />
                   </div>
                   <Button 
                     className="fetch-btn"
                     onClick={fetchWeekly} 
-                    disabled={loading || !date}
+                    disabled={state.loading || !state.date}
                   >
-                    {loading ? (
+                    {state.loading ? (
                       <>
                         <Spinner size="sm" />
                         Loading...
@@ -843,7 +813,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
                 </div>
               )}
               
-              {mode === "monthly" && (
+              {state.mode === "monthly" && (
                 <div className="filter-form">
                   <div className="filter-form-group">
                     <label className="filter-form-label" htmlFor="monthYear">
@@ -854,8 +824,8 @@ Preferred Time: ${waitlistEntry.preferred_time}
                       id="monthYear"
                       type="number"
                       className="filter-form-input"
-                      value={year}
-                      onChange={(e) => setYear(e.target.value)}
+                      value={state.year}
+                      onChange={(e) => actions.setFilters({ year: e.target.value })}
                       min="2020"
                       max="2100"
                       placeholder="Enter year"
@@ -869,8 +839,8 @@ Preferred Time: ${waitlistEntry.preferred_time}
                     <select
                       id="monthMonth"
                       className="filter-form-input"
-                      value={month}
-                      onChange={(e) => setMonth(e.target.value)}
+                      value={state.month}
+                      onChange={(e) => actions.setFilters({ month: e.target.value })}
                     >
                       <option value="1">January</option>
                       <option value="2">February</option>
@@ -889,9 +859,9 @@ Preferred Time: ${waitlistEntry.preferred_time}
                   <Button 
                     className="fetch-btn"
                     onClick={fetchMonthly} 
-                    disabled={loading || !year || !month}
+                    disabled={state.loading || !state.year || !state.month}
                   >
-                    {loading ? (
+                    {state.loading ? (
                       <>
                         <Spinner size="sm" />
                         Loading...
@@ -908,10 +878,10 @@ Preferred Time: ${waitlistEntry.preferred_time}
             </div>
 
             {/* Error Alert */}
-            {error && (
+            {state.error && (
               <div className="admin-alert danger" role="alert">
                 <span className="emoji-visible">❌</span>
-                {error}
+                {state.error}
               </div>
             )}
 
@@ -925,7 +895,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
                 aria-label="View all bookings sorted by date and deposit status"
               >
                 <div className="kpi-icon emoji-visible">📊</div>
-                <div className="kpi-value">{kpis.total}</div>
+                <div className="kpi-value">{state.kpis.total}</div>
                 <div className="kpi-label">Total Bookings</div>
                 <div className="kpi-hint">Click to view all</div>
               </div>
@@ -937,7 +907,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
                 aria-label="View current week bookings"
               >
                 <div className="kpi-icon emoji-visible">📅</div>
-                <div className="kpi-value">{kpis.week}</div>
+                <div className="kpi-value">{state.kpis.week}</div>
                 <div className="kpi-label">This Week</div>
                 <div className="kpi-hint">Click for current week</div>
               </div>
@@ -949,7 +919,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
                 aria-label="View current month bookings"
               >
                 <div className="kpi-icon emoji-visible">📆</div>
-                <div className="kpi-value">{kpis.month}</div>
+                <div className="kpi-value">{state.kpis.month}</div>
                 <div className="kpi-label">This Month</div>
                 <div className="kpi-hint">Click for current month</div>
               </div>
@@ -958,7 +928,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
                 onClick={handleWaitlistClick}
               >
                 <div className="kpi-icon emoji-visible">⏳</div>
-                <div className="kpi-value">{kpis.waitlist}</div>
+                <div className="kpi-value">{state.kpis.waitlist}</div>
                 <div className="kpi-label">Waitlist</div>
                 <div className="kpi-hint">Click to view waitlist</div>
               </div>
@@ -976,8 +946,8 @@ Preferred Time: ${waitlistEntry.preferred_time}
                     type="text"
                     className="search-input"
                     placeholder="Search by name, phone, email, or date..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     aria-label="Search bookings"
                   />
                 </div>
@@ -1013,18 +983,18 @@ Preferred Time: ${waitlistEntry.preferred_time}
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedBookings.length === 0 && !loading ? (
+                    {paginatedBookings.length === 0 && !state.loading ? (
                       <tr>
-                        <td colSpan={mode === 'waitlist' ? 7 : 9} className="no-bookings">
+                        <td colSpan={state.mode === 'waitlist' ? 7 : 9} className="no-bookings">
                           <div className="no-bookings-icon emoji-visible">📭</div>
-                          <div>{mode === 'waitlist' ? 'No waitlist entries found.' : 'No bookings found.'}</div>
+                          <div>{state.mode === 'waitlist' ? 'No waitlist entries found.' : 'No bookings found.'}</div>
                           <small>Try adjusting your search or date filters.</small>
                         </td>
                       </tr>
                     ) : (
                       paginatedBookings.map((b, index) => (
                         <tr key={b.id + (b.date || b.preferred_date) + index}>
-                          {mode === 'waitlist' ? (
+                          {state.mode === 'waitlist' ? (
                             <>
                               <td>{formatDate(b.preferred_date)}</td>
                               <td>{b.preferred_time}</td>
@@ -1145,21 +1115,21 @@ Preferred Time: ${waitlistEntry.preferred_time}
                 <div className="pagination-container">
                   <Button
                     className="pagination-btn"
-                    disabled={page === 1}
-                    onClick={() => setPage(page - 1)}
+                    disabled={state.page === 1}
+                    onClick={() => actions.setFilters({ page: state.page - 1 })}
                   >
                     <span className="emoji-visible">⬅️</span>
                     Previous
                   </Button>
                   
                   <div className="pagination-info">
-                    Page {page} of {totalPages}
+                    Page {state.page} of {totalPages}
                   </div>
                   
                   <Button
                     className="pagination-btn"
-                    disabled={page === totalPages || totalPages === 0}
-                    onClick={() => setPage(page + 1)}
+                    disabled={state.page === totalPages || totalPages === 0}
+                    onClick={() => actions.setFilters({ page: state.page + 1 })}
                   >
                     Next
                     <span className="emoji-visible">➡️</span>
@@ -1171,17 +1141,17 @@ Preferred Time: ${waitlistEntry.preferred_time}
         )}
 
         {/* Newsletter Management Tab */}
-        {activeTab === "newsletter" && (
+        {state.activeTab === "newsletter" && (
           <NewsletterManager />
         )}
 
         {/* Activity Logs Tab */}
-        {activeTab === "logs" && (
+        {state.activeTab === "logs" && (
           <LogPanel />
         )}
 
         {/* Super Admin Management Tab */}
-        {activeTab === "superadmin" && userRole === "superadmin" && (
+        {state.activeTab === "superadmin" && state.userRole === "superadmin" && (
           <SuperAdminManager />
         )}
       </div>
@@ -1259,18 +1229,18 @@ Preferred Time: ${waitlistEntry.preferred_time}
 
       {/* Admin Confirmation Modal */}
       <AdminConfirmationModal
-        show={confirmModal.show}
-        onClose={() => setConfirmModal(prev => ({ ...prev, show: false }))}
-        onConfirm={confirmModal.onConfirm}
-        title={confirmModal.title}
-        message={confirmModal.message}
-        actionType={confirmModal.actionType}
-        confirmButtonText={confirmModal.confirmButtonText}
-        cancelButtonText={confirmModal.cancelButtonText}
-        requiresReason={confirmModal.requiresReason}
-        reasonPlaceholder={confirmModal.reasonPlaceholder}
-        bookingDetails={confirmModal.bookingDetails}
-        isLoading={confirmModal.isLoading}
+        show={state.confirmModal.show}
+        onClose={() => actions.setModal({ show: false })}
+        onConfirm={state.confirmModal.onConfirm}
+        title={state.confirmModal.title}
+        message={state.confirmModal.message}
+        actionType={state.confirmModal.actionType}
+        confirmButtonText={state.confirmModal.confirmButtonText}
+        cancelButtonText={state.confirmModal.cancelButtonText}
+        requiresReason={state.confirmModal.requiresReason}
+        reasonPlaceholder={state.confirmModal.reasonPlaceholder}
+        bookingDetails={state.confirmModal.bookingDetails}
+        isLoading={state.confirmModal.isLoading}
       />
         </>
       )}

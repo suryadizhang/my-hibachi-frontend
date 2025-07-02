@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { API_BASE } from '../config/api';
 import './SuperAdminManager.css';
@@ -31,7 +31,7 @@ function SuperAdminManager() {
     fetchActivityLogs();
   }, [fetchAdmins, fetchActivityLogs]);
 
-  const fetchAdmins = async () => {
+  const fetchAdmins = useCallback(async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${API_BASE}/api/booking/superadmin/admins`, {
@@ -43,9 +43,9 @@ function SuperAdminManager() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
-  const fetchActivityLogs = async () => {
+  const fetchActivityLogs = useCallback(async () => {
     try {
       const res = await axios.get(`${API_BASE}/api/booking/superadmin/activity_logs?limit=50`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -54,7 +54,7 @@ function SuperAdminManager() {
     } catch (err) {
       console.error('Failed to fetch activity logs:', err);
     }
-  };
+  }, [token]);
 
   const handleCreateAdmin = async (e) => {
     e.preventDefault();

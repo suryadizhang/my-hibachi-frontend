@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Badge, Modal, Spinner, Table, Accordion } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -12,7 +12,7 @@ const NewsletterManager = () => {
   const [message, setMessage] = useState('');
   const [variant, setVariant] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [sendingStats, setSendingStats] = useState({ total: 0, sent: 0, failed: 0 });
+  const [_sendingStats, setSendingStats] = useState({ total: 0, sent: 0, failed: 0 });
   
   // Filters
   const [cityFilter, setCityFilter] = useState('');
@@ -30,7 +30,7 @@ const NewsletterManager = () => {
 
   // Draft management
   const [drafts, setDrafts] = useState([]);
-  const [selectedDraft, setSelectedDraft] = useState(null);
+  const [_selectedDraft, setSelectedDraft] = useState(null);
 
   const router = useRouter();
   const [token, setToken] = useState(null);
@@ -53,7 +53,7 @@ const NewsletterManager = () => {
     loadDrafts();
   }, [token, router, fetchRecipients, isClient]);
 
-  const fetchRecipients = async (cityFilter = '', nameFilter = '') => {
+  const fetchRecipients = useCallback(async (cityFilter = '', nameFilter = '') => {
     setLoading(true);
     try {
       let url = `${API_BASE}/api/booking/admin/newsletter/recipients`;
@@ -77,7 +77,7 @@ const NewsletterManager = () => {
       setVariant("danger");
     }
     setLoading(false);
-  };
+  }, [token]);
 
   const loadDrafts = () => {
     if (typeof window !== 'undefined') {

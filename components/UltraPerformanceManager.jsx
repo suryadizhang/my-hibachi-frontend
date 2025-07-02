@@ -3,7 +3,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 
 const UltraPerformanceManager = () => {
-  const priorityRef = useRef(new Map());
+  // const priorityRef = useRef(new Map());
   const intersectionObserverRef = useRef(null);
 
   // Ultra-fast resource prioritization
@@ -94,7 +94,7 @@ const UltraPerformanceManager = () => {
             }
             
             componentPromise
-              .then(module => {
+              .then(() => {
                 target.innerHTML = `<div>Component ${componentName} loaded</div>`;
               })
               .catch(error => {
@@ -233,7 +233,7 @@ const UltraPerformanceManager = () => {
       cleanup.forEach(fn => fn?.());
       intersectionObserverRef.current?.disconnect();
     };
-  }, []);
+  }, [prioritizeResources, optimizeMemory, optimizeScrolling, setupUltraLazyLoading, prefetchNextPage, optimizeNetwork]);
 
   return null;
 };

@@ -20,20 +20,20 @@ const UltraOptimizedComponent = memo(({ data, onAction }) => {
     onAction?.(id);
   }, [onAction]);
 
-  const handleOptimizedScroll = useCallback(() => {
-    // Optimized scroll handler with throttling
-    let ticking = false;
-    
-    return (e) => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          // Handle scroll
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-  }, []);
+  // const handleOptimizedScroll = useCallback(() => {
+  //   // Optimized scroll handler with throttling
+  //   let ticking = false;
+  //   
+  //   return (e) => {
+  //     if (!ticking) {
+  //       requestAnimationFrame(() => {
+  //         // Handle scroll
+  //         ticking = false;
+  //       });
+  //       ticking = true;
+  //     }
+  //   };
+  // }, []);
 
   return (
     <div className="ultra-optimized-component">

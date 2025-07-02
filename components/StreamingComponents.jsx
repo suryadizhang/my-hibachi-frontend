@@ -19,7 +19,7 @@ const StreamingWrapper = ({ children, fallback, priority = 'normal' }) => {
 };
 
 // Micro-suspense for individual components
-export const MicroSuspense = ({ children, name }) => (
+export const MicroSuspense = ({ children }) => (
   <Suspense fallback={
     <div className="micro-loading" style={{ 
       height: '20px', 

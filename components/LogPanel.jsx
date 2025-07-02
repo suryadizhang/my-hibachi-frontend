@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Card, Table, Form, Badge, Spinner, Alert, Button } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -43,7 +43,7 @@ const LogPanel = () => {
     fetchLogs();
   }, [token, router, pagination.page, filters, fetchLogs, isClient]);
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     setLoading(true);
     setError('');
     
@@ -80,7 +80,7 @@ const LogPanel = () => {
     }
     
     setLoading(false);
-  };
+  }, [token, router, pagination.page, pagination.limit, filters.entityType, filters.actionType]);
 
   const handleFilterChange = (field, value) => {
     setFilters(prev => ({ ...prev, [field]: value }));

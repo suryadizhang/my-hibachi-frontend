@@ -29,8 +29,9 @@ function AdminWrapper() {
             localStorage.removeItem('adminToken');
             setIsAuthenticated(false);
           }
-        } catch (error) {
+        } catch (err) {
           // Invalid token
+          console.error('Token validation error:', err);
           localStorage.removeItem('adminToken');
           setIsAuthenticated(false);
         }

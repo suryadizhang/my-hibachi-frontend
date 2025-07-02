@@ -64,7 +64,7 @@ const PerformanceOptimizer = () => {
     // Intersection Observer for lazy loading
     const setupLazyLoading = () => {
       const images = document.querySelectorAll('img[data-src]');
-      const imageObserver = new IntersectionObserver((entries, observer) => {
+      const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const img = entry.target;
@@ -91,16 +91,16 @@ const PerformanceOptimizer = () => {
     };
 
     // Critical CSS optimization
-    const optimizeCriticalCSS = () => {
-      // Remove unused CSS classes (basic implementation)
-      const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
-      stylesheets.forEach(sheet => {
-        sheet.media = 'print';
-        sheet.onload = function() {
-          this.media = 'all';
-        };
-      });
-    };
+    // const optimizeCriticalCSS = () => {
+    //   // Remove unused CSS classes (basic implementation)
+    //   const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+    //   stylesheets.forEach(sheet => {
+    //     sheet.media = 'print';
+    //     sheet.onload = function() {
+    //       this.media = 'all';
+    //     };
+    //   });
+    // };
 
     // Memory management
     const optimizeMemory = () => {

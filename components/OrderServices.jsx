@@ -8,6 +8,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import { API_BASE } from '../lib/config/api';
 import './OrderServices.css';
 
+// Phase 1: Import new components and hooks
+import SmartDateSuggestions from './SmartDateSuggestions';
+import MobileCalendar from './MobileCalendar';
+import RealTimeNotifications from './RealTimeNotifications';
+import { useEnhancedCaching } from './hooks/useEnhancedCaching';
+import { useRealTimeUpdates } from './hooks/useRealTimeUpdates';
+
 const timeSlots = ['12:00 PM', '3:00 PM', '6:00 PM', '9:00 PM'];
 
 const slotStatusColor = (status) => {
@@ -35,7 +42,36 @@ const OrderServices = () => {
   const [loading, setLoading] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(false);
   const debounceRef = useRef();
-  const [availabilityCache, setAvailabilityCache] = useState({});
+  
+  // Phase 1: Enhanced caching and real-time updates
+  const { 
+    getAvailability, 
+    prefetchAvailability, 
+    bulkPrefetch, 
+    isCacheValid,
+    cacheSize 
+  } = useEnhancedCaching();
+  
+  const { 
+    isConnected, 
+    lastUpdate, 
+    updateNotifications, 
+    clearNotification, 
+    clearAllNotifications 
+  } = useRealTimeUpdates(selectedDate);
+
+  // Detect mobile device
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Example: Replace this with your real fully booked dates logic
   const fullyBookedDates = [
@@ -87,52 +123,40 @@ const OrderServices = () => {
     // eslint-disable-next-line
   }, []);
 
+  // Phase 1: Enhanced availability fetching with smart caching
   useEffect(() => {
     if (!selectedDate || !isDateAllowed(selectedDate)) return;
+    
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      const fetchAvailability = async () => {
+    debounceRef.current = setTimeout(async () => {
+      setCalendarLoading(true);
+      
+      try {
         const dateStr = selectedDate.toISOString().split('T')[0];
-        if (availabilityCache[dateStr]) {
-          if (JSON.stringify(slotStatus) !== JSON.stringify(availabilityCache[dateStr])) {
-            setSlotStatus(availabilityCache[dateStr]);
-          }
-          return;
+        const availability = await getAvailability(dateStr);
+        
+        if (JSON.stringify(slotStatus) !== JSON.stringify(availability)) {
+          setSlotStatus(availability);
         }
-        setCalendarLoading(true);
-        try {
-          const res = await axios.get(`${API_BASE}/api/booking/availability?date=${dateStr}`);
-          if (JSON.stringify(slotStatus) !== JSON.stringify(res.data)) {
-            setSlotStatus(res.data);
-            setAvailabilityCache(prev => ({ ...prev, [dateStr]: res.data }));
-            // Prefetch next 2 days availability
-            for (let offset = 1; offset <= 2; offset++) {
-              const prefetchDate = new Date(selectedDate);
-              prefetchDate.setDate(prefetchDate.getDate() + offset);
-              const prefetchStr = prefetchDate.toISOString().split('T')[0];
-              if (!availabilityCache[prefetchStr]) {
-                axios.get(`${API_BASE}/api/booking/availability?date=${prefetchStr}`).then(res => {
-                  setAvailabilityCache(prev => ({ ...prev, [prefetchStr]: res.data }));
-                });
-              }
-            }
-          }
-        } catch (error) {
-          console.warn('API not available, using default slot status:', error.message);
-          // Set default available status for all time slots when API is not available
-          const defaultSlotStatus = {};
-          timeSlots.forEach(slot => {
-            defaultSlotStatus[slot] = { status: 'available' };
-          });
-          setSlotStatus(defaultSlotStatus);
-        }
+        
+        // Phase 1: Trigger smart prefetching
+        prefetchAvailability(selectedDate);
+        
+      } catch (error) {
+        console.warn('API not available, using default slot status:', error.message);
+        // Set default available status for all time slots when API is not available
+        const defaultSlotStatus = {};
+        timeSlots.forEach(slot => {
+          defaultSlotStatus[slot] = { status: 'available' };
+        });
+        setSlotStatus(defaultSlotStatus);
+      } finally {
         setCalendarLoading(false);
-      };
-      fetchAvailability();
+      }
     }, 300); // 300ms debounce
+    
     return () => clearTimeout(debounceRef.current);
-    // eslint-disable-next-line
-  }, [selectedDate]);
+  }, [selectedDate, getAvailability, prefetchAvailability, slotStatus]);
 
   const handleSubmit = async (e) => {
     if (e && e.preventDefault) {
@@ -409,21 +433,68 @@ const OrderServices = () => {
                     <h3 className="calendar-title">Select Your Date</h3>
                   </div>
                   
+                  {/* Phase 1: Smart Date Suggestions */}
+                  <SmartDateSuggestions 
+                    onDateSelect={setSelectedDate}
+                    selectedDate={selectedDate}
+                  />
+                  
                   <div style={{ position: "relative", minHeight: "340px" }}>
                     {calendarLoading && (
                       <div className="loading-overlay">
                         <div className="loading-spinner"></div>
                       </div>
                     )}
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={date => setSelectedDate(date)}
-                      dayClassName={dayClassName}
-                      minDate={minSelectableDate}
-                      excludeDates={fullyBookedDates}
-                      inline
-                      aria-label="Select booking date"
-                    />
+                    
+                    {/* Phase 1: Mobile-optimized calendar */}
+                    {isMobile ? (
+                      <MobileCalendar
+                        selectedDate={selectedDate}
+                        onDateSelect={setSelectedDate}
+                        minDate={minSelectableDate}
+                        excludeDates={fullyBookedDates}
+                        dayClassName={dayClassName}
+                        onMonthChange={(date) => {
+                          // Phase 1: Prefetch month data when navigating
+                          const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+                          const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                          const monthDates = [];
+                          
+                          for (let d = new Date(startOfMonth); d <= endOfMonth; d.setDate(d.getDate() + 1)) {
+                            if (d >= minSelectableDate) {
+                              monthDates.push(d.toISOString().split('T')[0]);
+                            }
+                          }
+                          
+                          // Bulk prefetch month data
+                          bulkPrefetch(monthDates);
+                        }}
+                      />
+                    ) : (
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={date => setSelectedDate(date)}
+                        dayClassName={dayClassName}
+                        minDate={minSelectableDate}
+                        excludeDates={fullyBookedDates}
+                        inline
+                        aria-label="Select booking date"
+                        onMonthChange={(date) => {
+                          // Phase 1: Prefetch month data for desktop too
+                          const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+                          const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                          const monthDates = [];
+                          
+                          for (let d = new Date(startOfMonth); d <= endOfMonth; d.setDate(d.getDate() + 1)) {
+                            if (d >= minSelectableDate) {
+                              monthDates.push(d.toISOString().split('T')[0]);
+                            }
+                          }
+                          
+                          bulkPrefetch(monthDates);
+                        }}
+                      />
+                    )}
                   </div>
                   
                   <div className="status-legend">
@@ -471,394 +542,5 @@ const OrderServices = () => {
                         Full Name
                       </Form.Label>
                       <Form.Control 
-                        id="name" 
-                        type="text" 
-                        required
-                        className="enhanced-form-control"
-                        placeholder="Enter your full name"
-                        value={formData.name}
-                        onChange={e => setFormData({ ...formData, name: e.target.value })} 
-                      />
-                    </div>
-
-                    <div className="enhanced-form-group">
-                      <Form.Label htmlFor="phone" className="enhanced-form-label">
-                        <span className="label-icon emoji-visible">📞</span>
-                        Phone Number
-                      </Form.Label>
-                      <Form.Control 
-                        id="phone" 
-                        type="tel" 
-                        required 
-                        pattern="[0-9]{10,15}"
-                        className="enhanced-form-control"
-                        placeholder="Enter your phone number"
-                        value={formData.phone}
-                        onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                        isInvalid={formData.phone && !isPhoneValid(formData.phone)}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please enter a valid phone number (10-15 digits).
-                      </Form.Control.Feedback>
-                    </div>
-
-                    <div className="enhanced-form-group">
-                      <Form.Label htmlFor="email" className="enhanced-form-label">
-                        <span className="label-icon emoji-visible">✉️</span>
-                        Email Address
-                      </Form.Label>
-                      <Form.Control 
-                        id="email" 
-                        type="email" 
-                        required 
-                        className="enhanced-form-control"
-                        placeholder="Enter your email address"
-                        value={formData.email}
-                        onChange={e => setFormData({ ...formData, email: e.target.value })} 
-                      />
-                    </div>
-
-                    <div className="enhanced-form-group">
-                      <Form.Label htmlFor="address" className="enhanced-form-label">
-                        <span className="label-icon emoji-visible">🏠</span>
-                        Street Address
-                      </Form.Label>
-                      <Form.Control
-                        id="address"
-                        type="text"
-                        required
-                        className="enhanced-form-control"
-                        placeholder="Enter your street address"
-                        value={formData.address}
-                        onChange={e => setFormData({ ...formData, address: e.target.value })}
-                      />
-                    </div>
-
-                    <div className="address-grid">
-                      <div className="enhanced-form-group">
-                        <Form.Label htmlFor="city" className="enhanced-form-label">
-                          <span className="label-icon emoji-visible">🏙️</span>
-                          City
-                        </Form.Label>
-                        <Form.Control
-                          id="city"
-                          type="text"
-                          required
-                          className="enhanced-form-control"
-                          placeholder="Enter your city"
-                          value={formData.city}
-                          onChange={e => setFormData({ ...formData, city: e.target.value })}
-                        />
-                      </div>
-
-                      <div className="enhanced-form-group">
-                        <Form.Label htmlFor="zipcode" className="enhanced-form-label">
-                          <span className="label-icon emoji-visible">📮</span>
-                          Zip Code
-                        </Form.Label>
-                        <Form.Control
-                          id="zipcode"
-                          type="text"
-                          required
-                          className="enhanced-form-control"
-                          placeholder="Enter zip code"
-                          value={formData.zipcode}
-                          onChange={e => setFormData({ ...formData, zipcode: e.target.value })}
-                          isInvalid={formData.zipcode && !isZipValid(formData.zipcode)}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          Please enter a valid zip code (4-10 digits).
-                        </Form.Control.Feedback>
-                      </div>
-                    </div>
-
-                    <div className="enhanced-form-group">
-                      <Form.Label htmlFor="contactPreference" className="enhanced-form-label">
-                        <span className="label-icon emoji-visible">📱</span>
-                        Contact Preference
-                      </Form.Label>
-                      <Form.Select 
-                        id="contactPreference" 
-                        required
-                        className="enhanced-form-control"
-                        value={formData.contactPreference}
-                        onChange={e => setFormData({ ...formData, contactPreference: e.target.value })}
-                      >
-                        <option value="" disabled>Choose your preference</option>
-                        <option value="text">📱 Text Message</option>
-                        <option value="call">📞 Phone Call</option>
-                        <option value="email">✉️ Email</option>
-                      </Form.Select>
-                    </div>
-
-                    <div className="timeslot-section">
-                      <div className="timeslot-header">
-                        <span className="calendar-icon emoji-visible">⏰</span>
-                        <h4 className="timeslot-title">Select Time Slot</h4>
-                      </div>
-                      
-                      <Form.Select 
-                        id="timeSlot" 
-                        required 
-                        className="enhanced-form-control"
-                        value={formData.timeSlot}
-                        onChange={e => setFormData({ ...formData, timeSlot: e.target.value })}
-                      >
-                        <option value="">Select a time</option>
-                        {timeSlots.map(time => (
-                          <option key={time} value={time}
-                            disabled={slotStatus[time]?.status === "booked"}
-                            className={isSelectedTime(time) ? "selected-time" : ""}
-                          >
-                            {time}
-                            {slotStatus[time]?.status === "available" && " (Available)"}
-                            {slotStatus[time]?.status === "waiting" && " (Waiting List)"}
-                            {slotStatus[time]?.status === "booked" && " (Booked)"}
-                          </option>
-                        ))}
-                      </Form.Select>
-                      
-                      <TimeSlotStatus timeSlots={timeSlots} slotStatus={slotStatus} selectedTime={formData.timeSlot} />
-                    </div>
-
-                    <Button
-                      type="button"
-                      className="enhanced-btn"
-                      disabled={loading || isBookingDisabled()}
-                      onClick={handleSubmitClick}
-                      aria-label="Submit Booking"
-                    >
-                      {loading ? (
-                        <Spinner animation="border" size="sm" />
-                      ) : (
-                        <>
-                          <span className="btn-icon emoji-visible">📅</span>
-                          Submit Booking
-                        </>
-                      )}
-                    </Button>
-                  </Form>
-
-                  {/* Info Cards */}
-                  <div className="info-card warning">
-                    <div className="info-content">
-                      <span className="info-icon emoji-visible">⚠️</span>
-                      <div>
-                        <div className="info-text">Deposit Required</div>
-                        <small>Booking requires a deposit to lock the slot within 6 hours. If not, the slot will be released.</small>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="info-card info">
-                    <div className="info-content">
-                      <span className="info-icon emoji-visible">ℹ️</span>
-                      <div>
-                        <div className="info-text">Advance Booking</div>
-                        <small>Bookings must be made at least 2 days in advance.</small>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Waitlist Section */}
-                  {timeSlots.every(time => slotStatus[time]?.status === "booked") && (
-                    <div className="info-card warning">
-                      <div className="info-content">
-                        <span className="info-icon emoji-visible">⏰</span>
-                        <div>
-                          <div className="info-text">All Slots Booked</div>
-                          <small>All time slots are fully booked for this date. Please choose another date or join the waitlist.</small>
-                        </div>
-                      </div>
-                      <Button
-                        variant="warning"
-                        className="enhanced-btn enhanced-btn-warning mt-3"
-                        onClick={handleWaitlistOpen}
-                        aria-label="Join Waitlist"
-                      >
-                        <span className="btn-icon emoji-visible">📝</span>
-                        Join Waitlist
-                      </Button>
-                    </div>
-                  )}
-
-                  {allSlotsFullyBooked && nextAvailableDate && (
-                    <div className="info-card info">
-                      <div className="info-content">
-                        <span className="info-icon emoji-visible">📅</span>
-                        <div>
-                          <div className="info-text">Next Available Date</div>
-                          <small>{nextAvailableDate.toLocaleDateString()}</small>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </Card>
-      </Container>
-
-      {/* Booking Confirmation Modal */}
-      {showModal && (
-        <Suspense fallback={<Spinner animation="border" />}>
-          <BookingModal
-            show={showModal}
-            onClose={() => setShowModal(false)}
-            onConfirm={(e) => {
-              setShowModal(false);
-              handleSubmit(e);
-            }}
-            selectedDate={selectedDate}
-            formData={formData}
-          />
-        </Suspense>
-      )}
-      
-      {/* Missing Fields Modal */}
-      {showMissingFieldsModal && (
-        <div
-          className="modal-backdrop"
-          role="dialog"
-          aria-modal="true"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0,0,0,0.5)",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "2rem",
-              borderRadius: "15px",
-              minWidth: "320px",
-              maxWidth: "500px",
-              maxHeight: "80vh",
-              overflowY: "auto",
-              margin: "1rem",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
-            }}
-          >
-            <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>⚠️</div>
-              <h3 style={{ color: "#dc3545", marginBottom: "0.5rem" }}>Missing Required Fields</h3>
-              <p style={{ color: "#6c757d", margin: "0" }}>
-                Please complete all required fields to proceed with your booking.
-              </p>
-            </div>
-            
-            <div style={{ marginBottom: "1.5rem" }}>
-              <h5 style={{ color: "#495057", marginBottom: "1rem" }}>Please complete:</h5>
-              <ul style={{ 
-                listStyle: "none", 
-                padding: "1rem", 
-                margin: "0",
-                background: "#f8f9fa",
-                borderRadius: "8px"
-              }}>
-                {getMissingFields().map((field, index) => (
-                  <li key={index} style={{ 
-                    padding: "0.5rem 0", 
-                    borderBottom: index < getMissingFields().length - 1 ? "1px solid #dee2e6" : "none",
-                    display: "flex",
-                    alignItems: "center"
-                  }}>
-                    <span style={{ color: "#dc3545", marginRight: "0.5rem" }}>•</span>
-                    <span style={{ color: "#495057" }}>{field}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-              <Button
-                variant="primary"
-                onClick={() => setShowMissingFieldsModal(false)}
-                style={{
-                  background: "linear-gradient(135deg, #007bff 0%, #0056b3 100%)",
-                  border: "none",
-                  borderRadius: "25px",
-                  padding: "0.75rem 2rem",
-                  fontWeight: "600",
-                  boxShadow: "0 4px 15px rgba(0,123,255,0.3)",
-                }}
-              >
-                <span className="emoji-visible" style={{ marginRight: "0.5rem" }}>✏️</span>
-                Continue Filling Form
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Waitlist Modal */}
-      {showWaitlistModal && (
-        <Suspense fallback={<Spinner animation="border" />}>
-          <WaitlistModal
-            show={showWaitlistModal}
-            onClose={() => setShowWaitlistModal(false)}
-            onSubmit={handleWaitlistSubmit}
-            waitlistData={waitlistData}
-            setWaitlistData={setWaitlistData}
-            loading={loading}
-            waitlistMessage={waitlistMessage}
-            waitlistVariant={waitlistVariant}
-            timeSlots={timeSlots}
-          />
-        </Suspense>
-      )}
-      {/* Waitlist feedback */}
-      {waitlistMessage && !showWaitlistModal && (
-        <Alert variant={waitlistVariant} className="enhanced-alert mt-3" aria-live="polite">
-          <span className="alert-icon emoji-visible">
-            {waitlistVariant === 'success' ? '✅' : '⚠️'}
-          </span>
-          {waitlistMessage}
-        </Alert>
-      )}
-    </div>
-  );
-};
-
-const TimeSlotStatus = React.memo(({ timeSlots, slotStatus, selectedTime }) => (
-  <div className="slot-status-container">
-    {timeSlots.map(time => (
-      <div 
-        key={time} 
-        className={`slot-status-item ${selectedTime === time ? 'selected' : ''}`}
-      >
-        <div
-          className="slot-status-dot"
-          style={{
-            background: slotStatusColor(slotStatus[time]?.status),
-          }}
-        />
-        <div>
-          <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{time}</div>
-          <div style={{ 
-            fontSize: '0.8rem', 
-            color: slotStatusColor(slotStatus[time]?.status),
-            fontWeight: 500 
-          }}>
-            {slotStatus[time]?.status === "available" && "Available"}
-            {slotStatus[time]?.status === "waiting" && "Waiting List"}
-            {slotStatus[time]?.status === "booked" && "Booked"}
-          </div>
-        </div>
-      </div>
-    ))}
-  </div>
-));
-
-export default OrderServices;
+                        id="name"
 

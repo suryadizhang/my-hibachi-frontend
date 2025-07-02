@@ -379,6 +379,26 @@ function AdminPanel() {
     }
   };
 
+  const calculateFallbackKpis = useCallback(() => {
+    if (bookings.length > 0) {
+      console.log('AdminPanel: Using fallback KPI calculation');
+      const now = new Date();
+      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      
+      const fallbackKpis = {
+        total: bookings.length,
+        week: bookings.filter(b => new Date(b.date) >= startOfWeek).length,
+        month: bookings.filter(b => new Date(b.date) >= startOfMonth).length,
+        waitlist: 0 // add waitlist logic if available
+      };
+      console.log('AdminPanel: Fallback KPIs:', fallbackKpis);
+      setKpis(fallbackKpis);
+    } else {
+      console.log('AdminPanel: No bookings available for fallback KPI calculation');
+    }
+  }, [bookings]);
+
   useEffect(() => {
     // Fetch KPIs from backend independently of bookings
     const fetchKpis = async () => {
@@ -397,23 +417,7 @@ function AdminPanel() {
           data: error.response?.data
         });
         // Only use fallback if we have bookings data
-        if (bookings.length > 0) {
-          console.log('AdminPanel: Using fallback KPI calculation');
-          const now = new Date();
-          const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-          
-          const fallbackKpis = {
-            total: bookings.length,
-            week: bookings.filter(b => new Date(b.date) >= startOfWeek).length,
-            month: bookings.filter(b => new Date(b.date) >= startOfMonth).length,
-            waitlist: 0 // add waitlist logic if available
-          };
-          console.log('AdminPanel: Fallback KPIs:', fallbackKpis);
-          setKpis(fallbackKpis);
-        } else {
-          console.log('AdminPanel: No bookings available for fallback KPI calculation');
-        }
+        calculateFallbackKpis();
       }
     };
     if (token) {
@@ -422,7 +426,7 @@ function AdminPanel() {
     } else {
       console.log('AdminPanel: No token available for KPIs fetch');
     }
-  }, [token]); // Only depend on token, not bookings
+  }, [token, calculateFallbackKpis]);
 
   const filteredBookings = bookings.filter(b => {
     const searchTerm = search.toLowerCase();

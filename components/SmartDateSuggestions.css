@@ -1,0 +1,273 @@
+/* Smart Date Suggestions Styles */
+
+.smart-date-suggestions {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.suggestions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.suggestions-header h5 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.suggestion-section {
+  margin-bottom: 16px;
+}
+
+.suggestion-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.suggestion-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestion-btn {
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-width: 1px;
+  white-space: nowrap;
+}
+
+.suggestion-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.suggestion-btn:active {
+  transform: translateY(0);
+}
+
+/* Weekend specific styling */
+.weekend-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: none;
+  color: white;
+}
+
+.weekend-btn.btn-outline-success {
+  background: transparent;
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.weekend-btn.btn-outline-success:hover {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+/* Popular dates styling */
+.popular-btn {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+  border: none;
+  color: #212529;
+  font-weight: 600;
+}
+
+.popular-btn.btn-outline-warning {
+  background: transparent;
+  color: #ffc107;
+  border-color: #ffc107;
+}
+
+.popular-btn.btn-outline-warning:hover {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+  color: #212529;
+}
+
+/* Loading state */
+.smart-suggestions-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Error state */
+.smart-suggestions-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+/* No suggestions state */
+.no-suggestions {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}
+
+.no-suggestions p {
+  margin: 8px 0 4px 0;
+  color: #495057;
+}
+
+.no-suggestions small {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .smart-date-suggestions {
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+  
+  .suggestions-header h5 {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 0.85rem;
+  }
+  
+  .suggestion-btn {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .suggestions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .refresh-btn {
+    align-self: flex-end;
+  }
+  
+  .suggestion-grid {
+    gap: 6px;
+  }
+  
+  .suggestion-btn {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .smart-date-suggestions {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .suggestions-header {
+    border-color: #4a5568;
+  }
+  
+  .suggestions-header h5 {
+    color: #e2e8f0;
+  }
+  
+  .section-title {
+    color: #cbd5e0;
+  }
+  
+  .smart-suggestions-loading {
+    background: #4a5568;
+    color: #cbd5e0;
+  }
+  
+  .no-suggestions {
+    color: #a0aec0;
+  }
+  
+  .no-suggestions p {
+    color: #cbd5e0;
+  }
+}
+
+/* Animation for suggestion buttons */
+@keyframes suggestionAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.suggestion-btn {
+  animation: suggestionAppear 0.3s ease-out;
+}
+
+.suggestion-btn:nth-child(1) { animation-delay: 0.1s; }
+.suggestion-btn:nth-child(2) { animation-delay: 0.2s; }
+.suggestion-btn:nth-child(3) { animation-delay: 0.3s; }
+.suggestion-btn:nth-child(4) { animation-delay: 0.4s; }
+.suggestion-btn:nth-child(5) { animation-delay: 0.5s; }
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .suggestion-btn {
+    border-width: 2px;
+  }
+  
+  .weekend-btn {
+    border: 2px solid #28a745;
+  }
+  
+  .popular-btn {
+    border: 2px solid #ffc107;
+  }
+}

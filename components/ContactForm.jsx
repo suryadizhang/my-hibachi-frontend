@@ -40,7 +40,8 @@ export default function ContactForm() {
         guests: '',
         message: ''
       });
-    } catch (error) {
+    } catch (err) {
+      console.error('Contact form submission error:', err);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);

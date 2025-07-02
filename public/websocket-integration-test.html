@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Integration Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .status { padding: 10px; border-radius: 4px; margin: 10px 0; }
+        .connected { background: #d4edda; color: #155724; }
+        .disconnected { background: #f8d7da; color: #721c24; }
+        .log-container { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin: 15px 0; max-height: 400px; overflow-y: auto; }
+        .log-entry { margin: 5px 0; padding: 5px; border-left: 3px solid #007bff; background: #e9ecef; }
+        .notification { border-left-color: #28a745; background: #d1ecf1; }
+        .error { border-left-color: #dc3545; background: #f8d7da; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 4px; }
+        input, select { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔌 WebSocket Integration Test</h1>
+        <p>This page tests the complete real-time booking system integration.</p>
+        
+        <div id="connection-status" class="status disconnected">
+            🔴 WebSocket: Disconnected
+        </div>
+
+        <div class="test-section">
+            <h3>📡 WebSocket Connection</h3>
+            <button onclick="connectWebSocket()">Connect to WebSocket</button>
+            <button onclick="disconnectWebSocket()">Disconnect</button>
+            <button onclick="subscribeToDate()">Subscribe to Date</button>
+            <button onclick="sendPing()">Send Ping</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📅 Date Subscription</h3>
+            <label>Subscribe to date: </label>
+            <input type="date" id="subscribeDate" value="2025-07-03">
+            <button onclick="subscribeToSpecificDate()">Subscribe</button>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Create Test Booking</h3>
+            <div>
+                <label>Date: </label>
+                <input type="date" id="bookingDate" value="2025-07-03">
+                <label>Time: </label>
+                <select id="bookingTime">
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="3:00 PM">3:00 PM</option>
+                    <option value="6:00 PM">6:00 PM</option>
+                    <option value="9:00 PM">9:00 PM</option>
+                </select>
+                <button onclick="createTestBooking()">Create Booking</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Availability Check</h3>
+            <label>Check date: </label>
+            <input type="date" id="availabilityDate" value="2025-07-03">
+            <button onclick="checkAvailability()">Check Availability</button>
+        </div>
+
+        <div class="log-container">
+            <h3>📝 Activity Log</h3>
+            <div id="activity-log"></div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let logContainer = document.getElementById('activity-log');
+        let statusDiv = document.getElementById('connection-status');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        function updateStatus(connected) {
+            if (connected) {
+                statusDiv.className = 'status connected';
+                statusDiv.innerHTML = '🟢 WebSocket: Connected';
+            } else {
+                statusDiv.className = 'status disconnected';
+                statusDiv.innerHTML = '🔴 WebSocket: Disconnected';
+            }
+        }
+
+        function connectWebSocket() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                log('WebSocket already connected!', 'info');
+                return;
+            }
+
+            log('Connecting to WebSocket...', 'info');
+            ws = new WebSocket('ws://localhost:8000/ws/booking-updates');
+
+            ws.onopen = function(event) {
+                log('✅ WebSocket connected successfully!', 'info');
+                updateStatus(true);
+            };
+
+            ws.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    log(`📨 Received: ${JSON.stringify(data, null, 2)}`, 'notification');
+                    
+                    // Handle different message types
+                    if (data.type === 'availability_update') {
+                        log(`🔄 AVAILABILITY UPDATE: ${data.date} ${data.timeSlot} → ${data.status}`, 'notification');
+                    } else if (data.type === 'availability_snapshot') {
+                        log(`📊 AVAILABILITY SNAPSHOT: ${data.date}`, 'notification');
+                        Object.entries(data.availability).forEach(([slot, info]) => {
+                            log(`   ${slot}: ${info.status} (${info.count} bookings)`, 'info');
+                        });
+                    } else if (data.type === 'pong') {
+                        log('🏓 Received pong response', 'info');
+                    }
+                } catch (e) {
+                    log(`❌ Failed to parse message: ${event.data}`, 'error');
+                }
+            };
+
+            ws.onclose = function(event) {
+                log(`🔴 WebSocket closed (code: ${event.code})`, 'info');
+                updateStatus(false);
+            };
+
+            ws.onerror = function(error) {
+                log('❌ WebSocket error: ' + error, 'error');
+                updateStatus(false);
+            };
+        }
+
+        function disconnectWebSocket() {
+            if (ws) {
+                ws.close();
+                ws = null;
+                log('WebSocket disconnected manually', 'info');
+                updateStatus(false);
+            }
+        }
+
+        function subscribeToDate() {
+            subscribeToSpecificDate();
+        }
+
+        function subscribeToSpecificDate() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('❌ WebSocket not connected!', 'error');
+                return;
+            }
+
+            const date = document.getElementById('subscribeDate').value;
+            const message = {
+                type: 'subscribe',
+                date: date
+            };
+
+            ws.send(JSON.stringify(message));
+            log(`📅 Subscribed to date: ${date}`, 'info');
+        }
+
+        function sendPing() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('❌ WebSocket not connected!', 'error');
+                return;
+            }
+
+            const message = { type: 'ping' };
+            ws.send(JSON.stringify(message));
+            log('🏓 Sent ping', 'info');
+        }
+
+        async function createTestBooking() {
+            const date = document.getElementById('bookingDate').value;
+            const timeSlot = document.getElementById('bookingTime').value;
+
+            const bookingData = {
+                name: 'Test User',
+                phone: '555-0123',
+                email: 'test@example.com',
+                address: '123 Test St',
+                city: 'Test City',
+                zipcode: '12345',
+                date: date,
+                time_slot: timeSlot,
+                contact_preference: 'email'
+            };
+
+            try {
+                log(`🧪 Creating test booking: ${date} at ${timeSlot}...`, 'info');
+                
+                const response = await fetch('http://localhost:8000/api/booking/book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    log(`✅ Booking created successfully! ID: ${result.booking_id}`, 'notification');
+                } else {
+                    log(`❌ Booking failed: ${result.detail}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Error creating booking: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkAvailability() {
+            const date = document.getElementById('availabilityDate').value;
+
+            try {
+                log(`📊 Checking availability for ${date}...`, 'info');
+                
+                const response = await fetch(`http://localhost:8000/api/booking/availability?date=${date}`);
+                const availability = await response.json();
+
+                if (response.ok) {
+                    log(`📊 Availability for ${date}:`, 'info');
+                    Object.entries(availability).forEach(([slot, info]) => {
+                        log(`   ${slot}: ${info.status}`, 'info');
+                    });
+                } else {
+                    log(`❌ Failed to get availability: ${availability.detail}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Error checking availability: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-connect on page load
+        window.onload = function() {
+            log('🚀 WebSocket Integration Test started', 'info');
+            setTimeout(connectWebSocket, 1000);
+        };
+
+        // Clean up on page unload
+        window.onbeforeunload = function() {
+            if (ws) {
+                ws.close();
+            }
+        };
+    </script>
+</body>
+</html>
