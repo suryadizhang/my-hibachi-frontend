@@ -7,6 +7,7 @@ import AdminConfirmationModal from './AdminConfirmationModal';
 import NewsletterManager from './NewsletterManager';
 import LogPanel from './LogPanel';
 import SuperAdminManager from './SuperAdminManager';
+import CustomerManagement from './admin/CustomerManagement';
 import OptimizedBookingCard from './performance/OptimizedBookingCard';
 import { 
   useOptimizedAdminState, 
@@ -32,18 +33,18 @@ function AdminPanel() {
   const [token, setToken] = useState(null);
 
   // Router and constants
-  const router = useRouter();
-  const pageSize = 10;
+  const _router = useRouter();
+  const _pageSize = 10;
 
   // Performance monitoring
-  const renderCount = useRenderProfiler('AdminPanel');
+  const _renderCount = useRenderProfiler('AdminPanel');
   
   // Debounced search for better performance
   const [searchTerm, setSearchTerm, debouncedSearch] = useDebouncedState(state.search, 300);
 
   
   // Optimized booking filtering with memoization
-  const filteredBookings = useOptimizedBookingFilters(state.bookings, {
+  const _filteredBookings = useOptimizedBookingFilters(state.bookings, {
     search: debouncedSearch,
     status: null, // Add filtering by status if needed
     sortBy: 'date',
@@ -51,21 +52,21 @@ function AdminPanel() {
   });
 
   // Memoized pagination calculation
-  const paginatedBookings = useMemo(() => {
-    const startIndex = (state.page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
+  const _paginatedBookings = useMemo(() => {
+    const _startIndex = (state.page - 1) * pageSize;
+    const _endIndex = startIndex + pageSize;
     return filteredBookings.slice(startIndex, endIndex);
   }, [filteredBookings, state.page, pageSize]);
 
   // Total pages calculation
-  const totalPages = useMemo(() => {
+  const _totalPages = useMemo(() => {
     return Math.ceil(filteredBookings.length / pageSize);
   }, [filteredBookings.length, pageSize]);
 
   // Client-side only initialization
   useEffect(() => {
     setIsClient(true);
-    const storedToken = localStorage.getItem("adminToken");
+    const _storedToken = localStorage.getItem("adminToken");
     setToken(storedToken);
   }, []);
 
@@ -91,20 +92,20 @@ function AdminPanel() {
   }, [token, state.mode, fetchUpcoming]);
 
   // KPI card click handlers - optimized with stable callbacks
-  const handleThisWeekClick = useStableCallback(async () => {
+  const _handleThisWeekClick = useStableCallback(async () => {
     actions.setFilters({ mode: "weekly" });
     
     // Get current week's Monday
-    const now = new Date();
-    const monday = new Date(now.setDate(now.getDate() - now.getDay() + 1));
-    const mondayStr = monday.toISOString().split('T')[0];
+    const _now = new Date();
+    const _monday = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+    const _mondayStr = monday.toISOString().split('T')[0];
     
     actions.setFilters({ date: mondayStr });
     
     // Fetch current week data
     try {
       actions.setLoading(true);
-      const res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${mondayStr}`, {
+      const _res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${mondayStr}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       actions.setBookings(res.data);
@@ -114,20 +115,20 @@ function AdminPanel() {
     }
   }, [actions, token]);
 
-  const handleThisMonthClick = useStableCallback(async () => {
+  const _handleThisMonthClick = useStableCallback(async () => {
     actions.setFilters({ mode: "monthly" });
     
     // Get current month and year
-    const now = new Date();
-    const currentYear = now.getFullYear().toString();
-    const currentMonth = (now.getMonth() + 1).toString();
+    const _now = new Date();
+    const _currentYear = now.getFullYear().toString();
+    const _currentMonth = (now.getMonth() + 1).toString();
     
     actions.setFilters({ year: currentYear, month: currentMonth });
     
     // Fetch current month data
     try {
       actions.setLoading(true);
-      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${currentYear}&month=${currentMonth}`, {
+      const _res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${currentYear}&month=${currentMonth}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       actions.setBookings(res.data);
@@ -137,29 +138,29 @@ function AdminPanel() {
     }
   }, [actions, token]);
 
-  const handleTotalBookingsClick = useStableCallback(async () => {
+  const _handleTotalBookingsClick = useStableCallback(async () => {
     actions.setFilters({ mode: "total" });
     
     // Fetch all bookings from all time periods and sort by date (earliest first) and deposit status
     try {
       actions.setLoading(true);
-      const res = await axios.get(`${API_BASE}/api/booking/admin/all-bookings`, {
+      const _res = await axios.get(`${API_BASE}/api/booking/admin/all-bookings`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
       // Sort by date (earliest first), then by deposit status (pending first)
-      const sortedBookings = res.data.sort((a, b) => {
+      const _sortedBookings = res.data.sort((a, b) => {
         // First sort by date (earliest first)
-        const dateCompare = new Date(a.date) - new Date(b.date);
+        const _dateCompare = new Date(a.date) - new Date(b.date);
         if (dateCompare !== 0) return dateCompare;
         
         // Then by time slot
-        const timeCompare = (a.time_slot || '').localeCompare(b.time_slot || '');
+        const _timeCompare = (a.time_slot || '').localeCompare(b.time_slot || '');
         if (timeCompare !== 0) return timeCompare;
         
         // Finally by deposit status (pending deposits first)
-        const aDeposit = a.deposit_received || 0;
-        const bDeposit = b.deposit_received || 0;
+        const _aDeposit = a.deposit_received || 0;
+        const _bDeposit = b.deposit_received || 0;
         return aDeposit - bDeposit;
       });
       
@@ -170,24 +171,24 @@ function AdminPanel() {
     }
   }, [actions, token]);
 
-  const handleWaitlistClick = useStableCallback(async () => {
+  const _handleWaitlistClick = useStableCallback(async () => {
     actions.setFilters({ mode: "waitlist" });
     
     // Fetch all waitlist entries sorted by earliest date
     try {
       actions.setLoading(true);
-      const res = await axios.get(`${API_BASE}/api/booking/admin/waitlist`, {
+      const _res = await axios.get(`${API_BASE}/api/booking/admin/waitlist`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
       // Sort by preferred date (earliest first), then by created_at
-      const sortedWaitlist = res.data.sort((a, b) => {
+      const _sortedWaitlist = res.data.sort((a, b) => {
         // First sort by preferred date (earliest first)
-        const dateCompare = new Date(a.preferred_date) - new Date(b.preferred_date);
+        const _dateCompare = new Date(a.preferred_date) - new Date(b.preferred_date);
         if (dateCompare !== 0) return dateCompare;
         
         // Then by preferred time
-        const timeCompare = (a.preferred_time || '').localeCompare(b.preferred_time || '');
+        const _timeCompare = (a.preferred_time || '').localeCompare(b.preferred_time || '');
         if (timeCompare !== 0) return timeCompare;
         
         // Finally by creation time (earliest first)
@@ -201,26 +202,26 @@ function AdminPanel() {
     }
   }, [actions, token]);
 
-  const fetchCurrentUser = useStableCallback(async () => {
+  const _fetchCurrentUser = useStableCallback(async () => {
     try {
       // Decode the token to get username and role
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const _payload = JSON.parse(atob(token.split('.')[1]));
       actions.setUser(payload.sub || 'Admin', payload.role || 'admin');
     } catch {
       actions.setUser('Admin', 'admin');
     }
   }, [token, actions]);
 
-  const fetchWeekly = useStableCallback(async () => {
+  const _fetchWeekly = useStableCallback(async () => {
     if (!state.date) return;
     actions.setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${state.date}`, {
+      const _res = await axios.get(`${API_BASE}/api/booking/admin/weekly?start_date=${state.date}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       actions.setBookings(res.data);
     } catch (e) {
-      const errorMsg = e.response?.status === 401
+      const _errorMsg = e.response?.status === 401
         ? "Session expired. Please log in again."
         : e.response?.data?.detail || "Error fetching weekly data.";
       actions.setError(errorMsg);
@@ -232,16 +233,16 @@ function AdminPanel() {
     }
   }, [state.date, token, actions, router]);
 
-  const fetchMonthly = useStableCallback(async () => {
+  const _fetchMonthly = useStableCallback(async () => {
     if (!state.year || !state.month) return;
     actions.setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${state.year}&month=${state.month}`, {
+      const _res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${state.year}&month=${state.month}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       actions.setBookings(res.data);
     } catch (e) {
-      const errorMsg = e.response?.status === 401
+      const _errorMsg = e.response?.status === 401
         ? "Session expired. Please log in again."
         : e.response?.data?.detail || "Error fetching monthly data.";
       actions.setError(errorMsg);
@@ -253,16 +254,16 @@ function AdminPanel() {
     }
   }, [state.year, state.month, token, actions, router]);
 
-  const fetchUpcoming = useStableCallback(async () => {
+  const _fetchUpcoming = useStableCallback(async () => {
     actions.setLoading(true);
     try {
       // Get current date and 14 days from now
-      const now = new Date();
-      const fourteenDaysLater = new Date();
+      const _now = new Date();
+      const _fourteenDaysLater = new Date();
       fourteenDaysLater.setDate(now.getDate() + 14);
       
       // Collect bookings from all months that overlap with our 14-day range
-      const monthsToFetch = new Set();
+      const _monthsToFetch = new Set();
       
       // Add current month
       monthsToFetch.add(`${now.getFullYear()}-${now.getMonth() + 1}`);
@@ -278,7 +279,7 @@ function AdminPanel() {
       for (const monthKey of monthsToFetch) {
         const [year, month] = monthKey.split('-');
         try {
-          const res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${year}&month=${month}`, {
+          const _res = await axios.get(`${API_BASE}/api/booking/admin/monthly?year=${year}&month=${month}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           allBookings = allBookings.concat(res.data);
@@ -288,22 +289,22 @@ function AdminPanel() {
       }
       
       // Filter bookings to only show next 14 days
-      const upcomingBookings = allBookings.filter(booking => {
-        const bookingDate = new Date(booking.date);
-        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const _upcomingBookings = allBookings.filter(booking => {
+        const _bookingDate = new Date(booking.date);
+        const _todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         return bookingDate >= todayStart && bookingDate <= fourteenDaysLater;
       });
       
       // Sort by date and time
       upcomingBookings.sort((a, b) => {
-        const dateCompare = new Date(a.date) - new Date(b.date);
+        const _dateCompare = new Date(a.date) - new Date(b.date);
         if (dateCompare !== 0) return dateCompare;
         return (a.time_slot || '').localeCompare(b.time_slot || '');
       });
       
       actions.setBookings(upcomingBookings);
     } catch (e) {
-      const errorMsg = e.response?.status === 401
+      const _errorMsg = e.response?.status === 401
         ? "Session expired. Please log in again."
         : e.response?.data?.detail || "Error fetching upcoming bookings.";
       actions.setError(errorMsg);
@@ -315,7 +316,7 @@ function AdminPanel() {
     }
   }, [token, router, actions]);
 
-  const handleLogout = useStableCallback(() => {
+  const _handleLogout = useStableCallback(() => {
     actions.setModal({
       show: true,
       title: "Confirm Logout",
@@ -332,7 +333,7 @@ function AdminPanel() {
     });
   }, [actions, router]);
 
-  const handleChangePassword = useStableCallback(async (e) => {
+  const _handleChangePassword = useStableCallback(async (e) => {
     e.preventDefault();
     
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
@@ -346,7 +347,7 @@ function AdminPanel() {
     }
 
     try {
-      const formData = new FormData();
+      const _formData = new FormData();
       formData.append('current_password', passwordForm.currentPassword);
       formData.append('new_password', passwordForm.newPassword);
 
@@ -376,17 +377,17 @@ function AdminPanel() {
 
   useEffect(() => {
     // Fetch KPIs from backend (create an endpoint or compute from bookings)
-    const fetchKpis = async () => {
+    const _fetchKpis = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/api/booking/admin/kpis`, {
+        const _res = await axios.get(`${API_BASE}/api/booking/admin/kpis`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         actions.setKpis(res.data);
       } catch {
         // fallback: compute from bookings if endpoint not available
-        const now = new Date();
-        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const _now = new Date();
+        const _startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+        const _startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         
         actions.setKpis({
           total: state.bookings.length,
@@ -404,7 +405,7 @@ function AdminPanel() {
     actions.setFilters({ search: debouncedSearch });
   }, [debouncedSearch, actions]);
 
-  const formatDate = (dateString) => {
+  const _formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'short',
       year: 'numeric',
@@ -413,9 +414,9 @@ function AdminPanel() {
     });
   };
 
-  const formatPhone = (phone) => {
+  const _formatPhone = (phone) => {
     if (!phone) return '';
-    const cleaned = phone.replace(/\D/g, '');
+    const _cleaned = phone.replace(/\D/g, '');
     if (cleaned.length === 10) {
       return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
     }
@@ -423,7 +424,7 @@ function AdminPanel() {
   };
 
   // Get current view title for display
-  const getCurrentViewTitle = () => {
+  const _getCurrentViewTitle = () => {
     switch (state.mode) {
       case "upcoming":
         return "📋 Upcoming Events (Next 14 Days)";
@@ -441,7 +442,7 @@ function AdminPanel() {
   };
 
   // Admin action handlers  
-  const handleCancelBooking = useStableCallback((booking) => {
+  const _handleCancelBooking = useStableCallback((booking) => {
     actions.setModal({
       show: true,
       title: "Cancel Booking",
@@ -477,7 +478,7 @@ function AdminPanel() {
           
         } catch (e) {
           actions.setModal({ isLoading: false });
-          const errorMsg = e.response?.status === 401
+          const _errorMsg = e.response?.status === 401
             ? "Session expired. Please log in again."
             : e.response?.data?.detail || "Error canceling booking. Please try again.";
           actions.setError(errorMsg);
@@ -491,7 +492,7 @@ function AdminPanel() {
     });
   }, [actions, token, state.mode, fetchWeekly, fetchUpcoming, fetchMonthly, router]);
 
-  const handleMarkDepositReceived = useStableCallback((booking) => {
+  const _handleMarkDepositReceived = useStableCallback((booking) => {
     actions.setModal({
       show: true,
       title: "Mark Deposit as Received",
@@ -526,7 +527,7 @@ function AdminPanel() {
           
         } catch (e) {
           actions.setModal({ isLoading: false });
-          const errorMsg = e.response?.status === 401
+          const _errorMsg = e.response?.status === 401
             ? "Session expired. Please log in again."
             : e.response?.data?.detail || "Error updating deposit status. Please try again.";
           actions.setError(errorMsg);
@@ -540,7 +541,7 @@ function AdminPanel() {
     });
   }, [actions, token, state.mode, fetchWeekly, fetchUpcoming, fetchMonthly, router]);
 
-  const handleContactWaitlistCustomer = useStableCallback((waitlistEntry) => {
+  const _handleContactWaitlistCustomer = useStableCallback((waitlistEntry) => {
     actions.setModal({
       show: true,
       title: "Contact Waitlist Customer",
@@ -552,7 +553,7 @@ function AdminPanel() {
       bookingDetails: waitlistEntry,
       onConfirm: () => {
         // Open contact information - could be enhanced to open email/phone app
-        const contactInfo = `
+        const _contactInfo = `
 Customer: ${waitlistEntry.name}
 Phone: ${waitlistEntry.phone}
 Email: ${waitlistEntry.email}
@@ -572,7 +573,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
     });
   }, [actions]);
 
-  const handleRemoveFromWaitlist = useStableCallback((waitlistEntry) => {
+  const _handleRemoveFromWaitlist = useStableCallback((waitlistEntry) => {
     actions.setModal({
       show: true,
       title: "Remove from Waitlist",
@@ -600,7 +601,7 @@ Preferred Time: ${waitlistEntry.preferred_time}
           
         } catch (e) {
           actions.setModal({ isLoading: false });
-          const errorMsg = e.response?.status === 401
+          const _errorMsg = e.response?.status === 401
             ? "Session expired. Please log in again."
             : e.response?.data?.detail || "Error removing from waitlist. Please try again.";
           actions.setError(errorMsg);
@@ -684,6 +685,13 @@ Preferred Time: ${waitlistEntry.preferred_time}
             >
               <span className="emoji-visible">📊</span>
               Activity Logs
+            </button>
+            <button 
+              className={`tab-btn ${state.activeTab === "customers" ? "active" : ""}`}
+              onClick={() => actions.setFilters({ activeTab: "customers" })}
+            >
+              <span className="emoji-visible">👥</span>
+              Customer Database
             </button>
             {state.userRole === "superadmin" && (
               <button 
@@ -1148,6 +1156,11 @@ Preferred Time: ${waitlistEntry.preferred_time}
         {/* Activity Logs Tab */}
         {state.activeTab === "logs" && (
           <LogPanel />
+        )}
+
+        {/* Customer Database Tab */}
+        {state.activeTab === "customers" && (
+          <CustomerManagement />
         )}
 
         {/* Super Admin Management Tab */}

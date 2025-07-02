@@ -695,3 +695,104 @@ input, textarea, select {
     background-position: 0% 50%;
   }
 }
+
+/* Hide Next.js default loading indicators - ALL VARIANTS */
+[data-next-mark-loading],
+[data-next-mark-loading="true"],
+[data-next-mark-loading="false"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Target SVG with data-next-mark-loading="false" specifically */
+svg[data-next-mark-loading="false"],
+[data-next-mark-loading="false"] svg {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Hide any Next.js logo or loading SVGs */
+svg[viewBox="0 0 40 40"],
+svg[width="40"][height="40"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Hide any loading animations with Next.js branding */
+svg path.paused,
+svg[data-next-mark-loading],
+svg[data-next-mark-loading="true"],
+svg[data-next-mark-loading="false"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Hide specific Next.js logo gradients and elements */
+#next_logo_paint0_linear_1357_10853,
+#next_logo_paint1_linear_1357_10853,
+#next_logo_mask0,
+defs [id*="next_logo"],
+linearGradient[id*="next_logo"],
+mask[id*="next_logo"] {
+  display: none !important;
+}
+
+/* Remove any Next.js loading overlays */
+div[data-next-loading],
+.next-loading,
+[class*="next_logo"],
+[id*="next_logo"] {
+  display: none !important;
+}
+
+/* Disable all loading animations and transitions */
+* {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+/* Override any Next.js loading states */
+html[data-loading],
+body[data-loading],
+[data-loading] {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Force immediate visibility for all content */
+main, section, div, article {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Hide any potential loading overlays */
+[class*="loading"],
+[id*="loading"],
+[data*="loading"] {
+  display: none !important;
+}
+
+/* SIMPLIFIED Next.js logo removal */
+svg[width="40"][height="40"] {
+  display: none !important;
+}
+
+/* Exception: Keep our own loading spinners */
+.spinner-border,
+.booking-system .spinner-border,
+.btn .spinner-border {
+  display: inline-block !important;
+}

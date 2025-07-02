@@ -4,6 +4,7 @@
 import React, { memo, useCallback, useMemo } from 'react';
 import { Card, Alert } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { useBooking } from '../context/BookingContext';
 import SmartDateSuggestions from '../SmartDateSuggestions';
 import './DateSelection.css';
@@ -74,8 +75,32 @@ const DateSelection = memo(() => {
     placeholderText: "Select a date",
     className: "form-control",
     disabled: isLoading,
-    inline: true
+    inline: true,
+    showMonthDropdown: false,
+    showYearDropdown: false,
+    disabledKeyboardNavigation: false
   }), [selectedDate, handleDateChange, filterDate, isLoading]);
+  
+  // Fallback native date input props
+  const nativeDateProps = useMemo(() => {
+    const today = new Date();
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 60);
+    
+    return {
+      type: "date",
+      value: selectedDate ? selectedDate.toISOString().split('T')[0] : '',
+      min: today.toISOString().split('T')[0],
+      max: maxDate.toISOString().split('T')[0],
+      onChange: (e) => {
+        if (e.target.value) {
+          handleDateChange(new Date(e.target.value));
+        }
+      },
+      disabled: isLoading,
+      className: "form-control"
+    };
+  }, [selectedDate, handleDateChange, isLoading]);
   
   return (
     <Card className="mb-4 date-selection-card">
@@ -104,7 +129,39 @@ const DateSelection = memo(() => {
         
         {/* Date Picker */}
         <div className="date-picker-container mb-3">
-          <DatePicker {...datePickerProps} />
+          {/* Use native date picker by default - more reliable */}
+          <div className="native-date-picker mb-3">
+            <label htmlFor="date-select" className="form-label">
+              <strong>Select Date:</strong>
+            </label>
+            <input 
+              id="date-select"
+              {...nativeDateProps} 
+              style={{
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: '1px solid #ddd',
+                fontSize: '16px',
+                width: '100%'
+              }}
+            />
+          </div>
+          
+          {/* Advanced calendar toggle */}
+          <details className="advanced-calendar">
+            <summary className="text-primary" style={{ cursor: 'pointer' }}>
+              📅 Use Advanced Calendar
+            </summary>
+            <div className="calendar-override mt-2" style={{
+              background: 'white',
+              padding: '15px',
+              border: '2px solid #dee2e6',
+              borderRadius: '8px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+            }}>
+              <DatePicker {...datePickerProps} />
+            </div>
+          </details>
         </div>
         
         {/* Selected Date Info */}

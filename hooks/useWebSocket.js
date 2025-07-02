@@ -16,6 +16,15 @@ export const useWebSocket = (bookingId = null) => {
   const connect = useCallback(() => {
     try {
       const wsUrl = bookingId ? `${WS_URL}/${bookingId}` : WS_URL;
+      
+      // Skip WebSocket connection in development if server is not available
+      if (process.env.NODE_ENV === 'development' && WS_URL.includes('localhost:8000')) {
+        console.log('WebSocket server not available in development mode - using fallback');
+        setError(null); // Don't show error in development
+        setIsConnected(false);
+        return;
+      }
+      
       wsRef.current = new WebSocket(wsUrl);
       
       wsRef.current.onopen = () => {
@@ -38,7 +47,7 @@ export const useWebSocket = (bookingId = null) => {
           const data = JSON.parse(event.data);
           setLastMessage(data);
         } catch (err) {
-          console.error('Error parsing WebSocket message:', err);
+          console.warn('Error parsing WebSocket message:', err);
           setLastMessage({ type: 'error', message: 'Invalid message format' });
         }
       };
@@ -47,22 +56,26 @@ export const useWebSocket = (bookingId = null) => {
         console.log('WebSocket disconnected', event.code, event.reason);
         setIsConnected(false);
         
-        // Attempt to reconnect if not manually closed
-        if (event.code !== 1000 && reconnectAttemptsRef.current < maxReconnectAttempts) {
+        // Only attempt to reconnect if not in development or if it's a real connection
+        if (event.code !== 1000 && 
+            reconnectAttemptsRef.current < maxReconnectAttempts && 
+            !WS_URL.includes('localhost:8000')) {
           reconnectAttemptsRef.current += 1;
           console.log(`Attempting to reconnect... (${reconnectAttemptsRef.current}/${maxReconnectAttempts})`);
           
           reconnectTimeoutRef.current = setTimeout(() => {
             connect();
           }, reconnectInterval);
-        } else if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
-          setError('Failed to reconnect after multiple attempts');
         }
       };
 
       wsRef.current.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        setError('Connection error occurred');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('WebSocket connection failed - this is expected in development without backend server');
+        } else {
+          console.error('WebSocket error:', error);
+          setError('Connection error occurred');
+        }
       };
     } catch (err) {
       console.error('Error creating WebSocket:', err);

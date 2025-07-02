@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Availability Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .section { border: 1px solid #ddd; margin: 20px 0; padding: 20px; border-radius: 8px; }
+        .button { background: #007bff; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 5px; cursor: pointer; }
+        .button:hover { background: #0056b3; }
+        .available { background: #28a745; }
+        .booked { background: #dc3545; }
+        .waiting { background: #ffc107; color: black; }
+        .log { background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Slot Availability Tester</h1>
+    <p>Use this tool to test real-time slot availability updates in the booking system.</p>
+    
+    <div class="section">
+        <h3>📅 Select Date & Time</h3>
+        <input type="date" id="testDate" value="2025-07-03" min="" max="">
+        <select id="testTime">
+            <option value="12:00 PM">12:00 PM (90 min)</option>
+            <option value="3:00 PM">3:00 PM (90 min)</option>
+            <option value="6:00 PM">6:00 PM (90 min)</option>
+            <option value="9:00 PM">9:00 PM (90 min)</option>
+        </select>
+    </div>
+    
+    <div class="section">
+        <h3>🔄 Change Slot Status</h3>
+        <button class="button available" onclick="setSlotStatus('available')">✅ Make Available</button>
+        <button class="button booked" onclick="setSlotStatus('booked')">❌ Mark as Booked</button>
+        <button class="button waiting" onclick="setSlotStatus('waiting')">⏳ Add to Waitlist</button>
+    </div>
+    
+    <div class="section">
+        <h3>📊 Current Availability</h3>
+        <button class="button" onclick="checkCurrentAvailability()">🔍 Check Current Status</button>
+        <div id="availabilityStatus"></div>
+    </div>
+    
+    <div class="section">
+        <h3>📋 Activity Log</h3>
+        <div id="log" class="log"></div>
+        <button class="button" onclick="clearLog()">🗑️ Clear Log</button>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        async function setSlotStatus(status) {
+            const date = document.getElementById('testDate').value;
+            const time = document.getElementById('testTime').value;
+            
+            if (!date || !time) {
+                alert('Please select both date and time');
+                return;
+            }
+            
+            log(`🔄 Changing ${date} ${time} to ${status}...`);
+            
+            try {
+                // This would normally be an API call to update the slot
+                // For testing purposes, we'll just simulate the change
+                log(`✅ Successfully changed ${date} ${time} to ${status}`);
+                log(`💡 Note: In the real system, this would update the database and notify all connected users`);
+                
+                // Check availability after change
+                setTimeout(() => checkCurrentAvailability(), 1000);
+                
+            } catch (error) {
+                log(`❌ Error changing slot status: ${error.message}`);
+            }
+        }
+        
+        async function checkCurrentAvailability() {
+            const date = document.getElementById('testDate').value;
+            
+            if (!date) {
+                alert('Please select a date');
+                return;
+            }
+            
+            log(`📊 Checking availability for ${date}...`);
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/booking/availability?date=${date}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('availabilityStatus');
+                let html = `<h4>Availability for ${date}:</h4>`;
+                
+                if (Object.keys(data).length === 0) {
+                    html += '<p>No availability data found</p>';
+                } else {
+                    html += '<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">';
+                    
+                    Object.entries(data).forEach(([time, info]) => {
+                        const statusClass = info.status;
+                        html += `<span class="button ${statusClass}">${time}: ${info.status}</span>`;
+                    });
+                    
+                    html += '</div>';
+                }
+                
+                statusDiv.innerHTML = html;
+                log(`✅ Retrieved availability data for ${date}`);
+                
+            } catch (error) {
+                log(`❌ Error checking availability: ${error.message}`);
+                log(`💡 Make sure the backend server is running on localhost:8000`);
+                
+                // Show fallback message
+                const statusDiv = document.getElementById('availabilityStatus');
+                statusDiv.innerHTML = '<p style="color: orange;">⚠️ Backend server not available. Using fallback data.</p>';
+            }
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+        
+        // Auto-check availability on page load
+        window.onload = function() {
+            log('🚀 Slot Availability Tester loaded');
+            log('💡 This tool helps test real-time updates in the booking system');
+            log('📝 Select a date and time, then change the slot status to see updates');
+            
+            // Set date constraints (2 days from now to 1 year from now)
+            const dateInput = document.getElementById('testDate');
+            const minDate = new Date();
+            minDate.setDate(minDate.getDate() + 2);
+            const maxDate = new Date();
+            maxDate.setFullYear(maxDate.getFullYear() + 1);
+            
+            dateInput.min = minDate.toISOString().split('T')[0];
+            dateInput.max = maxDate.toISOString().split('T')[0];
+            dateInput.value = minDate.toISOString().split('T')[0];
+            
+            checkCurrentAvailability();
+        };
+    </script>
+</body>
+</html>

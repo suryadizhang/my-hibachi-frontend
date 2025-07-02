@@ -1,6 +1,7 @@
+"use client";
 // Simple WebSocket Test Page
 import React from 'react';
-import { useSimpleWebSocketTest } from '../components/hooks/useSimpleWebSocketTest';
+import { useSimpleWebSocketTest } from '../../components/hooks/useSimpleWebSocketTest';
 
 export default function WebSocketTestPage() {
   const { isConnected, messages } = useSimpleWebSocketTest();

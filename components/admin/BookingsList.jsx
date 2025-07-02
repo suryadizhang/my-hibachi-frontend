@@ -2,7 +2,7 @@
 import React, { memo, useMemo, useCallback } from 'react';
 import { Table, Badge, Button, Card, Spinner, Alert } from 'react-bootstrap';
 
-const BookingsList = memo(({ 
+const _BookingsList = memo(({ 
   bookings = [],
   isLoading = false,
   error = null,
@@ -16,15 +16,15 @@ const BookingsList = memo(({
   onBulkAction
 }) => {
   // Memoized status badge renderer
-  const getStatusBadge = useCallback((status) => {
-    const statusConfig = {
+  const _getStatusBadge = useCallback((status) => {
+    const _statusConfig = {
       'pending': { variant: 'warning', text: '⏳ Pending' },
       'confirmed': { variant: 'success', text: '✅ Confirmed' },
       'cancelled': { variant: 'danger', text: '❌ Cancelled' },
       'completed': { variant: 'info', text: '🎉 Completed' }
     };
     
-    const config = statusConfig[status] || { variant: 'secondary', text: status };
+    const _config = statusConfig[status] || { variant: 'secondary', text: status };
     
     return (
       <Badge bg={config.variant}>
@@ -34,8 +34,8 @@ const BookingsList = memo(({
   }, []);
   
   // Memoized action buttons renderer
-  const renderActionButtons = useCallback((booking) => {
-    const actions = [];
+  const _renderActionButtons = useCallback((booking) => {
+    const _actions = [];
     
     if (booking.status === 'pending') {
       actions.push(
@@ -88,7 +88,7 @@ const BookingsList = memo(({
   }, [onBookingAction]);
   
   // Memoized table rows to prevent unnecessary re-renders
-  const tableRows = useMemo(() => 
+  const _tableRows = useMemo(() => 
     bookings.map((booking) => (
       <tr key={booking.id} className={selectedBookings.includes(booking.id) ? 'table-active' : ''}>
         <td>
@@ -130,11 +130,11 @@ const BookingsList = memo(({
   );
   
   // Memoized pagination controls
-  const paginationControls = useMemo(() => {
-    const pages = [];
-    const maxVisiblePages = 5;
-    const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+  const _paginationControls = useMemo(() => {
+    const _pages = [];
+    const _maxVisiblePages = 5;
+    const _startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    const _endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
     
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
@@ -181,7 +181,7 @@ const BookingsList = memo(({
   }, [currentPage, totalPages, bookings.length, onPageChange]);
   
   // Memoized bulk action controls
-  const bulkActionControls = useMemo(() => {
+  const _bulkActionControls = useMemo(() => {
     if (selectedBookings.length === 0) return null;
     
     return (

@@ -15,7 +15,7 @@ const proteinOptions = [
 const upgradeOptions = [
   { name: 'Salmon', extra: 5, description: 'Wild-caught Atlantic salmon with teriyaki glaze' },
   { name: 'Scallops', extra: 5, description: 'Fresh sea scallops grilled to perfection' },
-  { name: 'Filet Mignon', extra: 8, description: 'Premium tender beef filet' },
+  { name: 'Filet Mignon', extra: 5, description: 'Premium tender beef filet' },
   { name: 'Lobster Tail', extra: 15, description: 'Fresh lobster tail with garlic butter' }
 ].sort((a, b) => a.extra - b.extra);
 
@@ -150,7 +150,11 @@ const Menu = () => (
                     <small>Approximately 10 adults</small>
                   </div>
                 </div>
-                <div className="tip-info">
+              </div>
+              
+              {/* Centered Gratuity Guidelines */}
+              <div className="gratuity-guidelines-centered">
+                <div className="tip-info-centered">
                   <span className="info-icon emoji-visible">💡</span>
                   <div className="info-text">
                     <strong>Gratuity Guidelines</strong>

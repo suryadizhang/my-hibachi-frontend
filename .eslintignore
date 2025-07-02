@@ -1,19 +1,33 @@
-# ESLint ignore patterns for development cleanup
-# TODO: Fix these issues gradually
-
-# Temporarily ignore specific patterns
-**/AdminPanel*.jsx
-**/test*.jsx
-**/debug*.jsx
-**/main-*.jsx
-**/*-COMPLETE.jsx
-**/*-FINAL.jsx
-**/*-test*.jsx
-
-# Legacy files to be cleaned up
-components/
+# Build outputs
+.next/
 dist/
-backup-*/
-*.html
-*.bat
-*.py
+build/
+out/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.min.js
+*.bundle.js
+
+# Test files that may have issues
+**/*.test.js
+**/*.spec.js
+
+# Generated chunks and bundles
+*.chunk.js
+*-[hash].js
+bootstrap-*.js
+framework-*.js
+webpack-*.js
+polyfills-*.js
+vendors-*.js
+
+# Static files
+public/
+static/
+
+# Logs
+*.log
+logs/

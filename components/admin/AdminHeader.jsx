@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo } from 'react';
 import { Navbar, Nav, Dropdown, Badge, Button, Container } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 
-const AdminHeader = memo(({ 
+const _AdminHeader = memo(({ 
   currentUser = null,
   isAuthenticated = false,
   notifications = [],
@@ -13,10 +13,10 @@ const AdminHeader = memo(({
   currentPath = '',
   isLoading = false
 }) => {
-  const router = useRouter();
+  const _router = useRouter();
   
   // Memoized user initials for avatar
-  const userInitials = useMemo(() => {
+  const _userInitials = useMemo(() => {
     if (!currentUser?.username) return 'U';
     return currentUser.username
       .split(' ')
@@ -27,13 +27,13 @@ const AdminHeader = memo(({
   }, [currentUser?.username]);
   
   // Memoized unread notifications count
-  const unreadCount = useMemo(() => 
+  const _unreadCount = useMemo(() => 
     notifications.filter(n => !n.read).length,
     [notifications]
   );
   
   // Stable logout handler
-  const handleLogout = useCallback(async () => {
+  const _handleLogout = useCallback(async () => {
     try {
       if (onLogout) {
         await onLogout();
@@ -46,12 +46,12 @@ const AdminHeader = memo(({
   }, [onLogout, router]);
   
   // Stable navigation handler
-  const handleNavigation = useCallback((path) => {
+  const _handleNavigation = useCallback((path) => {
     router.push(path);
   }, [router]);
   
   // Memoized navigation items
-  const navigationItems = useMemo(() => [
+  const _navigationItems = useMemo(() => [
     { path: '/admin', label: 'Dashboard', icon: '📊' },
     { path: '/admin/bookings', label: 'Bookings', icon: '📅' },
     { path: '/admin/users', label: 'Users', icon: '👥' },
@@ -60,7 +60,7 @@ const AdminHeader = memo(({
   ], []);
   
   // Memoized nav links
-  const navLinks = useMemo(() => 
+  const _navLinks = useMemo(() => 
     navigationItems.map((item) => (
       <Nav.Link
         key={item.path}
@@ -76,7 +76,7 @@ const AdminHeader = memo(({
   );
   
   // Memoized user dropdown
-  const userDropdown = useMemo(() => {
+  const _userDropdown = useMemo(() => {
     if (!isAuthenticated || !currentUser) return null;
     
     return (
@@ -117,7 +117,7 @@ const AdminHeader = memo(({
   }, [isAuthenticated, currentUser, userInitials, handleNavigation, onSettingsClick, handleLogout]);
   
   // Memoized notifications dropdown
-  const notificationsDropdown = useMemo(() => (
+  const _notificationsDropdown = useMemo(() => (
     <Dropdown align="end">
       <Dropdown.Toggle variant="outline-light" className="position-relative">
         🔔

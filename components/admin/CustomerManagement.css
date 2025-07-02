@@ -1,0 +1,334 @@
+/* Customer Management Styles */
+.customer-management {
+  padding: 20px;
+}
+
+/* Analytics Cards */
+.analytics-card {
+  border: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.analytics-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.analytics-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.analytics-value {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.analytics-label {
+  color: #6c757d;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+/* Tier Distribution */
+.tier-stat {
+  text-align: center;
+  padding: 15px;
+}
+
+.tier-badge {
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.tier-count {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Customer Table */
+.customer-row {
+  transition: background-color 0.2s ease;
+}
+
+.customer-row:hover {
+  background-color: #f8f9fa;
+}
+
+.customer-info strong {
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.favorite-times {
+  max-width: 120px;
+}
+
+.favorite-times .badge {
+  font-size: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+/* No Data State */
+.no-data {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.no-data-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+.no-data p {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  color: #6c757d;
+}
+
+/* Pagination */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.pagination-info {
+  padding: 8px 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  font-weight: 500;
+  color: #495057;
+}
+
+/* Customer Detail Modal */
+.customer-detail .card {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+}
+
+.customer-detail .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 12px 20px;
+}
+
+.customer-detail .card-header h6 {
+  color: #495057;
+  font-weight: 600;
+}
+
+.customer-detail p {
+  margin-bottom: 8px;
+}
+
+.customer-detail p strong {
+  color: #2c3e50;
+  min-width: 80px;
+  display: inline-block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .customer-management {
+    padding: 10px;
+  }
+  
+  .analytics-value {
+    font-size: 1.5rem;
+  }
+  
+  .analytics-icon {
+    font-size: 2rem;
+  }
+  
+  .tier-stat {
+    padding: 10px;
+  }
+  
+  .tier-count {
+    font-size: 1.2rem;
+  }
+  
+  .favorite-times {
+    max-width: 80px;
+  }
+  
+  .favorite-times .badge {
+    font-size: 0.6rem;
+    max-width: 70px;
+  }
+  
+  .customer-detail p strong {
+    min-width: 60px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .customer-management {
+    padding: 5px;
+  }
+  
+  .analytics-card {
+    margin-bottom: 15px;
+  }
+  
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .customer-info strong {
+    font-size: 0.9rem;
+  }
+  
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Loading States */
+.spinner-border {
+  color: #007bff;
+}
+
+/* Enhanced Card Styling */
+.customer-management .card {
+  border: none;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.customer-management .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 8px 8px 0 0;
+  padding: 15px 20px;
+}
+
+.customer-management .card-header h5 {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+/* Button Styling */
+.customer-management .btn-outline-primary {
+  border-color: #007bff;
+  color: #007bff;
+  transition: all 0.2s ease;
+}
+
+.customer-management .btn-outline-primary:hover {
+  background-color: #007bff;
+  border-color: #007bff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Table Enhancements */
+.customer-management .table th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+  color: #495057;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 12px 8px;
+}
+
+.customer-management .table td {
+  padding: 12px 8px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+/* Badge Styling */
+.customer-management .badge {
+  font-size: 0.75rem;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+/* Form Control Styling */
+.customer-management .form-control,
+.customer-management .form-select {
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customer-management .form-control:focus,
+.customer-management .form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Alert Styling */
+.customer-management .alert {
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+}
+
+/* Modal Enhancements */
+.customer-management .modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 8px 8px 0 0;
+}
+
+.customer-management .modal-title {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.customer-management .modal-body {
+  padding: 20px;
+}
+
+.customer-management .modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Accessibility Improvements */
+.customer-management .btn:focus,
+.customer-management .form-control:focus,
+.customer-management .form-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Print Styles */
+@media print {
+  .customer-management .btn,
+  .customer-management .pagination-controls,
+  .customer-management .modal {
+    display: none !important;
+  }
+  
+  .customer-management .table {
+    font-size: 0.8rem;
+  }
+  
+  .customer-management .analytics-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}

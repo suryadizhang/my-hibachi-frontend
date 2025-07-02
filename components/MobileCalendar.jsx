@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './MobileCalendar.css';
 
-const MobileCalendar = ({ 
+const _MobileCalendar = ({ 
   selectedDate, 
   onDateSelect, 
   minDate, 
@@ -19,21 +19,21 @@ const MobileCalendar = ({
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const calendarRef = useRef();
+  const _calendarRef = useRef();
 
   // Minimum swipe distance for month navigation
-  const MIN_SWIPE_DISTANCE = 50;
+  const _MIN_SWIPE_DISTANCE = 50;
 
   // Get days in month
-  const getDaysInMonth = (date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
+  const _getDaysInMonth = (date) => {
+    const _year = date.getFullYear();
+    const _month = date.getMonth();
+    const _firstDay = new Date(year, month, 1);
+    const _lastDay = new Date(year, month + 1, 0);
+    const _daysInMonth = lastDay.getDate();
+    const _startingDayOfWeek = firstDay.getDay();
 
-    const days = [];
+    const _days = [];
     
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < startingDayOfWeek; i++) {
@@ -49,7 +49,7 @@ const MobileCalendar = ({
   };
 
   // Check if date is disabled
-  const isDateDisabled = (date) => {
+  const _isDateDisabled = (date) => {
     if (!date) return true;
     if (minDate && date < minDate) return true;
     return excludeDates.some(excludeDate => 
@@ -58,23 +58,23 @@ const MobileCalendar = ({
   };
 
   // Handle touch start
-  const handleTouchStart = (e) => {
+  const _handleTouchStart = (e) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
   };
 
   // Handle touch move
-  const handleTouchMove = (e) => {
+  const _handleTouchMove = (e) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
   // Handle touch end - determine swipe direction
-  const handleTouchEnd = () => {
+  const _handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > MIN_SWIPE_DISTANCE;
-    const isRightSwipe = distance < -MIN_SWIPE_DISTANCE;
+    const _distance = touchStart - touchEnd;
+    const _isLeftSwipe = distance > MIN_SWIPE_DISTANCE;
+    const _isRightSwipe = distance < -MIN_SWIPE_DISTANCE;
 
     if (!isTransitioning) {
       if (isLeftSwipe) {
@@ -86,15 +86,15 @@ const MobileCalendar = ({
   };
 
   // Navigate to different month
-  const navigateMonth = (direction) => {
+  const _navigateMonth = (direction) => {
     setIsTransitioning(true);
     
-    const newMonth = new Date(currentMonth);
+    const _newMonth = new Date(currentMonth);
     newMonth.setMonth(currentMonth.getMonth() + direction);
     
     // Prevent going to past months
-    const now = new Date();
-    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const _now = new Date();
+    const _currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     
     if (newMonth >= currentMonthStart) {
       setCurrentMonth(newMonth);
@@ -105,13 +105,13 @@ const MobileCalendar = ({
   };
 
   // Handle date click
-  const handleDateClick = (date) => {
+  const _handleDateClick = (date) => {
     if (isDateDisabled(date) || isTransitioning) return;
     onDateSelect(date);
   };
 
   // Get CSS class for day
-  const getDayClass = (date) => {
+  const _getDayClass = (date) => {
     if (!date) return 'mobile-calendar-day empty';
     
     let className = 'mobile-calendar-day';
@@ -132,7 +132,7 @@ const MobileCalendar = ({
     }
     
     // Highlight today
-    const today = new Date();
+    const _today = new Date();
     if (date.toDateString() === today.toDateString()) {
       className += ' today';
     }
@@ -141,15 +141,15 @@ const MobileCalendar = ({
   };
 
   // Format month/year header
-  const formatMonthYear = (date) => {
+  const _formatMonthYear = (date) => {
     return date.toLocaleDateString('en-US', { 
       month: 'long', 
       year: 'numeric' 
     });
   };
 
-  const days = getDaysInMonth(currentMonth);
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const _days = getDaysInMonth(currentMonth);
+  const _weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
     <div className="mobile-calendar" ref={calendarRef}>

@@ -46,7 +46,7 @@ export const upgradeOptions = [
   },
   { 
     name: 'Filet Mignon', 
-    extra: 8, 
+    extra: 5, 
     description: 'Premium tender beef filet',
     icon: '🥩',
     premium: true

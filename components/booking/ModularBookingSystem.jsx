@@ -56,7 +56,7 @@ const ModularBookingSystem = () => {
           </div>
 
           {/* Main Booking Interface */}
-          <Row className="booking-main-row">
+          <Row className="booking-main-row g-3">
             {/* Left Column - Progress & Notifications */}
             <Col lg={3} className="booking-sidebar">
               <div className="sidebar-content">
@@ -124,9 +124,9 @@ const ModularBookingSystem = () => {
           </Row>
 
           {/* Additional Information Cards */}
-          <Row className="info-cards-row">
+          <Row className="info-cards-row g-3">
             <Col md={6} lg={3}>
-              <Card className="info-card">
+              <Card className="info-card h-100">
                 <Card.Body className="info-card-body">
                   <div className="info-icon">
                     <span className="emoji-visible">⏰</span>
@@ -140,7 +140,7 @@ const ModularBookingSystem = () => {
             </Col>
 
             <Col md={6} lg={3}>
-              <Card className="info-card">
+              <Card className="info-card h-100">
                 <Card.Body className="info-card-body">
                   <div className="info-icon">
                     <span className="emoji-visible">💰</span>
@@ -154,7 +154,7 @@ const ModularBookingSystem = () => {
             </Col>
 
             <Col md={6} lg={3}>
-              <Card className="info-card">
+              <Card className="info-card h-100">
                 <Card.Body className="info-card-body">
                   <div className="info-icon">
                     <span className="emoji-visible">🎯</span>
@@ -168,7 +168,7 @@ const ModularBookingSystem = () => {
             </Col>
 
             <Col md={6} lg={3}>
-              <Card className="info-card">
+              <Card className="info-card h-100">
                 <Card.Body className="info-card-body">
                   <div className="info-icon">
                     <span className="emoji-visible">📞</span>

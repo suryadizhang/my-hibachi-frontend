@@ -10,7 +10,7 @@ import './TimeSlotSelection.css';
 const TimeSlotSelection = memo(() => {
   const { 
     selectedDate,
-    selectedTimeSlot,
+    selectedTime,
     availability,
     isLoading,
     error,
@@ -40,7 +40,7 @@ const TimeSlotSelection = memo(() => {
       
       try {
         actions.setLoading(true);
-        const response = await fetch(`${API_BASE}/booking/availability?date=${dateStr}`);
+        const response = await fetch(`${API_BASE}/api/booking/availability?date=${dateStr}`);
         
         if (response.ok) {
           const data = await response.json();
@@ -67,7 +67,7 @@ const TimeSlotSelection = memo(() => {
       return;
     }
     
-    actions.setSelectedTimeSlot(timeSlot);
+    actions.setSelectedTime(timeSlot);
     actions.clearError();
   }, [dateAvailability, actions]);
   
@@ -86,13 +86,13 @@ const TimeSlotSelection = memo(() => {
   // Memoized button variant helper
   const getButtonVariant = useCallback((timeSlot) => {
     const status = getSlotStatus(timeSlot);
-    const isSelected = selectedTimeSlot === timeSlot;
+    const isSelected = selectedTime === timeSlot;
     
     if (isSelected) return 'primary';
     if (status === 'booked') return 'danger';
     if (status === 'waiting') return 'warning';
     return 'outline-primary';
-  }, [getSlotStatus, selectedTimeSlot]);
+  }, [getSlotStatus, selectedTime]);
   
   // Memoized status badge
   const getStatusBadge = useCallback((timeSlot) => {
@@ -165,7 +165,7 @@ const TimeSlotSelection = memo(() => {
           <Row>
             {timeSlots.map((timeSlot) => {
               const status = getSlotStatus(timeSlot);
-              const isSelected = selectedTimeSlot === timeSlot;
+              const isSelected = selectedTime === timeSlot;
               const isDisabled = status === 'booked';
               
               return (
@@ -198,10 +198,10 @@ const TimeSlotSelection = memo(() => {
           </Row>
         )}
         
-        {selectedTimeSlot && (
+        {selectedTime && (
           <div className="selected-time-info mt-3">
             <Alert variant="success">
-              <strong>Selected Time:</strong> {selectedTimeSlot} on {selectedDate.toLocaleDateString()}
+              <strong>Selected Time:</strong> {selectedTime} on {selectedDate.toLocaleDateString()}
             </Alert>
           </div>
         )}

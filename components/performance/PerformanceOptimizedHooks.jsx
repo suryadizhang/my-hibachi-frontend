@@ -130,12 +130,40 @@ export const useOptimizedAdminState = () => {
   const actions = useMemo(() => ({
     setLoading: (loading) => dispatch({ type: ADMIN_ACTIONS.SET_LOADING, payload: loading }),
     setError: (error) => dispatch({ type: ADMIN_ACTIONS.SET_ERROR, payload: error }),
+    clearError: () => dispatch({ type: ADMIN_ACTIONS.SET_ERROR, payload: '' }),
     setBookings: (bookings) => dispatch({ type: ADMIN_ACTIONS.SET_BOOKINGS, payload: bookings }),
     setUser: (username, role) => dispatch({ type: ADMIN_ACTIONS.SET_USER, payload: { username, role } }),
     setKpis: (kpis) => dispatch({ type: ADMIN_ACTIONS.SET_KPIS, payload: kpis }),
     setFilters: (filters) => dispatch({ type: ADMIN_ACTIONS.SET_FILTERS, payload: filters }),
     setModal: (modalProps) => dispatch({ type: ADMIN_ACTIONS.SET_MODAL, payload: modalProps }),
-    resetState: () => dispatch({ type: ADMIN_ACTIONS.RESET_STATE, payload: initialAdminState })
+    resetState: () => dispatch({ type: ADMIN_ACTIONS.RESET_STATE, payload: initialAdminState }),
+    fetchBookings: async () => {
+      try {
+        dispatch({ type: ADMIN_ACTIONS.SET_LOADING, payload: true });
+        
+        // Ensure we're on the client side
+        if (typeof window === 'undefined') {
+          dispatch({ type: ADMIN_ACTIONS.SET_ERROR, payload: 'Not on client side' });
+          return;
+        }
+        
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch('/api/booking/admin/bookings', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+          const bookings = await response.json();
+          dispatch({ type: ADMIN_ACTIONS.SET_BOOKINGS, payload: bookings });
+        } else {
+          throw new Error('Failed to fetch bookings');
+        }
+      } catch (error) {
+        dispatch({ type: ADMIN_ACTIONS.SET_ERROR, payload: error.message });
+      } finally {
+        dispatch({ type: ADMIN_ACTIONS.SET_LOADING, payload: false });
+      }
+    }
   }), []);
 
   return [state, actions];

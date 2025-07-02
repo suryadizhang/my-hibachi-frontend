@@ -42,17 +42,79 @@ const VALIDATION_RULES = {
 };
 
 const CustomerInfoForm = memo(() => {
+  const bookingContext = useBooking();
+  
+  // Early return if context is not available
+  if (!bookingContext) {
+    return (
+      <Card className="mb-4 customer-form-card">
+        <Card.Header>
+          <h5 className="mb-0">👤 Customer Information</h5>
+        </Card.Header>
+        <Card.Body className="text-center text-muted">
+          <p>Loading booking context...</p>
+        </Card.Body>
+      </Card>
+    );
+  }
+  
   const { 
     selectedDate,
-    selectedTimeSlot,
-    formData,
+    selectedTime,
+    customerInfo,
     error,
     actions
-  } = useBooking();
+  } = bookingContext;
+  
+  // Safety check for actions
+  if (!actions) {
+    return (
+      <Card className="mb-4 customer-form-card">
+        <Card.Header>
+          <h5 className="mb-0">👤 Customer Information</h5>
+        </Card.Header>
+        <Card.Body className="text-center text-muted">
+          <p>Initializing form actions...</p>
+        </Card.Body>
+      </Card>
+    );
+  }
+  
+  // Ensure customerInfo is defined with default values
+  const formData = useMemo(() => {
+    // Robust fallback for undefined or null customerInfo
+    if (!customerInfo || typeof customerInfo !== 'object') {
+      return {
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        city: '',
+        zipcode: '',
+        contactPreference: 'email'
+      };
+    }
+    
+    // Merge customerInfo with defaults to ensure all fields exist
+    return {
+      name: customerInfo.name || '',
+      phone: customerInfo.phone || '',
+      email: customerInfo.email || '',
+      address: customerInfo.address || '',
+      city: customerInfo.city || '',
+      zipcode: customerInfo.zipcode || '',
+      contactPreference: customerInfo.contactPreference || customerInfo.contact_preference || 'email'
+    };
+  }, [customerInfo]);
   
   // Memoized validation state
   const validationErrors = useMemo(() => {
     const errors = {};
+    
+    // Safety check: ensure formData is defined and is an object
+    if (!formData || typeof formData !== 'object') {
+      return errors;
+    }
     
     Object.entries(VALIDATION_RULES).forEach(([field, rules]) => {
       const value = formData[field]?.trim() || '';
@@ -78,17 +140,28 @@ const CustomerInfoForm = memo(() => {
   
   // Check if form is valid
   const isFormValid = useMemo(() => {
+    // Safety check for formData
+    if (!formData || typeof formData !== 'object') {
+      return false;
+    }
+    
     return Object.keys(validationErrors).length === 0 && 
-           Object.values(formData).every(value => value?.trim());
+           Object.values(formData).every(value => value?.toString().trim());
   }, [validationErrors, formData]);
   
   // Handle field changes with validation
   const handleFieldChange = useCallback((field, value) => {
+    // Safety check for actions
+    if (!actions || typeof actions.updateCustomerInfo !== 'function') {
+      console.warn('BookingContext actions not available');
+      return;
+    }
+    
     // Real-time validation feedback
-    actions.updateFormData({ [field]: value });
+    actions.updateCustomerInfo({ [field]: value });
     
     // Clear global error if user is typing
-    if (error) {
+    if (error && actions.clearError) {
       actions.clearError();
     }
   }, [actions, error]);
@@ -106,7 +179,7 @@ const CustomerInfoForm = memo(() => {
     if (saved) {
       try {
         const savedData = JSON.parse(saved);
-        actions.updateFormData(savedData);
+        actions.updateCustomerInfo(savedData);
       } catch (e) {
         console.warn('Failed to load saved form data');
       }
@@ -116,7 +189,7 @@ const CustomerInfoForm = memo(() => {
   // Memoized field component
   const FormField = memo(({ field, label, type = 'text', placeholder, icon }) => {
     const hasError = validationErrors[field];
-    const value = formData[field] || '';
+    const value = (formData && formData[field]) ? formData[field].toString() : '';
     
     return (
       <Form.Group className="mb-3">
@@ -155,7 +228,7 @@ const CustomerInfoForm = memo(() => {
   
   FormField.displayName = 'FormField';
   
-  if (!selectedDate || !selectedTimeSlot) {
+  if (!selectedDate || !selectedTime) {
     return (
       <Card className="mb-4 customer-form-card disabled">
         <Card.Header>
@@ -173,7 +246,7 @@ const CustomerInfoForm = memo(() => {
       <Card.Header>
         <h5 className="mb-0">👤 Customer Information</h5>
         <small className="text-muted">
-          {selectedDate.toLocaleDateString()} at {selectedTimeSlot}
+          {selectedDate.toLocaleDateString()} at {selectedTime}
         </small>
       </Card.Header>
       
@@ -252,8 +325,8 @@ const CustomerInfoForm = memo(() => {
                   Preferred Contact Method
                 </Form.Label>
                 <Form.Select
-                  value={formData.contact_preference || 'email'}
-                  onChange={(e) => handleFieldChange('contact_preference', e.target.value)}
+                  value={formData.contactPreference || 'email'}
+                  onChange={(e) => handleFieldChange('contactPreference', e.target.value)}
                   className="form-field"
                 >
                   <option value="email">Email</option>
@@ -270,14 +343,14 @@ const CustomerInfoForm = memo(() => {
           <div className="d-flex justify-content-between align-items-center">
             <small className="text-muted">Form Completion:</small>
             <small className="text-muted">
-              {Object.values(formData).filter(v => v?.trim()).length} / {Object.keys(VALIDATION_RULES).length + 1} fields
+              {formData ? Object.values(formData).filter(v => v?.toString().trim()).length : 0} / {Object.keys(VALIDATION_RULES).length + 1} fields
             </small>
           </div>
           <div className="progress mt-1">
             <div 
               className="progress-bar"
               style={{ 
-                width: `${(Object.values(formData).filter(v => v?.trim()).length / (Object.keys(VALIDATION_RULES).length + 1)) * 100}%` 
+                width: `${formData ? (Object.values(formData).filter(v => v?.toString().trim()).length / (Object.keys(VALIDATION_RULES).length + 1)) * 100 : 0}%` 
               }}
             ></div>
           </div>

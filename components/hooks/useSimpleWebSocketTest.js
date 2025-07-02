@@ -1,3 +1,4 @@
+"use client";
 // Simple WebSocket Test Hook
 import { useState, useEffect, useRef } from 'react';
 

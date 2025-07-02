@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback, useMemo } from "react";
 import { Card, Form, Alert } from "react-bootstrap";
 import GuestCountSelector from './GuestCountSelector.jsx';

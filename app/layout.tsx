@@ -3,10 +3,10 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import ClientLayout from '../src/components/layout/ClientLayout'
+import ClientLayout from '../components/ClientLayout'
+import LoadingBlocker from '../components/LoadingBlocker'
 import PerformanceOptimizer from '../src/components/performance/PerformanceOptimizer'
 import WebVitalsMonitor from '../src/components/performance/WebVitalsMonitor'
-import criticalCSS from '../lib/criticalCSS'
 
 // Optimize font loading
 const inter = Inter({ 
@@ -60,9 +60,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        {/* Critical CSS for immediate rendering */}
-        <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
-        
         {/* Critical resource hints */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -89,8 +86,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="My Hibachi Chef" />
+        
+        {/* IMMEDIATE Next.js loading blocker - moved to end */}
+        <script src="/block-next-loading.js" defer />
       </head>
       <body className={inter.className}>
+        <LoadingBlocker />
         <PerformanceOptimizer />
         <WebVitalsMonitor />
         <ClientLayout>

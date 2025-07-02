@@ -213,7 +213,26 @@ const BookingContext = createContext();
 export const BookingProvider = ({ children }) => {
   const [state, dispatch] = useReducer(bookingReducer, initialState);
   
-  // WebSocket connection for real-time updates
+  // WebSocket connection for real-time updates (with error handling)
+  let webSocketHook = null;
+  try {
+    webSocketHook = useBookingWebSocket(state.booking.id);
+  } catch (error) {
+    console.warn('WebSocket not available:', error);
+    webSocketHook = {
+      isConnected: false,
+      bookingStatus: null,
+      availableSlots: [],
+      notifications: [],
+      subscribeToBooking: () => {},
+      unsubscribeFromBooking: () => {},
+      requestSlotUpdate: () => {},
+      clearNotification: () => {},
+      clearAllNotifications: () => {},
+      error: null
+    };
+  }
+  
   const {
     isConnected: wsConnected,
     bookingStatus: wsBookingStatus,
@@ -225,7 +244,7 @@ export const BookingProvider = ({ children }) => {
     clearNotification: clearWsNotification,
     clearAllNotifications: clearAllWsNotifications,
     error: wsError
-  } = useBookingWebSocket(state.booking.id);
+  } = webSocketHook;
   
   // Real-time updates hook (fallback/additional)
   const { isConnected, lastUpdate, updateNotifications } = useRealTimeUpdates(
@@ -277,14 +296,14 @@ export const BookingProvider = ({ children }) => {
     }
   }, [wsAvailableSlots, state.selectedDate]);
   
-  // Handle WebSocket errors
+  // Handle WebSocket errors (silently in development)
   useEffect(() => {
-    if (wsError) {
+    if (wsError && process.env.NODE_ENV !== 'development') {
       dispatch({ 
         type: BOOKING_ACTIONS.ADD_NOTIFICATION, 
         payload: {
-          type: 'error',
-          message: `Connection error: ${wsError}`,
+          type: 'warning',
+          message: 'Real-time updates temporarily unavailable',
           source: 'websocket'
         }
       });

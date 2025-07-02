@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Range Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .info { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        .date-input { padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px; width: 200px; }
+    </style>
+</head>
+<body>
+    <h1>📅 Date Range Verification</h1>
+    <p>This page tests the date picker constraints to ensure past dates are blocked and future dates up to 1 year are allowed.</p>
+    
+    <div class="info">
+        <h3>Current Date Information</h3>
+        <p><strong>Today:</strong> <span id="today"></span></p>
+        <p><strong>Minimum Date (2 days from now):</strong> <span id="minDate"></span></p>
+        <p><strong>Maximum Date (1 year from now):</strong> <span id="maxDate"></span></p>
+    </div>
+    
+    <div class="info">
+        <h3>Test Date Picker</h3>
+        <p>This date picker should have the same constraints as the booking system:</p>
+        <input type="date" id="testDatePicker" class="date-input">
+        <p><small>Try selecting past dates - they should be disabled.</small></p>
+        <p><small>Try selecting dates more than 1 year away - they should be disabled.</small></p>
+    </div>
+    
+    <div class="info">
+        <h3>Manual Date Tests</h3>
+        <button onclick="testYesterday()">❌ Try Yesterday (Should Fail)</button>
+        <button onclick="testTomorrow()">❌ Try Tomorrow (Should Fail - less than 2 days)</button>
+        <button onclick="testValidDate()">✅ Try Valid Date (Should Work)</button>
+        <button onclick="testFarFuture()">❌ Try 2 Years Ahead (Should Fail)</button>
+        <div id="testResults" style="margin-top: 10px; font-family: monospace; font-size: 12px;"></div>
+    </div>
+
+    <script>
+        // Calculate dates
+        const today = new Date();
+        const minDate = new Date();
+        minDate.setDate(minDate.getDate() + 2);
+        const maxDate = new Date();
+        maxDate.setFullYear(maxDate.getFullYear() + 1);
+        
+        // Display current date info
+        document.getElementById('today').textContent = today.toDateString();
+        document.getElementById('minDate').textContent = minDate.toDateString();
+        document.getElementById('maxDate').textContent = maxDate.toDateString();
+        
+        // Set up test date picker
+        const testPicker = document.getElementById('testDatePicker');
+        testPicker.min = minDate.toISOString().split('T')[0];
+        testPicker.max = maxDate.toISOString().split('T')[0];
+        testPicker.value = minDate.toISOString().split('T')[0];
+        
+        function log(message) {
+            const results = document.getElementById('testResults');
+            results.innerHTML += message + '<br>';
+        }
+        
+        function testDate(testDate, description) {
+            const picker = document.getElementById('testDatePicker');
+            const dateStr = testDate.toISOString().split('T')[0];
+            
+            picker.value = dateStr;
+            
+            // Check if the value was accepted
+            if (picker.value === dateStr) {
+                log(`✅ ${description}: ${testDate.toDateString()} - ACCEPTED`);
+            } else {
+                log(`❌ ${description}: ${testDate.toDateString()} - REJECTED (browser blocked it)`);
+            }
+        }
+        
+        function testYesterday() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            testDate(yesterday, "Yesterday Test");
+        }
+        
+        function testTomorrow() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            testDate(tomorrow, "Tomorrow Test");
+        }
+        
+        function testValidDate() {
+            const validDate = new Date();
+            validDate.setDate(validDate.getDate() + 7); // 1 week from now
+            testDate(validDate, "Valid Date Test (1 week ahead)");
+        }
+        
+        function testFarFuture() {
+            const farFuture = new Date();
+            farFuture.setFullYear(farFuture.getFullYear() + 2);
+            testDate(farFuture, "Far Future Test (2 years ahead)");
+        }
+        
+        // Auto-run tests on load
+        window.onload = function() {
+            log('🚀 Date Range Test Started');
+            log('📅 Testing date picker constraints...');
+            log('');
+        };
+    </script>
+</body>
+</html>

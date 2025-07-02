@@ -2,7 +2,7 @@
 import React, { memo, useCallback, useMemo, useState } from 'react';
 import { Form, Row, Col, Button, Badge, InputGroup, Card } from 'react-bootstrap';
 
-const BookingFilters = memo(({ 
+const _BookingFilters = memo(({ 
   searchTerm = '',
   onSearchChange,
   statusFilter = 'all',
@@ -20,7 +20,7 @@ const BookingFilters = memo(({
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   
   // Memoized status options to prevent unnecessary re-renders
-  const statusOptions = useMemo(() => [
+  const _statusOptions = useMemo(() => [
     { value: 'all', label: 'All Bookings', color: 'secondary' },
     { value: 'pending', label: 'Pending', color: 'warning' },
     { value: 'confirmed', label: 'Confirmed', color: 'success' },
@@ -29,7 +29,7 @@ const BookingFilters = memo(({
   ], []);
   
   // Memoized sort options
-  const sortOptions = useMemo(() => [
+  const _sortOptions = useMemo(() => [
     { value: 'date', label: 'Date' },
     { value: 'name', label: 'Customer Name' },
     { value: 'amount', label: 'Amount' },
@@ -38,27 +38,27 @@ const BookingFilters = memo(({
   ], []);
   
   // Stable callback for search input
-  const handleSearchChange = useCallback((e) => {
+  const _handleSearchChange = useCallback((e) => {
     onSearchChange(e.target.value);
   }, [onSearchChange]);
   
   // Stable callback for status filter
-  const handleStatusChange = useCallback((e) => {
+  const _handleStatusChange = useCallback((e) => {
     onStatusFilterChange(e.target.value);
   }, [onStatusFilterChange]);
   
   // Stable callback for sort changes
-  const handleSortChange = useCallback((e) => {
+  const _handleSortChange = useCallback((e) => {
     onSortChange(e.target.value);
   }, [onSortChange]);
   
   // Stable callback for sort order toggle
-  const handleSortOrderToggle = useCallback(() => {
+  const _handleSortOrderToggle = useCallback(() => {
     onSortOrderChange(sortOrder === 'asc' ? 'desc' : 'asc');
   }, [sortOrder, onSortOrderChange]);
   
   // Stable callback for date range changes
-  const handleDateRangeChange = useCallback((field, value) => {
+  const _handleDateRangeChange = useCallback((field, value) => {
     onDateRangeChange({
       ...dateRange,
       [field]: value
@@ -66,7 +66,7 @@ const BookingFilters = memo(({
   }, [dateRange, onDateRangeChange]);
   
   // Memoized status filter buttons
-  const statusFilterButtons = useMemo(() => 
+  const _statusFilterButtons = useMemo(() => 
     statusOptions.map((status) => (
       <Button
         key={status.value}

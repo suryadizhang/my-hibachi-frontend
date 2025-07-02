@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
   
+  // Disable default loading indicators
+  reactStrictMode: false,
+  
   // Temporarily disable ESLint during build to get pages working
   eslint: {
     ignoreDuringBuilds: true,
@@ -36,6 +39,12 @@ const nextConfig: NextConfig = {
     scrollRestoration: true,
     optimizeServerReact: true,
     serverSourceMaps: false, // Faster builds
+    
+    // Completely disable loading UI
+    appDocumentPreloading: false,
+    
+    // Disable router loading indicators
+    clientRouterFilter: false,
   },
 
   // Turbopack configuration (moved from experimental)

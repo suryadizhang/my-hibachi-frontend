@@ -15,6 +15,20 @@
   display: inline !important;
 }
 
+/* Hero main icon - make it much bigger */
+.hero-main-icon {
+  font-size: 6rem !important;
+  display: block;
+  margin: 0 auto;
+  animation: float 3s ease-in-out infinite;
+  text-shadow: 0 10px 30px rgba(219, 43, 40, 0.3);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
 /* Base menu styles */
 .menu-container {
   font-family: 'Inter', 'Poppins', sans-serif;
@@ -872,6 +886,58 @@
   .additional-item {
     padding: 1.5rem;
   }
+}
+
+/* Centered Gratuity Guidelines */
+.gratuity-guidelines-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 0;
+  margin-top: 1rem;
+  border-top: 2px solid rgba(255, 213, 79, 0.3);
+}
+
+.tip-info-centered {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, #FFD54F, #ffb997);
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  box-shadow: 0 8px 20px rgba(219, 43, 40, 0.2);
+  transition: all 0.3s ease;
+}
+
+.tip-info-centered:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(219, 43, 40, 0.3);
+}
+
+.tip-info-centered .info-icon {
+  font-size: 1.5rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tip-info-centered .info-text {
+  text-align: center;
+  color: #4a2d13;
+}
+
+.tip-info-centered .info-text strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.tip-info-centered .info-text small {
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 /* Ensure emojis are always visible */
