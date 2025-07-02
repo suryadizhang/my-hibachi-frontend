@@ -2,12 +2,12 @@
 
 import dynamic from 'next/dynamic';
 
-// Dynamic import to prevent SSR issues
-const OrderServices = dynamic(() => import('../../components/OrderServices'), {
+// Dynamic import for the new modular booking system
+const ModularBookingSystem = dynamic(() => import('../../components/booking/ModularBookingSystem'), {
   ssr: false,
   loading: () => <div className="text-center p-8">Loading booking form...</div>
 });
 
 export default function BookUsPage() {
-  return <OrderServices />;
+  return <ModularBookingSystem />;
 }

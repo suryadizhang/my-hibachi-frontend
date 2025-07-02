@@ -1,0 +1,173 @@
+/* Time Slot Selection Component Styles */
+.time-slot-card {
+  border: 1px solid #e3e6f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.time-slot-card.disabled {
+  opacity: 0.6;
+  background: #f8f9fa;
+}
+
+.time-slot-option {
+  position: relative;
+}
+
+.time-slot-button {
+  border-radius: 8px;
+  padding: 15px;
+  border-width: 2px;
+  transition: all 0.3s ease;
+  height: auto;
+  min-height: 80px;
+}
+
+.time-slot-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.time-slot-button.selected {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(13, 110, 253, 0.3);
+  animation: selectedPulse 2s infinite;
+}
+
+.time-slot-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.time-slot-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.status-badge {
+  font-size: 0.85rem;
+}
+
+.selected-time-info {
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+.real-time-alert {
+  border: none;
+  background: linear-gradient(135deg, #17a2b8 0%, #007bff 100%);
+  color: white;
+  border-radius: 8px;
+  animation: slideIn 0.5s ease;
+}
+
+.availability-legend {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 15px;
+  font-size: 0.85rem;
+}
+
+@keyframes selectedPulse {
+  0% { box-shadow: 0 4px 16px rgba(13, 110, 253, 0.3); }
+  50% { box-shadow: 0 4px 20px rgba(13, 110, 253, 0.5); }
+  100% { box-shadow: 0 4px 16px rgba(13, 110, 253, 0.3); }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button Variants */
+.btn-outline-primary.time-slot-button {
+  border-color: #007bff;
+  color: #007bff;
+  background: white;
+}
+
+.btn-outline-primary.time-slot-button:hover {
+  background: #007bff;
+  color: white;
+}
+
+.btn-warning.time-slot-button {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+  border-color: #ffc107;
+  color: #212529;
+}
+
+.btn-danger.time-slot-button {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border-color: #dc3545;
+}
+
+.btn-primary.time-slot-button {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  border-color: #007bff;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .time-slot-button {
+    padding: 12px;
+    min-height: 70px;
+  }
+  
+  .time-text {
+    font-size: 1rem;
+  }
+  
+  .legend-item {
+    display: block;
+    margin-bottom: 5px;
+    margin-right: 0;
+  }
+  
+  .availability-legend .d-flex {
+    flex-direction: column;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .time-slot-card {
+    background: #2d3748;
+    border-color: #4a5568;
+  }
+  
+  .availability-legend {
+    background: #4a5568;
+    border-color: #718096;
+  }
+  
+  .btn-outline-primary.time-slot-button {
+    background: #2d3748;
+    border-color: #4299e1;
+    color: #4299e1;
+  }
+}

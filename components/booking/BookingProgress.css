@@ -1,0 +1,272 @@
+/* Booking Progress Component Styles */
+.booking-progress-card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.progress-body {
+  padding: 1.25rem;
+}
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.progress-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progress-badge {
+  font-size: 0.8rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 15px;
+}
+
+.main-progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  background-color: #e9ecef;
+}
+
+.main-progress-bar .progress-bar {
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.steps-container {
+  margin-bottom: 1rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  position: relative;
+}
+
+.step-item:not(:last-child) {
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.step-indicator {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 2rem;
+}
+
+.step-icon {
+  font-size: 1.2rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.step-item.completed .step-icon {
+  background: #d4edda;
+  color: #155724;
+}
+
+.step-item.current .step-icon {
+  background: #cce5ff;
+  color: #004085;
+  animation: pulse 2s infinite;
+}
+
+.step-item.pending .step-icon {
+  background: #f8f9fa;
+  color: #6c757d;
+}
+
+.step-connector {
+  width: 2px;
+  height: 1rem;
+  background: #dee2e6;
+  margin-top: 0.25rem;
+}
+
+.step-item:last-child .step-connector {
+  display: none;
+}
+
+.step-item.completed .step-connector {
+  background: #28a745;
+}
+
+.step-item.current .step-connector {
+  background: #007bff;
+}
+
+.step-content {
+  flex: 1;
+  padding-top: 0.25rem;
+}
+
+.step-title {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.25rem;
+}
+
+.step-status {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-completed {
+  color: #28a745;
+  font-weight: 500;
+}
+
+.status-current {
+  color: #007bff;
+  font-weight: 500;
+  animation: fadeIn 1s ease;
+}
+
+.status-pending {
+  color: #6c757d;
+}
+
+.status-summary {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.summary-item:not(:last-child) {
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.5rem;
+}
+
+.summary-label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.summary-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.summary-value.complete {
+  color: #28a745;
+}
+
+.summary-value.incomplete {
+  color: #dc3545;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .progress-body {
+    padding: 1rem;
+  }
+  
+  .progress-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .step-item {
+    gap: 0.5rem;
+  }
+  
+  .step-icon {
+    font-size: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .booking-progress-card {
+    background: #343a40;
+    color: #f8f9fa;
+  }
+  
+  .progress-title {
+    color: #f8f9fa;
+  }
+  
+  .step-title {
+    color: #f8f9fa;
+  }
+  
+  .summary-label {
+    color: #f8f9fa;
+  }
+  
+  .status-summary {
+    background: #495057;
+  }
+  
+  .step-item:not(:last-child) {
+    border-color: #495057;
+  }
+  
+  .summary-item:not(:last-child) {
+    border-color: #6c757d;
+  }
+}

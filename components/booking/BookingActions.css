@@ -1,0 +1,266 @@
+/* Booking Actions Component Styles */
+.booking-actions-card {
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  margin-top: 1.5rem;
+}
+
+.actions-body {
+  padding: 1.5rem;
+}
+
+.primary-actions {
+  margin-bottom: 1.5rem;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.875rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  background: #6c757d;
+}
+
+.secondary-actions {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.secondary-actions .btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.draft-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+}
+
+.reset-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.advanced-actions {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.advanced-dropdown {
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+}
+
+.validation-summary {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.validation-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.validation-title {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.validation-items {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.validation-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.validation-item.complete {
+  background: #d4edda;
+  color: #155724;
+}
+
+.validation-item.incomplete {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.validation-icon {
+  font-size: 0.9rem;
+}
+
+.validation-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.help-text {
+  margin-top: 1rem;
+}
+
+.help-note {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #856404;
+  line-height: 1.5;
+}
+
+.help-note strong {
+  color: #533f03;
+}
+
+.btn-icon {
+  font-size: 1rem;
+}
+
+/* Loading state */
+.submit-btn .spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Animations */
+@keyframes buttonPress {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.submit-btn:active {
+  animation: buttonPress 0.2s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .actions-body {
+    padding: 1rem;
+  }
+  
+  .submit-btn {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .secondary-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .secondary-actions .btn {
+    width: 100%;
+  }
+  
+  .validation-items {
+    grid-template-columns: 1fr;
+  }
+  
+  .validation-item {
+    padding: 0.75rem;
+  }
+  
+  .help-note {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Focus states for accessibility */
+.submit-btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.secondary-actions .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .validation-item.complete {
+    border: 2px solid #155724;
+  }
+  
+  .validation-item.incomplete {
+    border: 2px solid #721c24;
+  }
+  
+  .submit-btn {
+    border: 2px solid #28a745;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .booking-actions-card {
+    background: #343a40;
+    color: #f8f9fa;
+  }
+  
+  .validation-summary {
+    background: #495057;
+    color: #f8f9fa;
+  }
+  
+  .validation-header {
+    border-color: #6c757d;
+  }
+  
+  .validation-title {
+    color: #f8f9fa;
+  }
+  
+  .help-note {
+    background: #664d03;
+    border-color: #664d03;
+    color: #ffecb5;
+  }
+  
+  .help-note strong {
+    color: #fff3cd;
+  }
+}
